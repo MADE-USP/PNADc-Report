@@ -1,0 +1,287 @@
+---
+title: "Relatório Trimestral da PNAD"
+author: "Made USP"
+date: "19/02/2024"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+subtitle: 4º Trimestre de 2023 (versão resumida)
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# SEMPRE CARREGAR RODAR ESTE CHUNK ANTES DE ABRIR O CÓDIGO COM OS DADOS
+library(survey)
+library(convey)
+library(tidyverse)
+library(dplyr)
+library(knitr)
+library(openxlsx)
+library(kableExtra)
+library(zoo)
+library(gplots)
+#devtools::install_github("kupietz/kableExtra")
+
+```
+
+```{r}
+carregar tabelas
+```
+
+```{r}
+
+```{r include=FALSE}
+
+i=2023
+q=4
+
+#trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
+#mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
+
+#"R" (resultado) foi adicionado no início de objetos de resultado textual para algumas funções de automação
+
+```
+
+# Introdução
+
+Reportamos, a seguir, estaísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios contínua (PNADc) referente ao `r q`º trimestre de `r i`. Para mais estatísticas e tabelas completas, acesse o link ao final do documento. Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito, Marina Sanches, Tainari Taioka, e pelos pesquisadores Hiaman Santos e José Bergamin. 
+
+# Mercado de Trabalho
+## Desemprego
+```{r}
+# Variáveis
+
+# Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q2"]
+
+#colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
+
+desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q4"]
+desemprego_tri_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
+desemprego_tri_ano_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2022 Q4"]
+                                                                   
+dif_desemprego <- ((desemprego)-(desemprego_tri_anterior))
+
+## Desemprego por raça e gênero
+
+desemprego_homem_branco <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+desemprego_homem_negro <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+
+desemprego_mulher_branca <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+desemprego_mulher_negra <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+
+
+desemprego_RG <- c(desemprego_mulher_branca, desemprego_mulher_negra, desemprego_homem_branco, desemprego_homem_negro)
+
+desemprego_minRG <- min(desemprego_RG)
+desemprego_maxRG <- max(desemprego_RG)
+
+resultado_maxRG <- switch(TRUE, desemprego_mulher_branca == desemprego_maxRG ~ "mulheres brancas", desemprego_mulher_negra == desemprego_maxRG ~ "mulheres negras", desemprego_homem_branco == desemprego_maxRG ~ "homens brancos", desemprego_homem_negro == desemprego_maxRG ~ "homens negros")
+
+resultado_minRG <- switch(TRUE, desemprego_mulher_branca == desemprego_minRG ~ "mulheres brancas", desemprego_mulher_negra == desemprego_minRG ~ "mulheres negras", desemprego_homem_branco == desemprego_minRG ~ "homens brancos", desemprego_homem_negro == desemprego_minRG ~ "homens negros")
+
+
+### Trimestre anterior
+
+desemprego_hb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desemprego_hn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+
+desemprego_mb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+
+desemprego_dif_triMB <- (desemprego_mulher_branca - desemprego_mb_tri_anterior)
+desemprego_dif_triMN <- (desemprego_mulher_negra - desemprego_mn_tri_anterior)
+desemprego_dif_triHB <- (desemprego_homem_branco - desemprego_hb_tri_anterior)
+desemprego_dif_triHN <- (desemprego_homem_negro desemprego_hn_tri_anterior)
+
+desemprego_maxRG <- max (desemprego_dif_triMB, desemprego_dif_triMN, desemprego_dif_triHB, desemprego_dif_triHN)
+
+r_maxtriRG <- switch(TRUE, desemprego_dif_triMB == desemprego_maxRG ~ "mulheres brancas", desemprego_dif_triMN == desemprego_maxRG ~ "mulheres negras", desemprego_dif_triHB == desemprego_maxRG ~ "homens brancos", desemprego_dif_triHN == desemprego_maxRG ~ "homens negros")
+
+desemprego_minRG <- min (desemprego_dif_triMB, desemprego_dif_triMN, desemprego_dif_triHB, desemprego_dif_triHN)
+
+r_mintriRG <- switch(TRUE, desemprego_dif_triMB == desemprego_minRG ~ "mulheres brancas", desemprego_dif_triMN == desemprego_minRG ~ "mulheres negras", desemprego_dif_triHB == desemprego_minRG ~ "homens brancos", desemprego_dif_triHN == desemprego_minRG ~ "homens negros")
+
+
+### Mesmo trimestre do ano anterior
+
+desemprego_hb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+desemprego_hn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+
+desemprego_mb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+
+
+## Por Região
+
+desemprego_norte <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte"])
+desemprego_nordeste <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste"])
+desemprego_centrooeste <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste"])
+desemprego_sudeste <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste"])
+desemprego_sul <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul"])
+
+desemprego_maxREG <- max(
+  desemprego_norte,
+  desemprego_nordeste,
+  desemprego_centrooeste,
+  desemprego_sudeste,
+  desemprego_sul
+)
+
+r_maxREG <- switch(
+  TRUE,
+  desemprego_norte == max_desemprego ~ "Norte",
+  desemprego_nordeste == max_desemprego ~ "Nordeste",
+  desemprego_centrooeste == max_desemprego ~ "Centro-oeste",
+  desemprego_sudeste == max_desemprego ~ "Sudeste",
+  desemprego_sul == max_desemprego ~ "Sul"
+)
+
+desemprego_minREG <- min(
+  desemprego_norte,
+  desemprego_nordeste,
+  desemprego_centrooeste,
+  desemprego_sudeste,
+  desemprego_sul
+)
+
+r_minREG <- switch(
+  TRUE,
+  desemprego_norte == max_desemprego ~ "Norte",
+  desemprego_nordeste == max_desemprego ~ "Nordeste",
+  desemprego_centrooeste == max_desemprego ~ "Centro-oeste",
+  desemprego_sudeste == max_desemprego ~ "Sudeste",
+  desemprego_sul == max_desemprego ~ "Sul"
+)
+
+### Trimestre anterior
+
+desemprego_norte_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_nordeste_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_centrooeste_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_sudeste_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_sul_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+
+# Variáveis de diferença, máx e mín
+desemprego_dif_triNO <- desemprego_norte - desemprego_norte_tri_anterior
+desemprego_dif_triNE <- desemprego_nordeste - desemprego_nordeste_tri_anterior
+desemprego_dif_triCO <- desemprego_centrooeste - desemprego_centrooeste_tri_anterior
+desemprego_dif_triSE <- desemprego_sudeste - desemprego_sudeste_tri_anterior
+desemprego_dif_triSU <- desemprego_sul - desemprego_sul_tri_anterior
+
+dif_desemprego_REGtri <- c(desemprego_dif_triNO, desemprego_dif_triNE, desemprego_dif_triCO, desemprego_dif_triSE, desemprego_dif_triSU)
+
+desemprego_maxREGtri <- max(dif_desemprego_REGtri)
+
+r_maxREG <- switch( TRUE, desemprego_dif_triNO == desemprego_maxREGtri ~ "Norte", desemprego_dif_triNE == desemprego_maxREGtri ~ "Nordeste", desemprego_dif_triCO == desemprego_maxREGtri ~ "Centro-oeste", desemprego_dif_triSE == desemprego_maxREGtri ~ "Sudeste", desemprego_dif_triSU == desemprego_maxREGtri ~ "Sul")
+
+desemprego_maxREGtri <- min(dif_desemprego_REGtri)
+
+r_minREG <- switch(TRUE, desemprego_dif_triNO == desemprego_minREGtri ~ "Norte", desemprego_dif_triNE == desemprego_minREGtri ~ "Nordeste", desemprego_dif_triCO == desemprego_minREGtri ~ "Centro-oeste", desemprego_dif_triSE == desemprego_minREGtri ~ "Sudeste", desemprego_dif_triSU == desemprego_minREGtri ~ "Sul")
+
+### Ano anterior, mesmo trimestre
+
+desemprego_norte_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_nordeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_centrooeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_sud_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+```
+Destacamos a alteração da taxa de desemprego geral de `r dif_desemprego` em relação ao `r q-1`º trimestre de `r i`. A região `r resultado_maxREG` registrou maior desemprego ao fim do último trimestre (`r (desemprego_maxREG)*100`%), enquanto o `r resultado_minREG` teve o menor resultado no mesmo período (`r (desemprego_minREG)*100`%). Nas categorias de raça e gênero, `r r_maxRG` foram a maior população desempregada, `r (desemprego_maxRG)*100`%. A menor taxa de desocupação foi registrada dentre `r r_minRG`, de `r (desemprego_minRG)*100`%. Veja abaixo mais dados de desemprego:
+
+
+
+
+
+
+```{r cars}
+summary(cars)
+
+#INCLUIR GRÁFICO/TABELA/SH
+#PODEMOS INCLUIR ALGUM PARÁGRAFO COMPARATIVO A ANO OU TRIMESTRE ANTERIROR A DEPENDER DO RESULTADO DOS DADOS
+```
+## Informalidade
+
+```{r}
+colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "informalidade_media"
+colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
+colnames(informal.RG.sh)[colnames(informal.RG.sh) == "não contribuinte INSS"] = "Informal"
+
+
+informalidade <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q4"]
+
+#Região
+
+informalidade_norte <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q4"]
+informalidade_nordeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q4"]
+informalidade_centrooeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q4"]
+informalidade_sudeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q4"]
+informalidade_sul <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q4"]
+
+max_informalREG <- max(informalidade_norte, informalidade_nordeste, informalidade_centrooeste, informalidade_sudeste, informalidade_sul)
+
+R_max_informalREG <- switch( TRUE, informalidade_norte == max_informalREG ~ "Norte", informalidade_nordeste == max_informalREG ~ "Nordeste", informalidade_centrooeste == max_informalREG ~ "Centro-oeste", informalidade_sudeste == max_informalREG ~ "Sudeste", informalidade_sul == max_informalREG ~ "Sul")
+
+min_informalREG <- min(informalidade_norte, informalidade_nordeste, informalidade_centrooeste, informalidade_sudeste, informalidade_sul)
+
+R_min_informalREG <- switch( TRUE, informalidade_norte == min_informalREG ~ "Norte", informalidade_nordeste == min_informalREG ~ "Nordeste", informalidade_centrooeste == min_informalREG ~ "Centro-oeste", informalidade_sudeste == min_informalREG ~ "Sudeste", informalidade_sul == min_informalREG ~ "Sul")
+
+#Raça e gênero
+informal_homem_branco <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_homem_negro <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_mulher_branca <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_mulher_negra <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q3"]
+
+max_informalRG <- max(informal_homem_branco, informal_homem_negro, informal_mulher_branca, informal_mulher_negra)
+
+r_maxinformalRG <- switch(TRUE, informal_mulher_branca == max_informalRG ~ "mulheres brancas", informal_mulher_negra == max_informalRG ~ "mulheres negras", informal_homem_branco == max_informalRG ~ "homens brancos", informal_homem_negro == max_informalRG ~ "homens negros")
+
+min_informalRG <- min(informal_homem_branco, informal_homem_negro, informal_mulher_branca, informal_mulher_negra)
+
+r_mininformalRG <- switch(TRUE, informal_mulher_branca == min_informalRG ~ "mulheres brancas", informal_mulher_negra == min_informalRG ~ "mulheres negras", informal_homem_branco == min_informalRG ~ "homens brancos", informal_homem_negro == min_informalRG ~ "homens negros")
+
+
+# Tri anterior
+
+informalidade_tri <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q3"]
+diftri_informalidade <- informalidade - informalidade_tri
+
+informal_triHB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_triHN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_triMB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_triMN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q3"]
+
+diftri_informalidadeHB <- informal_homem_branco - informal_triHB
+diftri_informalidadeHN <- informal_homem_negro - informal_triHN
+diftri_informalidadeMB <- informal_mulher_branca - informal_triMB
+diftri_informalidadeMN <- informal_mulher_negra - informal_triMN
+
+max_diftri_informalRG <- max(diftri_informalidadeHB, diftri_informalidadeHN, diftri_informalidadeMB, diftri_informalidadeMN)
+
+r_max_diftri_informalRG <- switch(TRUE, diftri_informalidadeMB == max_diftri_informalRG ~ "mulheres brancas", diftri_informalidadeMN == max_diftri_informalRG ~ "mulheres negras", diftri_informalidadeHB == max_diftri_informalRG ~ "homens brancos", diftri_informalidadeHN == max_diftri_informalRG ~ "homens negros")
+
+
+# Ano anterior
+informalidade_ano  <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2022 Q4"]
+difano_informalidadeRG <- informalidade - informalidade_ano
+
+informal_anoHB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2022 Q4"]
+informal_anoHN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2022 Q4"]
+informal_anoMB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2022 Q4"]
+informal_anoMN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2022 Q4"]
+
+max_difano_informalidadeRG <- ((informal_homem_branco - informal_anoHB), (informal_homem_negro - informal_anoHN), (informal_mulher_branca - informal_anoMB), (informal_mulher_negra - informal_anoMN))
+
+r_max_difano_informalRG <- switch(TRUE, (informal_mulher_branca - informal_anoMB) == max_difano_informalidadeRG ~ "mulheres brancas", (informal_mulher_negra - informal_anoMN) == max_difano_informalidadeRG ~ "mulheres negras", (informal_homem_branco - informal_anoHB) == max_difano_informalidadeRG ~ "homens brancos", (informal_homem_negro - informal_anoHN) == max_difano_informalidadeRG ~ "homens negros")
+
+
+```
+Neste relatório, definimos como trabalhadores informais aqueles que não contribuem à previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade*100)%` e a região com maior informalidade foi `r R_max_informalREG` (`r (max_informalREG*100)`%), enquanto a que registrou menores taxas foi `r R_min_informalREG` (`r (min_informalREG*100)`%). O grupo com maior proporção de trabalhadores informais foi o de `r r_maxinformalRG`, com `r (max_informalRG*100)%`. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informalidade*100)`% e o grupo com maior aumento de informalidade foi `r r_max_diftri_informalRG`, com uma diferença de `r (max_diftri_informalRG*100)`% . Na comparação anual, a variação média do Brasil foi de `r (difano_informalidadeRG*100)`% e a maior variação por raça e gênero foi registrada dentre `r r_max_difano_informalRG`, uma diferença de `r (max_difano_informalidadeRG*100)`%. 
+
+Estes dados estão reportados na Tabela 9: Informalidade por grupo (clique aqui para acessar). Veja mais abaixo:
+```{r pressure, echo=FALSE}
+#ADICIONAR VISUALIZAÇÃO GRÁFICA
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
