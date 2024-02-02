@@ -305,36 +305,57 @@ HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Hom
 HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
 HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
 
-setores_HB <- c(MB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
+setores_HB <- c(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
 ordem_HB <- (setores_HB, decreasing = TRUE)
-max_ordemHB <- ordem_HB[1]
+max_HB <- ordem_HB[1]
 segundo_HB <- ordem_HB[2]
 terceiro_HB <- ordem_HB[3]
 quarto_HB <- ordem_HB[4]
 quinto_HB <- ordem_HB[5]
 
-max_HB <- max(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
+#max_HB <- max(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
 
-r_max_HB <- switch(TRUE, HB_agro == max_HB ~ "agropecuária", HB_ind == max_HB ~ "indústria", HB_const == max_HB ~ "construção", HB_comercio == max_HB ~ "comércio", HB_tran == max_HB ~ "transporte", HB_alimen == max_HB ~ "alimentação", HB_info == max_HB ~ "informação", HB_publico == max_HB ~ "administração pública", HB_educa == max_HB ~ "educação", HB_oserv == max_HB ~ "outros serviços", HB_domes == max_HB ~ "serviços domésticos"
-
-min_HB <- min(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
+r_max_HB <- switch(TRUE, HB_agro == max_HB ~ "agropecuária", HB_ind == max_HB ~ "indústria", HB_const == max_HB ~ "construção", HB_comercio == max_HB ~ "comércio", HB_tran == max_HB ~ "transporte", HB_alimen == max_HB ~ "alimentação", HB_info == max_HB ~ "informação", HB_publico == max_HB ~ "administração pública", HB_educa == max_HB ~ "educação", HB_oserv == max_HB ~ "outros serviços", HB_domes == max_HB ~ "serviços domésticos")
+                   
+r_segundo_HB <- switch(TRUE, HB_agro == segundo_HB ~ "agropecuária", HB_ind == segundo_HB ~ "indústria", HB_const == segundo_HB ~ "construção", HB_comercio == segundo_HB ~ "comércio", HB_tran == segundo_HB ~ "transporte", HB_alimen == segundo_HB ~ "alimentação", HB_info == segundo_HB ~ "informação", HB_publico == segundo_HB ~ "administração pública", HB_educa == segundo_HB ~ "educação", HB_oserv == segundo_HB ~ "outros serviços", HB_domes == segundo_HB ~ "serviços domésticos") 
+                       
+r_terceiro_HB <- switch(TRUE, HB_agro == terceiro_HB ~ "agropecuária", HB_ind == terceiro_HB ~ "indústria", HB_const == terceiro_HB ~ "construção", HB_comercio == terceiro_HB ~ "comércio", HB_tran == terceiro_HB ~ "transporte", HB_alimen == terceiro_HB ~ "alimentação", HB_info == terceiro_HB ~ "informação", HB_publico == terceiro_HB ~ "administração pública", HB_educa == terceiro_HB ~ "educação", HB_oserv == terceiro_HB ~ "outros serviços", HB_domes == terceiro_HB ~ "serviços domésticos") 
+                        
+r_quarto_HB <- switch(TRUE, HB_agro == quarto_HB ~ "agropecuária", HB_ind == quarto_HB ~ "indústria", HB_const == quarto_HB ~ "construção", HB_comercio == quarto_HB ~ "comércio", HB_tran == quarto_HB ~ "transporte", HB_alimen == quarto_HB ~ "alimentação", HB_info == quarto_HB ~ "informação", HB_publico == quarto_HB ~ "administração pública", HB_educa == quarto_HB ~ "educação", HB_oserv == quarto_HB ~ "outros serviços", HB_domes == quarto_HB ~ "serviços domésticos")                       
+                        
+r_quinto_HB <- switch(TRUE, HB_agro == quinto_HB ~ "agropecuária", HB_ind == quinto_HB ~ "indústria", HB_const == quinto_HB ~ "construção", HB_comercio == quinto_HB ~ "comércio", HB_tran == quinto_HB ~ "transporte", HB_alimen == quinto_HB ~ "alimentação", HB_info == quinto_HB ~ "informação", HB_publico == quinto_HB ~ "administração pública", HB_educa == quinto_HB ~ "educação", HB_oserv == quinto_HB ~ "outros serviços", HB_domes == quinto_HB ~ "serviços domésticos")                        
 
 #Homem negro
-HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
+HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
+HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
 HN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
 HN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
 
-max_HN <- max(HN_agro, HN_ind, HN_const, HN_comercio, HN_tran, HN_alimen, HN_info, HN_publico, HN_educa, HN_oserv, HN_domes)
+setores_HN <- c(HN_agro, HN_ind, HN_const, HN_comercio, HN_tran, HN_alimen, HN_info, HN_publico, HN_educa, HN_oserv, HN_domes)
+ordem_HN <- (setores_HN, decreasing = TRUE)
+max_HN <- ordem_HN[1]
+segundo_HN <- ordem_HN[2]
+terceiro_HN <- ordem_HN[3]
+quarto_HN <- ordem_HN[4]
+quinto_HN <- ordem_HN[5]
 
-min_HN <- min(HN_agro, HN_ind, HN_const, HN_comercio, HN_tran, HN_alimen, HN_info, HN_publico, HN_educa, HN_oserv, HN_domes)
+r_max_HN <- switch(TRUE, HN_agro == max_HB ~ "agropecuária", HN_ind == max_HB ~ "indústria", HN_const == max_HB ~ "construção", HN_comercio == max_HB ~ "comércio", HN_tran == max_HB ~ "transporte", HN_alimen == max_HB ~ "alimentação", HN_info == max_HB ~ "informação", HN_publico == max_HB ~ "administração pública", HN_educa == max_HB ~ "educação", HN_oserv == max_HB ~ "outros serviços", HN_domes == max_HB ~ "serviços domésticos")
+                   
+r_segundo_HB <- switch(TRUE, HB_agro == segundo_HB ~ "agropecuária", HB_ind == segundo_HB ~ "indústria", HB_const == segundo_HB ~ "construção", HB_comercio == segundo_HB ~ "comércio", HB_tran == segundo_HB ~ "transporte", HB_alimen == segundo_HB ~ "alimentação", HB_info == segundo_HB ~ "informação", HB_publico == segundo_HB ~ "administração pública", HB_educa == segundo_HB ~ "educação", HB_oserv == segundo_HB ~ "outros serviços", HB_domes == segundo_HB ~ "serviços domésticos" 
+                       
+r_terceiro_HB <- switch(TRUE, HB_agro == terceiro_HB ~ "agropecuária", HB_ind == terceiro_HB ~ "indústria", HB_const == terceiro_HB ~ "construção", HB_comercio == terceiro_HB ~ "comércio", HB_tran == terceiro_HB ~ "transporte", HB_alimen == terceiro_HB ~ "alimentação", HB_info == terceiro_HB ~ "informação", HB_publico == terceiro_HB ~ "administração pública", HB_educa == terceiro_HB ~ "educação", HB_oserv == terceiro_HB ~ "outros serviços", HB_domes == terceiro_HB ~ "serviços domésticos" 
+                        
+r_quarto_HB <- switch(TRUE, HB_agro == quarto_HB ~ "agropecuária", HB_ind == quarto_HB ~ "indústria", HB_const == quarto_HB ~ "construção", HB_comercio == quarto_HB ~ "comércio", HB_tran == quarto_HB ~ "transporte", HB_alimen == quarto_HB ~ "alimentação", HB_info == quarto_HB ~ "informação", HB_publico == quarto_HB ~ "administração pública", HB_educa == quarto_HB ~ "educação", HB_oserv == quarto_HB ~ "outros serviços", HB_domes == quarto_HB ~ "serviços domésticos"                       
+                        
+r_quinto_HB <- switch(TRUE, HB_agro == quinto_HB ~ "agropecuária", HB_ind == quinto_HB ~ "indústria", HB_const == quinto_HB ~ "construção", HB_comercio == quinto_HB ~ "comércio", HB_tran == quinto_HB ~ "transporte", HB_alimen == quinto_HB ~ "alimentação", HB_info == quinto_HB ~ "informação", HB_publico == quinto_HB ~ "administração pública", HB_educa == quinto_HB ~ "educação", HB_oserv == quinto_HB ~ "outros serviços", HB_domes == quinto_HB ~ "serviços domésticos"    
+
 
 #Mulher Branca
 MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]
