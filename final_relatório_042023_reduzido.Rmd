@@ -27,7 +27,7 @@ library(gplots)
 ```
 
 ```{r}
-carregar tabelas
+carregar tabela
 ```
 
 ```{r}
