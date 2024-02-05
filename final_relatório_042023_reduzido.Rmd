@@ -27,10 +27,9 @@ library(gplots)
 ```
 
 ```{r}
-carregar tabela
+#carregar tabela
 ```
 
-```{r}
 
 ```{r include=FALSE}
 
@@ -55,7 +54,7 @@ Reportamos, a seguir, estaísticas resumidas do relatório da Pesquisa Nacional 
 
 # Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q2"]
 
-#colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
+colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
 
 desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
 desemprego_tri_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
@@ -77,9 +76,9 @@ desemprego_RG <- c(desemprego_mulher_branca, desemprego_mulher_negra, desemprego
 desemprego_minRG <- min(desemprego_RG)
 desemprego_maxRG <- max(desemprego_RG)
 
-resultado_maxRG <- switch(TRUE, desemprego_mulher_branca == desemprego_maxRG ~ "mulheres brancas", desemprego_mulher_negra == desemprego_maxRG ~ "mulheres negras", desemprego_homem_branco == desemprego_maxRG ~ "homens brancos", desemprego_homem_negro == desemprego_maxRG ~ "homens negros")
+r_maxRG <- switch(desemprego_maxRG, desemprego_mulher_branca == desemprego_maxRG ~ "mulheres brancas", desemprego_mulher_negra == desemprego_maxRG ~ "mulheres negras", desemprego_homem_branco == desemprego_maxRG ~ "homens brancos", desemprego_homem_negro == desemprego_maxRG ~ "homens negros")
 
-resultado_minRG <- switch(TRUE, desemprego_mulher_branca == desemprego_minRG ~ "mulheres brancas", desemprego_mulher_negra == desemprego_minRG ~ "mulheres negras", desemprego_homem_branco == desemprego_minRG ~ "homens brancos", desemprego_homem_negro == desemprego_minRG ~ "homens negros")
+r_minRG <- switch(TRUE, desemprego_mulher_branca == desemprego_minRG ~ "mulheres brancas", desemprego_mulher_negra == desemprego_minRG ~ "mulheres negras", desemprego_homem_branco == desemprego_minRG ~ "homens brancos", desemprego_homem_negro == desemprego_minRG ~ "homens negros")
 
 
 ### Trimestre anterior
@@ -93,7 +92,7 @@ desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria
 desemprego_dif_triMB <- (desemprego_mulher_branca - desemprego_mb_tri_anterior)
 desemprego_dif_triMN <- (desemprego_mulher_negra - desemprego_mn_tri_anterior)
 desemprego_dif_triHB <- (desemprego_homem_branco - desemprego_hb_tri_anterior)
-desemprego_dif_triHN <- (desemprego_homem_negro desemprego_hn_tri_anterior)
+desemprego_dif_triHN <- (desemprego_homem_negro - desemprego_hn_tri_anterior)
 
 desemprego_maxRG <- max (desemprego_dif_triMB, desemprego_dif_triMN, desemprego_dif_triHB, desemprego_dif_triHN)
 
@@ -170,15 +169,20 @@ desemprego_dif_triCO <- desemprego_centrooeste - desemprego_centrooeste_tri_ante
 desemprego_dif_triSE <- desemprego_sudeste - desemprego_sudeste_tri_anterior
 desemprego_dif_triSU <- desemprego_sul - desemprego_sul_tri_anterior
 
-dif_desemprego_REGtri <- c(desemprego_dif_triNO, desemprego_dif_triNE, desemprego_dif_triCO, desemprego_dif_triSE, desemprego_dif_triSU)
+desemprego_dif_triNO <- "Norte"
+desemprego_dif_triNE <- "Nordeste"
+desemprego_dif_triCO <- "Centro-Oeste"
+desemprego_dif_triSE <- "Sudeste"
+desemprego_dif_triSU <- "Sul"
 
-desemprego_maxREGtri <- max(dif_desemprego_REGtri)
+desem_triREG <- c(desemprego_dif_triNO, desemprego_dif_triNE, desemprego_dif_triCO, desemprego_dif_triSE, desemprego_dif_triSU)
+ordem_desem_triREG <- sort(desem_triREG, decreasing = TRUE)
+max_desemtriREG <- ordem_desem_triREG[1]
+seg_desemtriREG <- ordem_desem_triREG[2]
+ter_desemtriREG <- ordem_desem_triREG[3]
+qua_desemtriREG <- ordem_desem_triREG[4]
+qui_desemtriREG <- ordem_desem_triREG[5]
 
-r_maxREG <- switch( TRUE, desemprego_dif_triNO == desemprego_maxREGtri ~ "Norte", desemprego_dif_triNE == desemprego_maxREGtri ~ "Nordeste", desemprego_dif_triCO == desemprego_maxREGtri ~ "Centro-oeste", desemprego_dif_triSE == desemprego_maxREGtri ~ "Sudeste", desemprego_dif_triSU == desemprego_maxREGtri ~ "Sul")
-
-desemprego_maxREGtri <- min(dif_desemprego_REGtri)
-
-r_minREG <- switch(TRUE, desemprego_dif_triNO == desemprego_minREGtri ~ "Norte", desemprego_dif_triNE == desemprego_minREGtri ~ "Nordeste", desemprego_dif_triCO == desemprego_minREGtri ~ "Centro-oeste", desemprego_dif_triSE == desemprego_minREGtri ~ "Sudeste", desemprego_dif_triSU == desemprego_minREGtri ~ "Sul")
 
 ### Ano anterior, mesmo trimestre
 
@@ -188,7 +192,7 @@ desemprego_centrooeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.R
 desemprego_sud_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
 desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
 ```
-Destacamos a alteração da taxa de desemprego geral de `r dif_desemprego` em relação ao `r q-1`º trimestre de `r i`. A região `r resultado_maxREG` registrou maior desemprego ao fim do último trimestre (`r (desemprego_maxREG)*100`%), enquanto o `r resultado_minREG` teve o menor resultado no mesmo período (`r (desemprego_minREG)*100`%). Nas categorias de raça e gênero, `r r_maxRG` foram a maior população desempregada, `r (desemprego_maxRG)*100`%. A menor taxa de desocupação foi registrada dentre `r r_minRG`, de `r (desemprego_minRG)*100`%. Veja abaixo mais dados de desemprego:
+Destacamos a alteração da taxa de desemprego geral de `r dif_desemprego` em relação ao `r q-1`º trimestre de `r i`. A região `r r_maxREG` registrou maior desemprego ao fim do último trimestre (`r (desemprego_maxREG)*100`%), enquanto o `r r_minREG` teve o menor resultado no mesmo período (`r (desemprego_minREG)*100`%). Nas categorias de raça e gênero, `r r_maxRG` foram a maior população desempregada, `r (desemprego_maxRG)*100`%. A menor taxa de desocupação foi registrada dentre `r r_minRG`, de `r (desemprego_minRG)*100`%. Veja abaixo mais dados de desemprego:
 
 
 
@@ -211,42 +215,99 @@ colnames(informal.RG.sh)[colnames(informal.RG.sh) == "não contribuinte INSS"] =
 
 informalidade <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q3"]
 
+informal_tri <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q3"]
+diftri_informal <- informalidade - informalidade_tri
+
 #Região
+inf_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q3"]
+inf_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q3"]
+inf_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q3"]
+inf_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q3"]
+inf_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q3"]
 
-informalidade_norte <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q3"]
-informalidade_nordeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q3"]
-informalidade_centrooeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q3"]
-informalidade_sudeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q3"]
-informalidade_sul <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q3"]
+inf_NO <- "Norte"
+inf_NE <- "Nordeste"
+inf_CO <- "Centro-Oeste"
+inf_SE <- "Sudeste"
+inf_SU <- "Sul"
 
-max_informalREG <- max(informalidade_norte, informalidade_nordeste, informalidade_centrooeste, informalidade_sudeste, informalidade_sul)
+informalREG <- c(inf_NO, inf_NE, inf_CO, inf_SE, inf_SU)
+ordem_infREG <- sort(informalREG, decreasing = TRUE)
+max_infREG <- ordem_infREG[1]
+seg_infREG <- ordem_infREG[2]
+ter_infREG <- ordem_infREG[3]
+qua_infREG <- ordem_infREG[4]
 
-R_max_informalREG <- switch( TRUE, informalidade_norte == max_informalREG ~ "Norte", informalidade_nordeste == max_informalREG ~ "Nordeste", informalidade_centrooeste == max_informalREG ~ "Centro-oeste", informalidade_sudeste == max_informalREG ~ "Sudeste", informalidade_sul == max_informalREG ~ "Sul")
+## Tri anterior
+informal_triNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q2"]
 
-min_informalREG <- min(informalidade_norte, informalidade_nordeste, informalidade_centrooeste, informalidade_sudeste, informalidade_sul)
+inf_triNO <- ((inf_NO) - (informal_triNO))
+inf_triNE <- inf_NE - informal_triNE
+inf_triCO <- inf_CO - informal_triCO
+inf_triSE <- inf_SE - informal_triSE
+inf_triSU <- inf_SU - informal_triSU
 
-R_min_informalREG <- switch( TRUE, informalidade_norte == min_informalREG ~ "Norte", informalidade_nordeste == min_informalREG ~ "Nordeste", informalidade_centrooeste == min_informalREG ~ "Centro-oeste", informalidade_sudeste == min_informalREG ~ "Sudeste", informalidade_sul == min_informalREG ~ "Sul")
+inf_triNO <- "Norte"
+inf_triNE <- "Nordeste"
+inf_triCO <- "Centro-Oeste"
+inf_triSE <- "Sudeste"
+inf_triSU <- "Sul"
+
+inftri_REG <- c(inf_triNO, inf_triNE, inf_triCO, inf_triSE, inf_triSU)
+ordem_inftriREG <- sort(inftri_REG, decreasing = TRUE)
+max_inftriREG <- ordem_inftriREG[1]
+seg_inftriREG <- ordem_inftriREG[2]
+ter_inftriREG <- ordem_inftriREG[3]
+qua_inftriREG <- ordem_inftriREG[4]
+qui_inftriREG <- ordem_inftriREG[5]
+
+## Ano anterior
+
+informal_anoNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2022 Q3"]
+
+inf_anoNO <- inf_NO - informal_anoNO
+inf_anoNE <- inf_NE - informal_anoNE
+inf_anoCO <- inf_CO - informal_anoCO
+inf_anoSE <- inf_SE - informal_anoSE
+inf_anoSU <- inf_SU - informal_anoSU
+ 
+infano_REG <- c(inf_anoNO, inf_anoNE, inf_anoCO, inf_anoSE, inf_anoSU)
+ordem_infanoREG <- sort(infano_REG, decreasing = TRUE)
+max_infanoREG <- ordem_infanoREG[1]
+seg_infanoREG <- ordem_infanoREG[2]
+ter_infanoREG <- ordem_infanoREG[3]
+qua_infanoREG <- ordem_infanoREG[4]
+qui_infanoREG <- ordem_infanoREG[5]
+
 
 #Raça e gênero
-informal_homem_branco <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q3"]
-informal_homem_negro <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q3"]
-informal_mulher_branca <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
-informal_mulher_negra <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q3"]
+ 
+informal_HB <- "homens brancos"
+informal_HN <- "homens negros"
+informal_MB <- "mulheres brancas"
+informal_MN <- "mulheres negras"
 
-max_informalRG <- max(informal_homem_branco, informal_homem_negro, informal_mulher_branca, informal_mulher_negra)
+informalRG <- c(informal_HB, informal_HN, informal_MB, informal_MN)
+ordem_infRG <- sort(informalRG, decreasing = TRUE)
+max_infRG <- ordem_infRG[1]
+seg_infRG <- ordem_infRG[2]
+ter_infRG <- ordem_infRG[3]
+qua_infRG <- ordem_infRG[4]
 
-r_maxinformalRG <- switch(TRUE, informal_mulher_branca == max_informalRG ~ "mulheres brancas", informal_mulher_negra == max_informalRG ~ "mulheres negras", informal_homem_branco == max_informalRG ~ "homens brancos", informal_homem_negro == max_informalRG ~ "homens negros")
 
-min_informalRG <- min(informal_homem_branco, informal_homem_negro, informal_mulher_branca, informal_mulher_negra)
-
-r_mininformalRG <- switch(TRUE, informal_mulher_branca == min_informalRG ~ "mulheres brancas", informal_mulher_negra == min_informalRG ~ "mulheres negras", informal_homem_branco == min_informalRG ~ "homens brancos", informal_homem_negro == min_informalRG ~ "homens negros")
-
-
-# Tri anterior
-
-informalidade_tri <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q3"]
-diftri_informalidade <- informalidade - informalidade_tri
-
+##Tri anterior
 informal_triHB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q3"]
 informal_triHN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q3"]
 informal_triMB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
@@ -257,27 +318,49 @@ diftri_informalidadeHN <- informal_homem_negro - informal_triHN
 diftri_informalidadeMB <- informal_mulher_branca - informal_triMB
 diftri_informalidadeMN <- informal_mulher_negra - informal_triMN
 
-max_diftri_informalRG <- max(diftri_informalidadeHB, diftri_informalidadeHN, diftri_informalidadeMB, diftri_informalidadeMN)
+# Atribuir resultados às variáveis
+diftri_informalidadeHB <- "homens brancos"
+diftri_informalidadeHN <- "homens negros"
+diftri_informalidadeMB <- "mulheres brancas"
+diftri_informalidadeMN <- "mulheres negras"
 
-r_max_diftri_informalRG <- switch(TRUE, diftri_informalidadeMB == max_diftri_informalRG ~ "mulheres brancas", diftri_informalidadeMN == max_diftri_informalRG ~ "mulheres negras", diftri_informalidadeHB == max_diftri_informalRG ~ "homens brancos", diftri_informalidadeHN == max_diftri_informalRG ~ "homens negros")
+diftri_informalidadeRG <- c(diftri_informalidadeHB, diftri_informalidadeHN, diftri_informalidadeMB, diftri_informalidadeMN)
+ordem_diftri <- sort(diftri_informalidadeRG, decreasing = TRUE)
+max_inftriRG <- ordem_diftri[1]
+seg_inftriRG <- ordem_diftri[2]
+ter_inftriRG <- ordem_diftri[3]
+qua_inftriRG <- ordem_diftri[4]
 
 
-# Ano anterior
-informalidade_ano  <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2022 Q3"]
-difano_informalidadeRG <- informalidade - informalidade_ano
+## Ano anterior
+informalidade_ano <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2022 Q3"]
+difano_informalRG <- informalidade - informalidade_ano
 
 informal_anoHB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2022 Q3"]
 informal_anoHN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2022 Q3"]
 informal_anoMB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2022 Q3"]
 informal_anoMN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2022 Q3"]
 
-max_difano_informalidadeRG <- ((informal_homem_branco - informal_anoHB), (informal_homem_negro - informal_anoHN), (informal_mulher_branca - informal_anoMB), (informal_mulher_negra - informal_anoMN))
+infanoHB <- informal_HB - informal_anoHB
+infanoHN <- informal_HN - informal_anoHN
+infanoMB <- informal_MB - informal_anoMB
+infanoMN <- informal_MB - informal_anoMN
 
-r_max_difano_informalRG <- switch(TRUE, (informal_mulher_branca - informal_anoMB) == max_difano_informalidadeRG ~ "mulheres brancas", (informal_mulher_negra - informal_anoMN) == max_difano_informalidadeRG ~ "mulheres negras", (informal_homem_branco - informal_anoHB) == max_difano_informalidadeRG ~ "homens brancos", (informal_homem_negro - informal_anoHN) == max_difano_informalidadeRG ~ "homens negros")
+infanoHB <- "homens brancos"
+infanoHN <- "homens negros"
+infanoMB <- "mulheres brancas"
+infanoMN <- "mulheres negras"
+
+infano_RG <- c(infanoHB, infanoHN, infanoMB, infanoMN)
+ordem_infanoRG <- sort(infano_RG, decreasing = TRUE)
+max_infanoRG <- ordem_infanoRG[1]
+seg_infanoRG <- ordem_infanoRG[2]
+ter_infanoRG <- ordem_infanoRG[3]
+qua_infanoRG <- ordem_infanoRG[4]
 
 
 ```
-Neste relatório, definimos como trabalhadores informais aqueles que não contribuem à previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade*100)%` e a região com maior informalidade foi `r R_max_informalREG` (`r (max_informalREG*100)`%), enquanto a que registrou menores taxas foi `r R_min_informalREG` (`r (min_informalREG*100)`%). O grupo com maior proporção de trabalhadores informais foi o de `r r_maxinformalRG`, com `r (max_informalRG*100)%`. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informalidade*100)`% e o grupo com maior aumento de informalidade foi `r r_max_diftri_informalRG`, com uma diferença de `r (max_diftri_informalRG*100)`% . Na comparação anual, a variação média do Brasil foi de `r (difano_informalidadeRG*100)`% e a maior variação por raça e gênero foi registrada dentre `r r_max_difano_informalRG`, uma diferença de `r (max_difano_informalidadeRG*100)`%. 
+Neste relatório, definimos como trabalhadores informais aqueles que não contribuem à previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade*100)%` e a região com maior informalidade foi `r max_infREG` (`r (max_informalREG*100)`%), enquanto a que registrou menores taxas foi `r R_min_informalREG` (`r (min_informalREG*100)`%). O grupo com maior proporção de trabalhadores informais foi o de `r r_maxinformalRG`, com `r (max_informalRG*100)%`. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informalidade*100)`% e o grupo com maior aumento de informalidade foi `r r_max_diftri_informalRG`, com uma diferença de `r (max_diftri_informalRG*100)`% . Na comparação anual, a variação média do Brasil foi de `r (difano_informalidadeRG*100)`% e a maior variação por raça e gênero foi registrada dentre `r r_max_difano_informalRG`, uma diferença de `r (max_difano_informalidadeRG*100)`%. 
 
 Estes dados estão reportados na Tabela 9: Informalidade por grupo (clique aqui para acessar). Veja mais abaixo:
 ```{r pressure, echo=FALSE}
@@ -293,120 +376,146 @@ colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Outros serviços
 colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Serviços domésticos"] = "Ser_domesticos"
 
 #Homem Branco
-HB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
+HB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+
+# Atribuir resultados às variáveis
+HB_agro <- "agropecuária"
+HB_ind <- "indústria"
+HB_const <- "construção"
+HB_comercio <- "comércio"
+HB_tran <- "transporte"
+HB_alimen <- "alimentação"
+HB_info <- "informação" 
+HB_publico <- "administração pública"
+HB_educa <- "educação"
+HB_oserv <- "outros serviços"
+HB_domes <- "serviços domésticos"
 
 setores_HB <- c(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
-ordem_HB <- (setores_HB, decreasing = TRUE)
+ordem_HB <- sort(setores_HB, decreasing = TRUE)
 max_HB <- ordem_HB[1]
 segundo_HB <- ordem_HB[2]
 terceiro_HB <- ordem_HB[3]
 quarto_HB <- ordem_HB[4]
 quinto_HB <- ordem_HB[5]
 
-#max_HB <- max(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
-
-r_max_HB <- switch(TRUE, HB_agro == max_HB ~ "agropecuária", HB_ind == max_HB ~ "indústria", HB_const == max_HB ~ "construção", HB_comercio == max_HB ~ "comércio", HB_tran == max_HB ~ "transporte", HB_alimen == max_HB ~ "alimentação", HB_info == max_HB ~ "informação", HB_publico == max_HB ~ "administração pública", HB_educa == max_HB ~ "educação", HB_oserv == max_HB ~ "outros serviços", HB_domes == max_HB ~ "serviços domésticos")
-                   
-r_segundo_HB <- switch(TRUE, HB_agro == segundo_HB ~ "agropecuária", HB_ind == segundo_HB ~ "indústria", HB_const == segundo_HB ~ "construção", HB_comercio == segundo_HB ~ "comércio", HB_tran == segundo_HB ~ "transporte", HB_alimen == segundo_HB ~ "alimentação", HB_info == segundo_HB ~ "informação", HB_publico == segundo_HB ~ "administração pública", HB_educa == segundo_HB ~ "educação", HB_oserv == segundo_HB ~ "outros serviços", HB_domes == segundo_HB ~ "serviços domésticos") 
-                       
-r_terceiro_HB <- switch(TRUE, HB_agro == terceiro_HB ~ "agropecuária", HB_ind == terceiro_HB ~ "indústria", HB_const == terceiro_HB ~ "construção", HB_comercio == terceiro_HB ~ "comércio", HB_tran == terceiro_HB ~ "transporte", HB_alimen == terceiro_HB ~ "alimentação", HB_info == terceiro_HB ~ "informação", HB_publico == terceiro_HB ~ "administração pública", HB_educa == terceiro_HB ~ "educação", HB_oserv == terceiro_HB ~ "outros serviços", HB_domes == terceiro_HB ~ "serviços domésticos") 
-                        
-r_quarto_HB <- switch(TRUE, HB_agro == quarto_HB ~ "agropecuária", HB_ind == quarto_HB ~ "indústria", HB_const == quarto_HB ~ "construção", HB_comercio == quarto_HB ~ "comércio", HB_tran == quarto_HB ~ "transporte", HB_alimen == quarto_HB ~ "alimentação", HB_info == quarto_HB ~ "informação", HB_publico == quarto_HB ~ "administração pública", HB_educa == quarto_HB ~ "educação", HB_oserv == quarto_HB ~ "outros serviços", HB_domes == quarto_HB ~ "serviços domésticos")                       
-                        
-r_quinto_HB <- switch(TRUE, HB_agro == quinto_HB ~ "agropecuária", HB_ind == quinto_HB ~ "indústria", HB_const == quinto_HB ~ "construção", HB_comercio == quinto_HB ~ "comércio", HB_tran == quinto_HB ~ "transporte", HB_alimen == quinto_HB ~ "alimentação", HB_info == quinto_HB ~ "informação", HB_publico == quinto_HB ~ "administração pública", HB_educa == quinto_HB ~ "educação", HB_oserv == quinto_HB ~ "outros serviços", HB_domes == quinto_HB ~ "serviços domésticos")                        
 
 #Homem negro
-HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-HN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
+HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+HN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+
+# Atribuir resultados às variáveis
+HN_agro <- "agropecuária"
+HN_ind <- "indústria"
+HN_const <- "construção"
+HN_comercio <- "comércio"
+HN_tran <- "transporte"
+HN_alimen <- "alimentação"
+HN_info <- "informação" 
+HN_publico <- "administração pública"
+HN_educa <- "educação"
+HN_oserv <- "outros serviços"
+HN_domes <- "serviços domésticos"
 
 setores_HN <- c(HN_agro, HN_ind, HN_const, HN_comercio, HN_tran, HN_alimen, HN_info, HN_publico, HN_educa, HN_oserv, HN_domes)
-ordem_HN <- (setores_HN, decreasing = TRUE)
+ordem_HN <- sort(setores_HN, decreasing = TRUE)
 max_HN <- ordem_HN[1]
-segundo_HN <- ordem_HN[2]
-terceiro_HN <- ordem_HN[3]
-quarto_HN <- ordem_HN[4]
-quinto_HN <- ordem_HN[5]
-
-r_max_HN <- switch(TRUE, HN_agro == max_HB ~ "agropecuária", HN_ind == max_HB ~ "indústria", HN_const == max_HB ~ "construção", HN_comercio == max_HB ~ "comércio", HN_tran == max_HB ~ "transporte", HN_alimen == max_HB ~ "alimentação", HN_info == max_HB ~ "informação", HN_publico == max_HB ~ "administração pública", HN_educa == max_HB ~ "educação", HN_oserv == max_HB ~ "outros serviços", HN_domes == max_HB ~ "serviços domésticos")
-                   
-r_segundo_HB <- switch(TRUE, HB_agro == segundo_HB ~ "agropecuária", HB_ind == segundo_HB ~ "indústria", HB_const == segundo_HB ~ "construção", HB_comercio == segundo_HB ~ "comércio", HB_tran == segundo_HB ~ "transporte", HB_alimen == segundo_HB ~ "alimentação", HB_info == segundo_HB ~ "informação", HB_publico == segundo_HB ~ "administração pública", HB_educa == segundo_HB ~ "educação", HB_oserv == segundo_HB ~ "outros serviços", HB_domes == segundo_HB ~ "serviços domésticos" 
-                       
-r_terceiro_HB <- switch(TRUE, HB_agro == terceiro_HB ~ "agropecuária", HB_ind == terceiro_HB ~ "indústria", HB_const == terceiro_HB ~ "construção", HB_comercio == terceiro_HB ~ "comércio", HB_tran == terceiro_HB ~ "transporte", HB_alimen == terceiro_HB ~ "alimentação", HB_info == terceiro_HB ~ "informação", HB_publico == terceiro_HB ~ "administração pública", HB_educa == terceiro_HB ~ "educação", HB_oserv == terceiro_HB ~ "outros serviços", HB_domes == terceiro_HB ~ "serviços domésticos" 
-                        
-r_quarto_HB <- switch(TRUE, HB_agro == quarto_HB ~ "agropecuária", HB_ind == quarto_HB ~ "indústria", HB_const == quarto_HB ~ "construção", HB_comercio == quarto_HB ~ "comércio", HB_tran == quarto_HB ~ "transporte", HB_alimen == quarto_HB ~ "alimentação", HB_info == quarto_HB ~ "informação", HB_publico == quarto_HB ~ "administração pública", HB_educa == quarto_HB ~ "educação", HB_oserv == quarto_HB ~ "outros serviços", HB_domes == quarto_HB ~ "serviços domésticos"                       
-                        
-r_quinto_HB <- switch(TRUE, HB_agro == quinto_HB ~ "agropecuária", HB_ind == quinto_HB ~ "indústria", HB_const == quinto_HB ~ "construção", HB_comercio == quinto_HB ~ "comércio", HB_tran == quinto_HB ~ "transporte", HB_alimen == quinto_HB ~ "alimentação", HB_info == quinto_HB ~ "informação", HB_publico == quinto_HB ~ "administração pública", HB_educa == quinto_HB ~ "educação", HB_oserv == quinto_HB ~ "outros serviços", HB_domes == quinto_HB ~ "serviços domésticos"    
+seg_HN <- ordem_HN[2]
+ter_HN <- ordem_HN[3]
+qua_HN <- ordem_HN[4]
+qui_HN <- ordem_HN[5]
 
 
 #Mulher Branca
-MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
+MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
 
-max_MB <- max(MB_agro, MB_ind, MB_const, MB_comercio, MB_tran, MB_alimen, MB_info, MB_publico, MB_educa, MB_oserv, MB_domes)
+# Atribuir resultados às variáveis
+MB_agro <- "agropecuária"
+MB_ind <- "indústria"
+MB_const <- "construção"
+MB_comercio <- "comércio"
+MB_tran <- "transporte"
+MB_alimen <- "alimentação"
+MB_info <- "informação" 
+MB_publico <- "administração pública"
+MB_educa <- "educação"
+MB_oserv <- "outros serviços"
+MB_domes <- "serviços domésticos"
 
-min_MB <- min(MB_agro, MB_ind, MB_const, MB_comercio, MB_tran, MB_alimen, MB_info, MB_publico, MB_educa, MB_oserv, MB_domes)
+setores_MB <- c(MB_agro, MB_ind, MB_const, MB_comercio, MB_tran, MB_alimen, MB_info, MB_publico, MB_educa, MB_oserv, MB_domes)
+ordem_MB <- sort(setores_MB, decreasing = TRUE)
+max_ordemMB <- ordem_MB[1]
+seg_MB <- ordem_MB[2]
+ter_MB <- ordem_MB[3]
+qua_MB <- ordem_MB[4]
+qui_MB <- ordem_MB[5]
 
 #Mulher Negra
-MN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
-MN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]
+MN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+MN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
+
+# Atribuir resultados às variáveis
+MN_agro <- "agropecuária"
+MN_ind <- "indústria"
+MN_const <- "construção"
+MN_comercio <- "comércio"
+MN_tran <- "transporte"
+MN_alimen <- "alimentação"
+MN_info <- "informação" 
+MN_publico <- "administração pública"
+MN_educa <- "educação"
+MN_oserv <- "outros serviços"
+MN_domes <- "serviços domésticos"
 
 setores_MN <- c(MN_agro, MN_ind, MN_const, MN_comercio, MN_tran, MN_alimen, MN_info, MN_publico, MN_educa, MN_oserv, MN_domes)
-ordem_MN <- (setores_MN, decreasing = TRUE)
-max_ordemMN <- ordem_MN[1]
-segundo_MN <- ordem_MN[2]
-terceiro_MN <- ordem_MN[3]
-quarto_MN <- ordem_MN[4]
-quinto_MN <- ordem_MN[5]
-
-max_MN <- max(setores_MN)
-
-min_MN <- min(MN_agro, MN_ind, MN_const, MN_comercio, MN_tran, MN_alimen, MN_info, MN_publico, MN_educa, MN_oserv, MN_domes)
+ordem_MN <- sort(setores_MN, decreasing = TRUE)
+max_MN <- ordem_MN[1]
+seg_MN <- ordem_MN[2]
+ter_MN <- ordem_MN[3]
+qua_MN <- ordem_MN[4]
+qui_MN <- ordem_MN[5]
 
 ```
 
-A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º
-trimestre de `r i`, a maioria dos homens negros (VV) estão alocados no setor de XX, e a minoria (%) em XX.
-Para homens brancos, o setor que mais emprega também é `r r_max_HB` com `r (max_HB*100)`%, além da indústria com
-0.16%, informação que emprega 0.16% e agricultura com 0.1%.
-Para o total de mulheres brancas empregadas, 0.24% estão no setor de educação, 0.18% encontram-se no setor
-de comércio e 0.15% no setor de informação. Das mulheres negras, 0.21% estão alocadas no setor educação, seguido de comércio 0.18% e serviços domésticos com 0.16%. Nota-se que o setor de informação emprega
-mais brancos que negros e os serviços domésticos são majoritariamente exercidos por mulheres negras. Veja
-a Tabela 15: Setor do Trabalho Principal por Grupo, para maiores informações.
+A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (VALOR%) estavam alocados no setor de `r max_HN`, seguido de `r seg_HN` (VALOR%), `r ter_HN` (VALOR%), `r qua_HN` (VALOR%) e `r qui_HN` (VALOR%). Para homens brancos, o setor que mais empregou foi `r max_HB` com (VALOR)%, além de `r seg_HB` (VALOR)%, `r ter_HB` com (VALOR)%, `r qua_HB` com (VALOR)% e `r qui_HB` com (VALOR)%. Para o total de mulheres brancas empregadas, VALOR% estavam no setor de `r max_MB`, VALOR% encontram-se no setor de `r seg_MB` e VALOR% no setor de `r ter_MB`. Das mulheres negras, VALOR% ocupavam o setor de `r max_MN`, seguido de `r seg_MN` VALOR% e `r ter_MN` com VALOR%. 
+
+Nota-se que o setor de XX emprega mais brancos que negros e que os YY são majoritariamente exercidos por grupo JJ. Veja a Tabela 15: Setor do Trabalho Principal por Grupo, para maiores informações.
 
 
 
