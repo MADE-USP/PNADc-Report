@@ -590,7 +590,7 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 ```
 
-O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo, mas,no relatório reduzido, optamos por suprimir esse dado. Para acessá-lo, confira o relatório completo aqui (link).
+O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório reduzido, optamos por reportar apenas o rendimento habitual mensal e suprimir o rendimento efetivo mensal, que pode ser acessado no relatório completo aqui (link).
 
 O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR%, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR%). Para mais informações, acesse a Tabela XX: Título ou veja os dados a abaixo:
 
