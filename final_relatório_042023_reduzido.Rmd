@@ -613,6 +613,6 @@ Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que
 
 Finalmente, calculamos a desigualdade entre os grupos de raça e gênero, cujos resultados encontram-se apresentados na [Tabela 21: Índice de Gini por Grupo](https://docs.google.com/spreadsheets/d/1HocxMRN5kpiZGvq3gxV0NJUpR8IysgUK/edit?usp=sharing&ouid=115284899176275679612&rtpof=true&sd=true). 
 
-O índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes dos referidos grupos.
+O índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
 
 
