@@ -1,5 +1,5 @@
 ---
-title: "Relatório Trimestral da PNAD ^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito, Marina Sanches, Tainari Taioka, e pelos pesquisadores Hiaman Santos e José Bergamin.]"
+title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito, Marina Sanches, Tainari Taioka, e pelos pesquisadores Hiaman Santos e José Bergamin.]"
 author: "Made USP"
 date: "19/02/2024"
 output:
@@ -47,7 +47,7 @@ q=4
 
 # Introdução
 
-Reportamos, a seguir, estaísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios contínua (PNADc) referente ao `r q`º trimestre de `r i`. Para mais estatísticas e tabelas completas, acesse o link ao final do documento. 
+Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link no final do documento. 
 
 # Mercado de Trabalho
 ## Desemprego
