@@ -211,7 +211,7 @@ qua_desemanoREG <- ordem_desem_anoREG[4]
 qui_desemanoREG <- ordem_desem_anoREG[5]
 
 ```
-Destacamos a alteração da taxa de desemprego geral de `r dif_desemprego` em relação ao `r q-1`º trimestre de `r i`. A região `r max_desemREG` registrou maior desemprego ao fim do último trimestre (VALOR%), enquanto o `r qui_desemREG` teve o menor resultado no mesmo período (VALOR%). Nas categorias de raça e gênero, `r max_desemRG` foram a maior população desempregada, cerca de VALOR%. A menor taxa de desocupação foi registrada dentre `r qua_desemRG`, de VALOR%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r (dif_desemprego)*100`% em relação ao `r q-1`º trimestre de `r i`. A região `r max_desemREG` registrou maior desemprego ao fim do último trimestre (VALOR%), enquanto o `r qui_desemREG` teve o menor resultado no mesmo período (VALOR%). Nas categorias de raça e gênero, `r max_desemRG` foram a maior população desempregada, cerca de VALOR%. A menor taxa de desocupação foi registrada dentre `r qua_desemRG`, de VALOR%. 
 
 Informações completas sobre desemprego são encontradas na [Tabela X: TÌTULO]. Veja abaixo mais dados de desemprego:
 
