@@ -377,10 +377,12 @@ qua_infanoRG <- ordem_infanoRG[4]
 
 
 ```
-Neste relatório, definimos como trabalhadores informais aqueles que não contribuem à previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade*100)`% e a região com maior informalidade foi `r max_infREG` (VALOR%), seguida do `r max_infREG` (VALOR%). O `r qui_infREG` registrou as menores taxas de informalidade (VALOR%). 
-No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de `r max_infRG`, com VALOR%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (desem_tri*100)`% e o grupo com maior aumento de informalidade no mesmo período foi `r max_inftriRG`, com uma diferença de VALOR%.
+Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi `r max_infREG` (VALOR%), seguida do `r max_infREG` (VALOR%). O `r qui_infREG` registrou as menores taxas de informalidade (VALOR%). 
 
-Na comparação anual, a variação média do Brasil foi de `r (desem_ANO*100)`% e a maior variação por raça e gênero foi registrada dentre `r max_infanoRG`, uma diferença de VALOR%. Estes dados estão reportados na Tabela 9: Informalidade por grupo (clique aqui para acessar). Veja mais abaixo:
+No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de `r max_infRG`, com VALOR%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (desem_tri)*100`% e o grupo com maior aumento de informalidade no mesmo período foi `r max_inftriRG`, com uma diferença de VALOR%.
+
+Na comparação anual, a variação média do Brasil foi de `r (desem_ANO)*100`% e a maior variação por raça e gênero foi registrada dentre `r max_infanoRG`, uma diferença de VALOR%. Estes dados estão reportados na Tabela 9: Informalidade por grupo (clique aqui para acessar). Veja mais abaixo:
+
 ```{r pressure, echo=FALSE}
 #ADICIONAR VISUALIZAÇÃO GRÁFICA
 ```
