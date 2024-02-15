@@ -597,5 +597,22 @@ O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` p
 ```{r}
 #add graficos
 ```
-#Gini
+#Distribuição: Índice de Gini
+
+O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos.].
+
+O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR$gini`, um índice mais próximo de um do que de zero. Esse índice não se alterou comparativamente ao trimestre anterior e o mesmo trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
+
+![Índice de Gini por Gênero e Raça](C:/Users/clara/Downloads/GINI_RG.png){width=}
+
+![Índice de Gini por Região](C:/Users/clara/Downloads/GINI_REG.png){width=90%}
+
+Para termos uma ideia das desigualdades entre as regiões do país, reportamos o índice de Gini de rendimentos efetivos para cada região na [Tabela 20: Índice de Gini por Região](https://docs.google.com/spreadsheets/d/1HpgBZFAHhnWMZ83o623ly_Jv10nexg0v/edit?usp=sharing&ouid=115284899176275679612&rtpof=true&sd=true).
+
+Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado.
+
+Finalmente, calculamos a desigualdade entre os grupos de raça e gênero, cujos resultados encontram-se apresentados na [Tabela 21: Índice de Gini por Grupo](https://docs.google.com/spreadsheets/d/1HocxMRN5kpiZGvq3gxV0NJUpR8IysgUK/edit?usp=sharing&ouid=115284899176275679612&rtpof=true&sd=true). 
+
+O índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes dos referidos grupos.
+
 
