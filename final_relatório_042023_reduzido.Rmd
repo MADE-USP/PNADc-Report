@@ -649,3 +649,26 @@ Finalmente, calculamos a desigualdade entre os grupos de raça e gênero, cujos 
 O índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
 
 
+#Percentis de renda
+
+
+
+Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os resultados encontram-se na Tabela 22: Percentis de renda.
+
+Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, essa população é ordenada por renda e, então, dividida em grupos com o mesmo número de pessoas. Os quantis representam a divisão dessas 100 pessoas em quatro grupos de 25 cada. Dito de outra maneira, os quantis são a população dividida em faixas de 25% cada. Dessa forma, o Q1 representa a separação dos 25% com menor renda, o Q2 corresponde à faixa de renda que separa os 50% mais pobres e Q3 corresponde aos 75% mais pobres. 
+
+Além disso, os quantis podem ser subdivididos em mais segmentos, como é o caso dos decis, em que se divide a população em 10 grupos – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
+
+
+Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Dito de outra maneira, significa encontrar o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de X% da renda nacional, no terceiro trimestre de 2023. Esse número é x% maior/ menor que sua participação no trimestre
+do ano anterior.
+
+A partir desses dados, podemos construir uma curva de Lorenz para o Brasil para o terceiro trimestre de 2023. Para construir a curva de Lorenz, acumulamos os dados reportados acima, da população e da renda:
+a curva mostra como a proporção da renda total aumenta em função da proporção da população (Hoffmann,
+1998).
+Na situação hipotética de total igualdade em que todas as pessoas possuem o mesmo rendimento efetivo,
+a curva de Lorenz da economia seria o segmento de reta desenhado no gráfico, que chamamos de linha de
+perfeita igualdade. Assim, quanto mais afastada dessa linha a curva de Lorenz de um país está, maior o grau
+de desigualdade de rendimentos. Por definição, o Índice de Gini é igual à razão entre: a área entre a linha
+de perfeita igualdade e a curva de Lorenz, e a área total abaixo da linha de perfeita igualdade (Hoffmann,
+1998).
