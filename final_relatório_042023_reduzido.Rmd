@@ -72,18 +72,6 @@ desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Ne
 desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
 desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
 
-desemprego_HB <- "homens brancos"
-desemprego_HN <- "homens negros"
-desemprego_MB <- "mulheres brancas"
-desemprego_MN <- "mulheres negras"
-
-desemprego_RG <- c(desemprego_HB, desemprego_HN, desemprego_MB, desemprego_MN)
-ordem_desemRG <- sort(desemprego_RG, decreasing = TRUE)
-max_desemRG <- ordem_desemRG[1]
-seg_desemRG <- ordem_desemRG[2]
-ter_desemRG <- ordem_desemRG[3]
-qua_desemRG <- ordem_desemRG[4]
-
 
 ##Trimestre anterior
 
@@ -97,6 +85,34 @@ desemtriMN <- (desemprego_MN - desem_triMN)
 desemtriHB <- (desemprego_HB - desem_triHB)
 desemtriHN <- (desemprego_HN - desem_triHN)
 
+##Ano anterior
+desemano_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+desemano_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+desemano_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+desemano_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
+
+desemanoMB <- (desemprego_MB - desemano_MB)
+desemanoMN <- (desemprego_MN - desemano_MN)
+desemanoHB <- (desemprego_HB - desemano_HB)
+desemanoHN <- (desemprego_HN - desemano_HN)
+
+#cont rg
+
+
+desemprego_HB <- "homens brancos"
+desemprego_HN <- "homens negros"
+desemprego_MB <- "mulheres brancas"
+desemprego_MN <- "mulheres negras"
+
+desemprego_RG <- c(desemprego_HB, desemprego_HN, desemprego_MB, desemprego_MN)
+ordem_desemRG <- sort(desemprego_RG, decreasing = TRUE)
+max_desemRG <- ordem_desemRG[1]
+seg_desemRG <- ordem_desemRG[2]
+ter_desemRG <- ordem_desemRG[3]
+qua_desemRG <- ordem_desemRG[4]
+
+## fim rg
+
 desemtriMB <- "mulheres brancas"
 desemtriMN <- "mulheres negras"
 desemtriHB <- "homens brancos"
@@ -108,18 +124,6 @@ max_desemtriRG <- ordem_desemtri_RG[1]
 seg_desemtriRG <- ordem_desemtri_RG[2]
 ter_desemtriRG <- ordem_desemtri_RG[3]
 qua_desemtriRG <- ordem_desemtri_RG[4]
-
-
-##Ano anterior
-desemano_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
-desemano_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
-desemano_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
-desemano_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2022 Q2"])
-
-desemanoMB <- (desemprego_MB - desemano_MB)
-desemanoMN <- (desemprego_MN - desemano_MN)
-desemanoHB <- (desemprego_HB - desemano_HB)
-desemanoHN <- (desemprego_HN - desemano_HN)
 
 desemanoMB <- "mulheres brancas"
 desemanoMN <- "mulheres negras"
@@ -141,19 +145,6 @@ desemprego_CO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oe
 desemprego_SE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q2"])
 desemprego_SU <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q2"])
 
-desemprego_NO <- "Norte"
-desemprego_NE <- "Nordeste"
-desemprego_CO <- "Centro-oeste"
-desemprego_SE <- "Sudeste"
-desemprego_SU <- "Sul"
-
-desemprego_REG <- c(desemprego_NO, desemprego_NE, desemprego_CO, desemprego_SE, desemprego_SU)
-ordem_desemREG <- sort (desemprego_REG, decreasing = TRUE)
-max_desemREG <- ordem_desemREG[1]
-seg_desemREG <- ordem_desemREG[2]
-ter_desemREG <- ordem_desemREG[3]
-qua_desemREG <- ordem_desemREG[4]
-qui_desemREG <- ordem_desemREG[5]
 
 ### Trimestre anterior
 desemtri_NO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
@@ -167,6 +158,36 @@ desemtriNE <- desemprego_NE - desemtri_NE
 desemtriCO <- desemprego_CO - desemtri_CO
 desemtriSE <- desemprego_SE - desemtri_SE
 desemtriSU <- desemprego_SU - desemtri_SU
+
+## Ano anterior
+desemano_NO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
+desemano_NE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
+desemano_CO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
+desemano_SE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
+desemano_SU <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
+
+desemanoNO <- desemprego_NO - desemano_NO
+desemanoNE <- desemprego_NE - desemano_NE
+desemanoCO <- desemprego_CO - desemano_CO
+desemanoSE <- desemprego_SE - desemano_SE
+desemanoSU <- desemprego_SU - desemano_SU
+
+
+#anteriores
+
+desemprego_NO <- "Norte"
+desemprego_NE <- "Nordeste"
+desemprego_CO <- "Centro-oeste"
+desemprego_SE <- "Sudeste"
+desemprego_SU <- "Sul"
+
+desemprego_REG <- c(desemprego_NO, desemprego_NE, desemprego_CO, desemprego_SE, desemprego_SU)
+ordem_desemREG <- sort (desemprego_REG, decreasing = TRUE)
+max_desemREG <- ordem_desemREG[1]
+seg_desemREG <- ordem_desemREG[2]
+ter_desemREG <- ordem_desemREG[3]
+qua_desemREG <- ordem_desemREG[4]
+qui_desemREG <- ordem_desemREG[5]
 
 desemtriNO <- "Norte"
 desemtriNE <- "Nordeste"
@@ -182,19 +203,8 @@ ter_desemtriREG <- ordem_desem_triREG[3]
 qua_desemtriREG <- ordem_desem_triREG[4]
 qui_desemtriREG <- ordem_desem_triREG[5]
 
+##
 
-## Ano anterior
-desemano_NO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
-desemano_NE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
-desemano_CO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
-desemano_SE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
-desemano_SU <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2022 Q3"])
-
-desemanoNO <- desemprego_NO - desemano_NO
-desemanoNE <- desemprego_NE - desemano_NE
-desemanoCO <- desemprego_CO - desemano_CO
-desemanoSE <- desemprego_SE - desemano_SE
-desemanoSU <- desemprego_SU - desemano_SU
 
 desemanoNO <- "Norte"
 desemanoNE <- "Nordeste"
@@ -232,7 +242,7 @@ colnames(informal.RG.sh)[colnames(informal.RG.sh) == "não contribuinte INSS"] =
 informalidade <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q3"]
 
 informal_tri <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q3"]
-diftri_informal <- informalidade - informalidade_tri
+diftri_informal <- informalidade - informal_tri
 
 #Região
 inf_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q3"]
@@ -240,6 +250,36 @@ inf_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & inform
 inf_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q3"]
 inf_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q3"]
 inf_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q3"]
+
+
+## Tri anterior
+informal_triNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q2"]
+informal_triSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q2"]
+
+inf_triNO <- ((inf_NO) - (informal_triNO))
+inf_triNE <- inf_NE - informal_triNE
+inf_triCO <- inf_CO - informal_triCO
+inf_triSE <- inf_SE - informal_triSE
+inf_triSU <- inf_SU - informal_triSU
+
+## Ano anterior
+
+informal_anoNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2022 Q3"]
+informal_anoSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2022 Q3"]
+
+inf_anoNO <- inf_NO - informal_anoNO
+inf_anoNE <- inf_NE - informal_anoNE
+inf_anoCO <- inf_CO - informal_anoCO
+inf_anoSE <- inf_SE - informal_anoSE
+inf_anoSU <- inf_SU - informal_anoSU
+
+#
 
 inf_NO <- "Norte"
 inf_NE <- "Nordeste"
@@ -255,18 +295,7 @@ ter_infREG <- ordem_infREG[3]
 qua_infREG <- ordem_infREG[4]
 qui_infREG <- ordem_infREG[5]
 
-## Tri anterior
-informal_triNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q2"]
-informal_triNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q2"]
-informal_triCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q2"]
-informal_triSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q2"]
-informal_triSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q2"]
-
-inf_triNO <- ((inf_NO) - (informal_triNO))
-inf_triNE <- inf_NE - informal_triNE
-inf_triCO <- inf_CO - informal_triCO
-inf_triSE <- inf_SE - informal_triSE
-inf_triSU <- inf_SU - informal_triSU
+#
 
 inf_triNO <- "Norte"
 inf_triNE <- "Nordeste"
@@ -282,19 +311,14 @@ ter_inftriREG <- ordem_inftriREG[3]
 qua_inftriREG <- ordem_inftriREG[4]
 qui_inftriREG <- ordem_inftriREG[5]
 
-## Ano anterior
+#
 
-informal_anoNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2022 Q3"]
-informal_anoNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2022 Q3"]
-informal_anoCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2022 Q3"]
-informal_anoSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2022 Q3"]
-informal_anoSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2022 Q3"]
+inf_anoNO <- "Norte"
+inf_anoNE <- "Nordeste"
+inf_anoCO <- "Centro-Oeste"
+inf_anoSE <- "Sudeste"
+inf_anoSU <- "Sul"
 
-inf_anoNO <- inf_NO - informal_anoNO
-inf_anoNE <- inf_NE - informal_anoNE
-inf_anoCO <- inf_CO - informal_anoCO
-inf_anoSE <- inf_SE - informal_anoSE
-inf_anoSU <- inf_SU - informal_anoSU
  
 infano_REG <- c(inf_anoNO, inf_anoNE, inf_anoCO, inf_anoSE, inf_anoSU)
 ordem_infanoREG <- sort(infano_REG, decreasing = TRUE)
@@ -305,23 +329,12 @@ qua_infanoREG <- ordem_infanoREG[4]
 qui_infanoREG <- ordem_infanoREG[5]
 
 
-#Raça e gênero
+# Raça e gênero
+
 informal_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q3"]
 informal_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q3"]
 informal_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
 informal_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q3"]
- 
-informal_HB <- "homens brancos"
-informal_HN <- "homens negros"
-informal_MB <- "mulheres brancas"
-informal_MN <- "mulheres negras"
-
-informalRG <- c(informal_HB, informal_HN, informal_MB, informal_MN)
-ordem_infRG <- sort(informalRG, decreasing = TRUE)
-max_infRG <- ordem_infRG[1]
-seg_infRG <- ordem_infRG[2]
-ter_infRG <- ordem_infRG[3]
-qua_infRG <- ordem_infRG[4]
 
 
 ##Tri anterior
@@ -330,23 +343,10 @@ informal_triHN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Neg
 informal_triMB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
 informal_triMN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q3"]
 
-diftri_informalidadeHB <- informal_homem_branco - informal_triHB
-diftri_informalidadeHN <- informal_homem_negro - informal_triHN
-diftri_informalidadeMB <- informal_mulher_branca - informal_triMB
-diftri_informalidadeMN <- informal_mulher_negra - informal_triMN
-
-# Atribuir resultados às variáveis
-diftri_informalidadeHB <- "homens brancos"
-diftri_informalidadeHN <- "homens negros"
-diftri_informalidadeMB <- "mulheres brancas"
-diftri_informalidadeMN <- "mulheres negras"
-
-diftri_informalidadeRG <- c(diftri_informalidadeHB, diftri_informalidadeHN, diftri_informalidadeMB, diftri_informalidadeMN)
-ordem_diftri <- sort(diftri_informalidadeRG, decreasing = TRUE)
-max_inftriRG <- ordem_diftri[1]
-seg_inftriRG <- ordem_diftri[2]
-ter_inftriRG <- ordem_diftri[3]
-qua_inftriRG <- ordem_diftri[4]
+diftri_informalidadeHB <- informal_HB - informal_triHB
+diftri_informalidadeHN <- informal_HN - informal_triHN
+diftri_informalidadeMB <- informal_HB - informal_triMB
+diftri_informalidadeMN <- informal_HN - informal_triMN
 
 
 ## Ano anterior
@@ -362,6 +362,35 @@ infanoHB <- informal_HB - informal_anoHB
 infanoHN <- informal_HN - informal_anoHN
 infanoMB <- informal_MB - informal_anoMB
 infanoMN <- informal_MB - informal_anoMN
+
+# Atribuindo valor textual
+
+informal_HB <- "homens brancos"
+informal_HN <- "homens negros"
+informal_MB <- "mulheres brancas"
+informal_MN <- "mulheres negras"
+
+informalRG <- c(informal_HB, informal_HN, informal_MB, informal_MN)
+ordem_infRG <- sort(informalRG, decreasing = TRUE)
+max_infRG <- ordem_infRG[1]
+seg_infRG <- ordem_infRG[2]
+ter_infRG <- ordem_infRG[3]
+qua_infRG <- ordem_infRG[4]
+
+# trimestre
+diftri_informalidadeHB <- "homens brancos"
+diftri_informalidadeHN <- "homens negros"
+diftri_informalidadeMB <- "mulheres brancas"
+diftri_informalidadeMN <- "mulheres negras"
+
+diftri_informalidadeRG <- c(diftri_informalidadeHB, diftri_informalidadeHN, diftri_informalidadeMB, diftri_informalidadeMN)
+ordem_diftri <- sort(diftri_informalidadeRG, decreasing = TRUE)
+max_inftriRG <- ordem_diftri[1]
+seg_inftriRG <- ordem_diftri[2]
+ter_inftriRG <- ordem_diftri[3]
+qua_inftriRG <- ordem_diftri[4]
+
+#ano
 
 infanoHB <- "homens brancos"
 infanoHN <- "homens negros"
@@ -551,6 +580,19 @@ rendahabitHN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria ==
 rendahabitMB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]
 rendahabitMN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]
 
+##Ano anterior
+rendahabitano_HB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
+rendahabitano_HN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
+rendahabitano_MB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
+rendahabitano_MN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
+
+rendahabitanoHB <- (rendahabitHB - rendahabitano_HB)
+rendahabitanoHN <- (rendahabitHN - rendahabitano_HN)
+rendahabitanoMB <- (rendahabitMB - rendahabitano_MB)
+rendahabitanoMN <- (rendahabitMN - rendahabitano_MN)
+
+
+# Atribuindo valor textual
 rendahabitHB <- "homens brancos"
 rendahabitHN <- "homens negros"
 rendahabitMB <- "mulheres brancas"
@@ -563,16 +605,7 @@ seg_renhab <- ordemrendahabitRG[2]
 ter_renhab <- ordemrendahabitRG[3]
 qua_renhab <- ordemrendahabitRG[4]
 
-##Ano anterior
-rendahabitano_HB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
-rendahabitano_HN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
-rendahabitano_MB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
-rendahabitano_MN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre == "2022 Q3"]
-
-rendahabitanoHB <- (rendahabitHB - rendahabitano_HB)
-rendahabitanoHN <- (rendahabitHN - rendahabitano_HN)
-rendahabitanoMB <- (rendahabitMB - rendahabitano_MB)
-rendahabitanoMN <- (rendahabitMN - rendahabitano_MN)
+#ano
 
 rendahabitanoHB <- "homens brancos"
 rendahabitanoHN <- "homens negros"
