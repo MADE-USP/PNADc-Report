@@ -1,5 +1,5 @@
 ---
-title: "Relatório Trimestral da PNAD"
+title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito, Marina Sanches, Tainari Taioka, e pelos pesquisadores Hiaman Santos e José Bergamin.]"
 author: "Made USP"
 date: "19/02/2024"
 output:
@@ -47,7 +47,7 @@ q=4
 
 # Introdução
 
-Reportamos, a seguir, estaísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios contínua (PNADc) referente ao `r q`º trimestre de `r i`. Para mais estatísticas e tabelas completas, acesse o link ao final do documento. Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito, Marina Sanches, Tainari Taioka, e pelos pesquisadores Hiaman Santos e José Bergamin. 
+Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link no final do documento. 
 
 # Mercado de Trabalho
 ## Desemprego
@@ -221,7 +221,7 @@ qua_desemanoREG <- ordem_desem_anoREG[4]
 qui_desemanoREG <- ordem_desem_anoREG[5]
 
 ```
-Destacamos a alteração da taxa de desemprego geral de `r dif_desemprego` em relação ao `r q-1`º trimestre de `r i`. A região `r max_desemREG` registrou maior desemprego ao fim do último trimestre (VALOR%), enquanto o `r qui_desemREG` teve o menor resultado no mesmo período (VALOR%). Nas categorias de raça e gênero, `r max_desemRG` foram a maior população desempregada, cerca de VALOR%. A menor taxa de desocupação foi registrada dentre `r qua_desemRG`, de VALOR%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r (dif_desemprego)*100`% em relação ao `r q-1`º trimestre de `r i`. A região `r max_desemREG` registrou maior desemprego ao fim do último trimestre (VALOR%), enquanto o `r qui_desemREG` teve o menor resultado no mesmo período (VALOR%). Nas categorias de raça e gênero, `r max_desemRG` foram a maior população desempregada, cerca de VALOR%. A menor taxa de desocupação foi registrada dentre `r qua_desemRG`, de VALOR%. 
 
 Informações completas sobre desemprego são encontradas na [Tabela X: TÌTULO]. Veja abaixo mais dados de desemprego:
 
@@ -406,10 +406,12 @@ qua_infanoRG <- ordem_infanoRG[4]
 
 
 ```
-Neste relatório, definimos como trabalhadores informais aqueles que não contribuem à previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade*100)`% e a região com maior informalidade foi `r max_infREG` (VALOR%), seguida do `r max_infREG` (VALOR%). O `r qui_infREG` registrou as menores taxas de informalidade (VALOR%). 
-No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de `r max_infRG`, com VALOR%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (desem_tri*100)`% e o grupo com maior aumento de informalidade no mesmo período foi `r max_inftriRG`, com uma diferença de VALOR%.
+Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi `r max_infREG` (VALOR%), seguida do `r max_infREG` (VALOR%). O `r qui_infREG` registrou as menores taxas de informalidade (VALOR%). 
 
-Na comparação anual, a variação média do Brasil foi de `r (desem_ANO*100)`% e a maior variação por raça e gênero foi registrada dentre `r max_infanoRG`, uma diferença de VALOR%. Estes dados estão reportados na Tabela 9: Informalidade por grupo (clique aqui para acessar). Veja mais abaixo:
+No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de `r max_infRG`, com VALOR%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (desem_tri)*100`% e o grupo com maior aumento de informalidade no mesmo período foi `r max_inftriRG`, com uma diferença de VALOR%.
+
+Na comparação anual, a variação média do Brasil foi de `r (desem_ANO)*100`% e a maior variação por raça e gênero foi registrada dentre `r max_infanoRG`, uma diferença de VALOR%. Estes dados estão reportados na Tabela 9: Informalidade por grupo (clique aqui para acessar). Veja mais abaixo:
+
 ```{r pressure, echo=FALSE}
 #ADICIONAR VISUALIZAÇÃO GRÁFICA
 ```
@@ -621,11 +623,29 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 ```
 
-O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo, mas,no relatório reduzido, optamos por suprimir esse dado. Para acessá-lo, confira o relatório completo aqui (link).
+O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório reduzido, optamos por reportar apenas o rendimento habitual mensal e suprimir o rendimento efetivo mensal, que pode ser acessado no relatório completo aqui (link).
 
 O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR%, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR%). Para mais informações, acesse a Tabela XX: Título ou veja os dados a abaixo:
 
 ```{r}
 #add graficos
 ```
-#Gini
+#Distribuição: Índice de Gini
+
+O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos.].
+
+O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR$gini`, um índice mais próximo de um do que de zero. Esse índice não se alterou comparativamente ao trimestre anterior e o mesmo trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
+
+![Índice de Gini por Gênero e Raça](C:/Users/clara/Downloads/GINI_RG.png){width=}
+
+![Índice de Gini por Região](C:/Users/clara/Downloads/GINI_REG.png){width=90%}
+
+Para termos uma ideia das desigualdades entre as regiões do país, reportamos o índice de Gini de rendimentos efetivos para cada região na [Tabela 20: Índice de Gini por Região](https://docs.google.com/spreadsheets/d/1HpgBZFAHhnWMZ83o623ly_Jv10nexg0v/edit?usp=sharing&ouid=115284899176275679612&rtpof=true&sd=true).
+
+Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado.
+
+Finalmente, calculamos a desigualdade entre os grupos de raça e gênero, cujos resultados encontram-se apresentados na [Tabela 21: Índice de Gini por Grupo](https://docs.google.com/spreadsheets/d/1HocxMRN5kpiZGvq3gxV0NJUpR8IysgUK/edit?usp=sharing&ouid=115284899176275679612&rtpof=true&sd=true). 
+
+O índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
+
+
