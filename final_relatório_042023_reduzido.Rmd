@@ -58,9 +58,9 @@ Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Naciona
 
 colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
 
-desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
+desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q4"]
 desemprego_tri <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
-desemprego_ano <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2022 Q3"]
+desemprego_ano <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2022 Q4"]
                                                                    
 desem_tri <- ((desemprego)-(desemprego_tri))
 desem_ano <- ((desemprego)-(desemprego_ano))
@@ -437,6 +437,14 @@ HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Hom
 HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
 HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"]
 
+setores_HB <- c(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
+ordem_HB <- sort(setores_HB, decreasing = TRUE)
+max_HB <- ordem_HB[1]
+segundo_HB <- ordem_HB[2]
+terceiro_HB <- ordem_HB[3]
+quarto_HB <- ordem_HB[4]
+quinto_HB <- ordem_HB[5]
+
 # Atribuir resultados às variáveis
 HB_agro <- "agropecuária"
 HB_ind <- "indústria"
@@ -450,8 +458,6 @@ HB_educa <- "educação"
 HB_oserv <- "outros serviços"
 HB_domes <- "serviços domésticos"
 
-setores_HB <- c(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
-ordem_HB <- sort(setores_HB, decreasing = TRUE)
 max_HB <- ordem_HB[1]
 segundo_HB <- ordem_HB[2]
 terceiro_HB <- ordem_HB[3]
@@ -572,7 +578,8 @@ Nota-se que o setor de XX emprega mais brancos que negros e que os serciços de 
 #add tabelas
 ```
 
-#Rendimento habitual
+# Rendimento habitual
+
 ```{r}
 renda_med <- RendaHabitMedia.sh$RendaHabitMedia[RendaHabitMedia.sh$Trimestre == "2023 Q3"]
 
