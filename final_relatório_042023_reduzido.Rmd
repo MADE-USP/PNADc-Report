@@ -1,7 +1,8 @@
 ---
-title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito e pelos pesquisadores Hiaman Santos e José Bergamin.]"
+title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck e Eslen Brito e pelos pesquisadores Hiaman Santos e José Bergamin.]"
 author: "Made USP"
 date: "20/02/2024"
+lang: pt-br
 output:
   pdf_document: default
   html_document: default
@@ -49,6 +50,13 @@ Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Naciona
 # Mercado de Trabalho
 
 ## Desemprego
+
+![Taxa de Ocupação por Raça e Gênero](C:/Users/clara/Downloads/ocupado_RG.png){width=90%}
+
+
+![Taxa de Ocupação por Região](C:/Users/clara/Downloads/ocupado_REG.png){width=90%}
+
+
 
 ```{r include=FALSE}
 # Variáveis
@@ -223,16 +231,8 @@ qui_desemanoREG <- ordem_desem_anoREG[5]
 
 Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. A região `r max_desemREG` registrou maior desemprego ao fim do último trimestre (VALOR%), enquanto o `r qui_desemREG` teve o menor resultado no mesmo período (VALOR%). Nas categorias de raça e gênero, `r max_desemRG` foram a maior população desempregada, cerca de VALOR%. A menor taxa de desocupação foi registrada dentre `r qua_desemRG`, de VALOR%. 
 
-Veja abaixo mais dados de desemprego:
+Veja mais dados de ocupação nos figuras 1 e 2.
 
-
-
-
-```{r include=FALSE}
-
-#INCLUIR GRÁFICO/TABELA/SH
-#PODEMOS INCLUIR ALGUM PARÁGRAFO COMPARATIVO A ANO OU TRIMESTRE ANTERIROR A DEPENDER DO RESULTADO DOS DADOS
-```
 
 ## Informalidade
 
@@ -413,7 +413,15 @@ Neste relatório, são definidos como trabalhadores informais aqueles que não c
 
 No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de `r max_infRG`, com VALOR%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informal)*100`% e o grupo com maior aumento de informalidade no mesmo período foi `r max_inftriRG`, com uma diferença de VALOR%.
 
-Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100`% e a maior variação por raça e gênero foi registrada dentre `r max_infanoRG`, uma diferença de VALOR%. Veja mais abaixo:
+Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100`% e a maior variação por raça e gênero foi registrada dentre `r max_infanoRG`, uma diferença de VALOR%. Veja mais nos figuras 3 e 4.
+
+![Taxa de Informalidade por Raça e Gênero](C:/Users/clara/Downloads/informal_RG.png){width=}
+
+
+
+
+![Taxa de Informalidade por Região](C:/Users/clara/Downloads/informal_REG.png){width=}
+
 
 ## Emprego por Setor
 
@@ -627,9 +635,13 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 ```
 
-O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório reduzido, optamos por reportar apenas o rendimento habitual mensal e suprimir o rendimento efetivo mensal, que pode ser acessado no relatório completo aqui (link).
+![Rendimento Habitual por Raça e Gênero (reais de 2023)](C:/Users/clara/Downloads/RENDA_habit_RG.png){width=90%}
 
-O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR). veja os dados a abaixo:
+O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
+
+O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR). veja os dados no figura 5.
+
+
 
 # Distribuição: Índice de Gini
 
@@ -644,10 +656,10 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 
   O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`, um índice mais próximo de um do que de zero. Esse índice não se alterou comparativamente ao trimestre anterior e o mesmo trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
 
-![Índice de Gini por Região](C:/Users/clara/Downloads/giniRG.png){width=90%}
+![Índice de Gini por Região](C:/Users/clara/Downloads/giniRG_2304.png){width=90%}
 
 
-![Índice de Gini por Região](C:/Users/clara/Downloads/GINI_REG.png){width=90%}
+![Índice de Gini por Região](C:/Users/clara/Downloads/gini_REG_2304.png){width=90%}
 
 Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado. Por fim, o índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
 
@@ -656,3 +668,11 @@ Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que
 Clique abaixo para dados completos:
 
 [Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
+
+[Tabela 2: Dados por Região](https://drive.google.com/file/d/1bCn8967ccAvB3idm5PiwU31HIFqY680K/view?usp=sharing)
+
+[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/10pwdVV6pGg4FgjZuXLQR6h7l1Zkplgmq/view?usp=sharing)
+
+[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
+
+
