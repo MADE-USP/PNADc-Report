@@ -1,7 +1,14 @@
 ---
+<<<<<<< HEAD
+title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck e Eslen Brito e pelos pesquisadores Hiaman Santos e José Bergamin.]"
+author: "Made USP"
+date: "20/02/2024"
+lang: pt-br
+=======
 title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito e pelos pesquisadores Hiaman Santos e José Bergamin.]"
 author: "Made USP"
 date: "20/02/2024"
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 output:
   pdf_document: default
   html_document: default
@@ -24,8 +31,14 @@ library(zoo)
 library(gplots)
 #devtools::install_github("kupietz/kableExtra")
 
-load("C:\Users\USER\Downloads\dados_serie_historica_032023.RData")
+
+load("C:\USER\Downloads\PNAD_dados_relatorio_04_2023.RData")
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
+
+=======
+#load("C:\Users\USER\Downloads\dados_serie_historica_032023.RData")
+load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 ```
 
 
@@ -37,7 +50,7 @@ q=4
 #trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
 #mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
 
-#"R" (resultado) foi adicionado no início de objetos de resultado textual para algumas funções de automação
+#
 
 ```
 
@@ -49,7 +62,19 @@ Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Naciona
 
 ## Desemprego
 
-```{r include=FALSE}
+<<<<<<< HEAD
+![Taxa de Ocupação por Raça e Gênero](C:/Users/clara/Downloads/ocupado_RG.png){width=90%}
+
+
+![Taxa de Ocupação por Região](C:/Users/clara/Downloads/ocupado_REG.png){width=90%}
+
+
+
+=======
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
+
+``` {r include=FALSE}
+
 # Variáveis
 
 # Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q3"]
@@ -94,13 +119,7 @@ desemanoMN <- (desemprego_MN - desemano_MN)
 desemanoHB <- (desemprego_HB - desemano_HB)
 desemanoHN <- (desemprego_HN - desemano_HN)
 
-#cont rg
-
-
-desemprego_HB <- "homens brancos"
-desemprego_HN <- "homens negros"
-desemprego_MB <- "mulheres brancas"
-desemprego_MN <- "mulheres negras"
+#Ordem
 
 desemprego_RG <- c(desemprego_HB, desemprego_HN, desemprego_MB, desemprego_MN)
 ordem_desemRG <- sort(desemprego_RG, decreasing = TRUE)
@@ -109,24 +128,12 @@ seg_desemRG <- ordem_desemRG[2]
 ter_desemRG <- ordem_desemRG[3]
 qua_desemRG <- ordem_desemRG[4]
 
-## fim rg
-
-desemtriMB <- "mulheres brancas"
-desemtriMN <- "mulheres negras"
-desemtriHB <- "homens brancos"
-desemtriHN <- "homens negros"
-
 desemtri_RG <- c(desemtriMB, desemtriMN, desemtriHB, desemtriHN)
 ordem_desemtri_RG <- sort (desemtri_RG, decreasing = TRUE)
 max_desemtriRG <- ordem_desemtri_RG[1]
 seg_desemtriRG <- ordem_desemtri_RG[2]
 ter_desemtriRG <- ordem_desemtri_RG[3]
 qua_desemtriRG <- ordem_desemtri_RG[4]
-
-desemanoMB <- "mulheres brancas"
-desemanoMN <- "mulheres negras"
-desemanoHB <- "homens brancos"
-desemanoHN <- "homens negros"
 
 desemano_RG <- c(desemanoMB, desemanoMN, desemanoHB, desemanoHN)
 ordem_desemano_RG <- sort (desemano_RG, decreasing = TRUE)
@@ -137,19 +144,19 @@ qua_desemanoRG <- ordem_desemano_RG[4]
 
 
 #Região
-desemprego_NO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q4"])
-desemprego_NE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"])
-desemprego_CO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"])
-desemprego_SE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"])
-desemprego_SU <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q4"])
+desemprego_NO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
+desemprego_NE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
+desemprego_CO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
+desemprego_SE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
+desemprego_SU <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
 
 
 ### Trimestre anterior
-desemtri_NO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
-desemtri_NE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
-desemtri_CO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
-desemtri_SE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
-desemtri_SU <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemtri_NO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
+desemtri_NE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
+desemtri_CO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
+desemtri_SE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
+desemtri_SU <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
 
 desemtriNO <- desemprego_NO - desemtri_NO
 desemtriNE <- desemprego_NE - desemtri_NE
@@ -171,13 +178,7 @@ desemanoSE <- desemprego_SE - desemano_SE
 desemanoSU <- desemprego_SU - desemano_SU
 
 
-#anteriores
-
-desemprego_NO <- "Norte"
-desemprego_NE <- "Nordeste"
-desemprego_CO <- "Centro-oeste"
-desemprego_SE <- "Sudeste"
-desemprego_SU <- "Sul"
+#Ordem
 
 desemprego_REG <- c(desemprego_NO, desemprego_NE, desemprego_CO, desemprego_SE, desemprego_SU)
 ordem_desemREG <- sort (desemprego_REG, decreasing = TRUE)
@@ -187,12 +188,6 @@ ter_desemREG <- ordem_desemREG[3]
 qua_desemREG <- ordem_desemREG[4]
 qui_desemREG <- ordem_desemREG[5]
 
-desemtriNO <- "Norte"
-desemtriNE <- "Nordeste"
-desemtriCO <- "Centro-Oeste"
-desemtriSE <- "Sudeste"
-desemtriSU <- "Sul"
-
 desem_triREG <- c(desemtriNO, desemtriNE, desemtriCO, desemtriSE, desemtriSU)
 ordem_desem_triREG <- sort(desem_triREG, decreasing = TRUE)
 max_desemtriREG <- ordem_desem_triREG[1]
@@ -200,15 +195,6 @@ seg_desemtriREG <- ordem_desem_triREG[2]
 ter_desemtriREG <- ordem_desem_triREG[3]
 qua_desemtriREG <- ordem_desem_triREG[4]
 qui_desemtriREG <- ordem_desem_triREG[5]
-
-##
-
-
-desemanoNO <- "Norte"
-desemanoNE <- "Nordeste"
-desemanoCO <- "Centro-Oeste"
-desemanoSE <- "Sudeste"
-desemanoSU <- "Sul"
 
 desem_anoREG <- c(desemanoNO, desemanoNE, desemanoCO, desemanoSE, desemanoSU)
 ordem_desem_anoREG <- sort(desem_anoREG, decreasing = TRUE)
@@ -220,10 +206,14 @@ qui_desemanoREG <- ordem_desem_anoREG[5]
 
 ```
 
-Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. A região `r max_desemREG` registrou maior desemprego ao fim do último trimestre (VALOR%), enquanto o `r qui_desemREG` teve o menor resultado no mesmo período (VALOR%). Nas categorias de raça e gênero, `r max_desemRG` foram a maior população desempregada, cerca de VALOR%. A menor taxa de desocupação foi registrada dentre `r qua_desemRG`, de VALOR%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. A região Nordeste registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto o Sul teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, mulheres negras foram a maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada dentre homens brancos, de `r qua_desemRG*100`%. 
 
+<<<<<<< HEAD
+Veja mais dados de ocupação nos figuras 1 e 2.
+
+
+=======
 Veja abaixo mais dados de desemprego:
-
 
 
 
@@ -233,11 +223,15 @@ Veja abaixo mais dados de desemprego:
 #PODEMOS INCLUIR ALGUM PARÁGRAFO COMPARATIVO A ANO OU TRIMESTRE ANTERIROR A DEPENDER DO RESULTADO DOS DADOS
 ```
 
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 ## Informalidade
 
 ```{r include=FALSE}
+
 colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "informalidade_media"
+
 colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
+
 colnames(informal.RG.sh)[colnames(informal.RG.sh) == "não contribuinte INSS"] = "Informal"
 
 
@@ -281,13 +275,7 @@ inf_anoCO <- inf_CO - informal_anoCO
 inf_anoSE <- inf_SE - informal_anoSE
 inf_anoSU <- inf_SU - informal_anoSU
 
-#
-
-inf_NO <- "Norte"
-inf_NE <- "Nordeste"
-inf_CO <- "Centro-Oeste"
-inf_SE <- "Sudeste"
-inf_SU <- "Sul"
+#Ordem
 
 informalREG <- c(inf_NO, inf_NE, inf_CO, inf_SE, inf_SU)
 ordem_infREG <- sort(informalREG, decreasing = TRUE)
@@ -297,14 +285,6 @@ ter_infREG <- ordem_infREG[3]
 qua_infREG <- ordem_infREG[4]
 qui_infREG <- ordem_infREG[5]
 
-#
-
-inf_triNO <- "Norte"
-inf_triNE <- "Nordeste"
-inf_triCO <- "Centro-Oeste"
-inf_triSE <- "Sudeste"
-inf_triSU <- "Sul"
-
 inftri_REG <- c(inf_triNO, inf_triNE, inf_triCO, inf_triSE, inf_triSU)
 ordem_inftriREG <- sort(inftri_REG, decreasing = TRUE)
 max_inftriREG <- ordem_inftriREG[1]
@@ -312,14 +292,6 @@ seg_inftriREG <- ordem_inftriREG[2]
 ter_inftriREG <- ordem_inftriREG[3]
 qua_inftriREG <- ordem_inftriREG[4]
 qui_inftriREG <- ordem_inftriREG[5]
-
-#
-
-inf_anoNO <- "Norte"
-inf_anoNE <- "Nordeste"
-inf_anoCO <- "Centro-Oeste"
-inf_anoSE <- "Sudeste"
-inf_anoSU <- "Sul"
 
  
 infano_REG <- c(inf_anoNO, inf_anoNE, inf_anoCO, inf_anoSE, inf_anoSU)
@@ -365,12 +337,7 @@ infanoHN <- informal_HN - informal_anoHN
 infanoMB <- informal_MB - informal_anoMB
 infanoMN <- informal_MB - informal_anoMN
 
-# Atribuindo valor textual
-
-informal_HB <- "homens brancos"
-informal_HN <- "homens negros"
-informal_MB <- "mulheres brancas"
-informal_MN <- "mulheres negras"
+# Ordem
 
 informalRG <- c(informal_HB, informal_HN, informal_MB, informal_MN)
 ordem_infRG <- sort(informalRG, decreasing = TRUE)
@@ -379,25 +346,12 @@ seg_infRG <- ordem_infRG[2]
 ter_infRG <- ordem_infRG[3]
 qua_infRG <- ordem_infRG[4]
 
-# trimestre
-diftri_informalidadeHB <- "homens brancos"
-diftri_informalidadeHN <- "homens negros"
-diftri_informalidadeMB <- "mulheres brancas"
-diftri_informalidadeMN <- "mulheres negras"
-
 diftri_informalidadeRG <- c(diftri_informalidadeHB, diftri_informalidadeHN, diftri_informalidadeMB, diftri_informalidadeMN)
 ordem_diftri <- sort(diftri_informalidadeRG, decreasing = TRUE)
 max_inftriRG <- ordem_diftri[1]
 seg_inftriRG <- ordem_diftri[2]
 ter_inftriRG <- ordem_diftri[3]
 qua_inftriRG <- ordem_diftri[4]
-
-#ano
-
-infanoHB <- "homens brancos"
-infanoHN <- "homens negros"
-infanoMB <- "mulheres brancas"
-infanoMN <- "mulheres negras"
 
 infano_RG <- c(infanoHB, infanoHN, infanoMB, infanoMN)
 ordem_infanoRG <- sort(infano_RG, decreasing = TRUE)
@@ -408,14 +362,27 @@ qua_infanoRG <- ordem_infanoRG[4]
 
 
 ```
-Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi `r max_infREG` (VALOR%), seguida do `r seg_infREG` (VALOR%). O `r qui_infREG` registrou as menores taxas de informalidade (VALOR%). 
+Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi o Norte (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). O Sul registrou as menores taxas de informalidade (`r qui_infREG*100`%). 
 
-No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de `r max_infRG`, com VALOR%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informal)*100`% e o grupo com maior aumento de informalidade no mesmo período foi `r max_inftriRG`, com uma diferença de VALOR%.
+No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de homens negros, com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informal)*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
 
-Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100`% e a maior variação por raça e gênero foi registrada dentre `r max_infanoRG`, uma diferença de VALOR%. Veja mais abaixo:
+<<<<<<< HEAD
+Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. Veja mais nos figuras 3 e 4.
+
+![Taxa de Informalidade por Raça e Gênero](C:/Users/clara/Downloads/informal_RG.png){width=}
+
+
+![Taxa de Informalidade por Região](C:/Users/clara/Downloads/informal_REG.png){width=}
+
 
 ## Emprego por Setor
 
+=======
+
+
+## Emprego por Setor
+
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 ```{r include=FALSE}
 #colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Homem Branco"] = "Homem_Branco"
 colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Administração Pública"] = "Adm_pública"
@@ -626,9 +593,17 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 ```
 
-O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório reduzido, optamos por reportar apenas o rendimento habitual mensal e suprimir o rendimento efetivo mensal, que pode ser acessado no relatório completo aqui (link).
+![Rendimento Habitual por Raça e Gênero (reais de 2023)](C:/Users/clara/Downloads/RENDA_habit_RG.png){width=90%}
 
+<<<<<<< HEAD
+O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
+
+O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR). veja os dados no figura 5.
+
+
+=======
 O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR). veja os dados a abaixo:
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 
 # Distribuição: Índice de Gini
 
@@ -643,6 +618,9 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 
   O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`, um índice mais próximo de um do que de zero. Esse índice não se alterou comparativamente ao trimestre anterior e o mesmo trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
 
+<<<<<<< HEAD
+![Índice de Gini por Região](C:/Users/clara/Downloads/giniRG_2304.png){width=90%}
+=======
 ![Índice de Gini por Região](C:/Users/clara/Downloads/giniRG.png){width=90%}
 
 ![Índice de Gini por Região](C:/Users/clara/Downloads/GINI_REG.png){width=90%}
@@ -650,9 +628,29 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado. Por fim, o índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
 
 # Tabelas completas
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 
 Clique abaixo para dados completos:
 
+<<<<<<< HEAD
+![Índice de Gini por Região](C:/Users/clara/Downloads/gini_REG_2304.png){width=90%}
+
+Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado. Por fim, o índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
+
+# Tabelas completas
+
+Clique abaixo para dados completos:
+
+[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
+
+[Tabela 2: Dados por Região](https://drive.google.com/file/d/1bCn8967ccAvB3idm5PiwU31HIFqY680K/view?usp=sharing)
+
+[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/10pwdVV6pGg4FgjZuXLQR6h7l1Zkplgmq/view?usp=sharing)
+
+[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
+
+
+=======
 <<<<<<< HEAD
 [Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
 =======
@@ -680,3 +678,4 @@ de desigualdade de rendimentos. Por definição, o Índice de Gini é igual à r
 de perfeita igualdade e a curva de Lorenz, e a área total abaixo da linha de perfeita igualdade (Hoffmann,
 1998).
 >>>>>>> 0f64a1e3dc93815008b1331e779cdf254e1c5cbe
+>>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
