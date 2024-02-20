@@ -51,7 +51,7 @@ q=4
 
 # Introdução
 
-Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link ao final do documento. 
+Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e às tabelas completas pode ser feito por meio do link ao final do documento. 
 
 # Mercado de Trabalho
 
@@ -196,7 +196,7 @@ qui_desemanoREG <- ordem_desem_anoREG[5]
 
 ```
 
-Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. A região Nordeste registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto o Sul teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, mulheres negras foram a maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada dentre homens brancos, de `r qua_desemRG*100`%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. Assim, a taxa nacional de desemprego encerrou o trimestre em `r desemprego*100`%. A região Nordeste registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto o Sul teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, mulheres negras foram a maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada dentre homens brancos, de `r qua_desemRG*100`%. 
 
 Veja mais dados de ocupação nos figuras 1 e 2.
 
