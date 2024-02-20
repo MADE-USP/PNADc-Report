@@ -1,14 +1,8 @@
 ---
-<<<<<<< HEAD
-title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck e Eslen Brito e pelos pesquisadores Hiaman Santos e José Bergamin.]"
+title: "Relatório Trimestral da PNAD, versão reduzida^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito, Clara Brenck, Tainari Taioka e Marina Sanches e os pesquisadores José Bergamin e Hiaman Santos.]" 
 author: "Made USP"
 date: "20/02/2024"
 lang: pt-br
-=======
-title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras Clara Brenck, Eslen Brito e pelos pesquisadores Hiaman Santos e José Bergamin.]"
-author: "Made USP"
-date: "20/02/2024"
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 output:
   pdf_document: default
   html_document: default
@@ -17,9 +11,15 @@ subtitle: 4º Trimestre de 2023
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, error=FALSE, warning=FALSE, message=FALSE)
 
+options(digits=2)
+```
+
+```{r include=FALSE}
 # SEMPRE CARREGAR ESTE CHUNK ANTES DE ABRIR O CÓDIGO COM OS DADOS
+
+#library(PNADcIBGE)
 library(survey)
 library(convey)
 library(tidyverse)
@@ -29,16 +29,13 @@ library(openxlsx)
 library(kableExtra)
 library(zoo)
 library(gplots)
+
+
 #devtools::install_github("kupietz/kableExtra")
 
-
-load("C:\USER\Downloads\PNAD_dados_relatorio_04_2023.RData")
-#load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
-
-=======
-#load("C:\Users\USER\Downloads\dados_serie_historica_032023.RData")
+load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
 load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
+
 ```
 
 
@@ -50,28 +47,21 @@ q=4
 #trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
 #mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
 
-#
-
 ```
 
 # Introdução
 
-Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link no final do documento. 
+Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link ao final do documento. 
 
 # Mercado de Trabalho
 
 ## Desemprego
 
-<<<<<<< HEAD
-![Taxa de Ocupação por Raça e Gênero](C:/Users/clara/Downloads/ocupado_RG.png){width=90%}
+![Taxa de Ocupação por Raça e Gênero](C:/Users/clara/Downloads/ocupado_RG.png){width=70%}
 
 
-![Taxa de Ocupação por Região](C:/Users/clara/Downloads/ocupado_REG.png){width=90%}
+![Taxa de Ocupação por Região](C:/Users/clara/Downloads/ocupado_REG.png){width=70%}
 
-
-
-=======
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 
 ``` {r include=FALSE}
 
@@ -208,13 +198,9 @@ qui_desemanoREG <- ordem_desem_anoREG[5]
 
 Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. A região Nordeste registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto o Sul teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, mulheres negras foram a maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada dentre homens brancos, de `r qua_desemRG*100`%. 
 
-<<<<<<< HEAD
 Veja mais dados de ocupação nos figuras 1 e 2.
 
-
-=======
 Veja abaixo mais dados de desemprego:
-
 
 
 ```{r include=FALSE}
@@ -223,7 +209,6 @@ Veja abaixo mais dados de desemprego:
 #PODEMOS INCLUIR ALGUM PARÁGRAFO COMPARATIVO A ANO OU TRIMESTRE ANTERIROR A DEPENDER DO RESULTADO DOS DADOS
 ```
 
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 ## Informalidade
 
 ```{r include=FALSE}
@@ -366,23 +351,17 @@ Neste relatório, são definidos como trabalhadores informais aqueles que não c
 
 No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de homens negros, com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informal)*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
 
-<<<<<<< HEAD
 Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. Veja mais nos figuras 3 e 4.
 
-![Taxa de Informalidade por Raça e Gênero](C:/Users/clara/Downloads/informal_RG.png){width=}
+![Taxa de Informalidade por Raça e Gênero](C:/Users/clara/Downloads/informal_RG.png){width=70%}
 
 
-![Taxa de Informalidade por Região](C:/Users/clara/Downloads/informal_REG.png){width=}
+![Taxa de Informalidade por Região](C:/Users/clara/Downloads/informal_REG.png){width=70&}
 
-
-## Emprego por Setor
-
-=======
 
 
 ## Emprego por Setor
 
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 ```{r include=FALSE}
 #colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Homem Branco"] = "Homem_Branco"
 colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Administração Pública"] = "Adm_pública"
@@ -410,19 +389,6 @@ ter_HB <- ordem_HB[3]
 qua_HB <- ordem_HB[4]
 qui_HB <- ordem_HB[5]
 
-# Atribuir resultados às variáveis
-HB_agro <- "agropecuária"
-HB_ind <- "indústria"
-HB_const <- "construção"
-HB_comercio <- "comércio"
-HB_tran <- "transporte"
-HB_alimen <- "alimentação"
-HB_info <- "informação" 
-HB_publico <- "administração pública"
-HB_educa <- "educação"
-HB_oserv <- "outros serviços"
-HB_domes <- "serviços domésticos"
-
 
 #Homem negro
 HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
@@ -447,20 +413,6 @@ qua_HN <- ordem_HN[4]
 qui_HN <- ordem_HN[5]
 
 
-# Atribuir resultados às variáveis
-HN_agro <- "agropecuária"
-HN_ind <- "indústria"
-HN_const <- "construção"
-HN_comercio <- "comércio"
-HN_tran <- "transporte"
-HN_alimen <- "alimentação"
-HN_info <- "informação" 
-HN_publico <- "administração pública"
-HN_educa <- "educação"
-HN_oserv <- "outros serviços"
-HN_domes <- "serviços domésticos"
-
-
 #Mulher Branca
 MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
 MB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
@@ -483,18 +435,6 @@ ter_MB <- ordem_MB[3]
 qua_MB <- ordem_MB[4]
 qui_MB <- ordem_MB[5]
 
-# Atribuir resultados às variáveis
-MB_agro <- "agropecuária"
-MB_ind <- "indústria"
-MB_const <- "construção"
-MB_comercio <- "comércio"
-MB_tran <- "transporte"
-MB_alimen <- "alimentação"
-MB_info <- "informação" 
-MB_publico <- "administração pública"
-MB_educa <- "educação"
-MB_oserv <- "outros serviços"
-MB_domes <- "serviços domésticos"
 
 #Mulher Negra
 MN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
@@ -518,26 +458,13 @@ ter_MN <- ordem_MN[3]
 qua_MN <- ordem_MN[4]
 qui_MN <- ordem_MN[5]
 
-# Atribuir resultados às variáveis
-MN_agro <- "agropecuária"
-MN_ind <- "indústria"
-MN_const <- "construção"
-MN_comercio <- "comércio"
-MN_tran <- "transporte"
-MN_alimen <- "alimentação"
-MN_info <- "informação" 
-MN_publico <- "administração pública"
-MN_educa <- "educação"
-MN_oserv <- "outros serviços"
-MN_domes <- "serviços domésticos"
-
 ```
 
-A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN`%) estavam alocados no setor de SETOR, seguido de `r seg_HN` (VALOR%), `r ter_HN` (VALOR%), `r qua_HN` (VALOR%) e `r qui_HN` (VALOR%). Para homens brancos, o setor que mais empregou foi `r max_HB` com VALOR%, além de `r seg_HB` (VALOR%), `r ter_HB` (VALOR)%, `r qua_HB` (VALOR)% e `r qui_HB` (VALOR)%. 
+A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN`%) estavam alocados no setor de comércio, seguido de construção (`r seg_HN*100`%), de indústria (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de indústria (`r seg_HB*100`%), de informação (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
 
-Para as mulheres brancas empregadas, VALOR% estavam no setor de `r max_MB`, VALOR% em `r seg_MB`, VALOR% em `r ter_MB`, VALOR% em `r qua_MB` e VALOR% em `r qui_MB`. Das mulheres negras, a maioria (VALOR%) ocupava o setor de `r max_MN`, seguido de `r seg_MN` (VALOR%), `r ter_MN` (VALOR%), `r qua_MN` (VALOR%) e `r qui_MN` (VALOR%).
+Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Das mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
 
-Nota-se que o setor de XX emprega mais brancos que negros e que os serciços de YY são majoritariamente exercidos por grupo JJ. 
+Nota-se que os serviços de informação, educação e serviços domésticos são majoritariamente exercidos por mulheres. 
 
 
 # Rendimento habitual
@@ -564,12 +491,6 @@ rendahabitanoMB <- (rendahabitMB - rendahabitano_MB)
 rendahabitanoMN <- (rendahabitMN - rendahabitano_MN)
 
 
-# Atribuindo valor textual
-rendahabitHB <- "homens brancos"
-rendahabitHN <- "homens negros"
-rendahabitMB <- "mulheres brancas"
-rendahabitMN <- "mulheres negras"
-
 rendahabitRG <- c(rendahabitHB, rendahabitHN, rendahabitMB, rendahabitMN)
 ordemrendahabitRG <- sort(rendahabitRG, decreasing = TRUE)
 max_renhab <- ordemrendahabitRG[1]
@@ -578,11 +499,6 @@ ter_renhab <- ordemrendahabitRG[3]
 qua_renhab <- ordemrendahabitRG[4]
 
 #ano
-
-rendahabitanoHB <- "homens brancos"
-rendahabitanoHN <- "homens negros"
-rendahabitanoMB <- "mulheres brancas"
-rendahabitanoMN <- "mulheres negras"
 
 rendahabitanoRG <- c(rendahabitanoHB, rendahabitanoHN, rendahabitanoMB, rendahabitanoMN)
 ordem_renhabRG <- sort(rendahabitanoRG, decreasing = TRUE)
@@ -593,17 +509,11 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 ```
 
-![Rendimento Habitual por Raça e Gênero (reais de 2023)](C:/Users/clara/Downloads/RENDA_habit_RG.png){width=90%}
+![Rendimento Habitual por Raça e Gênero (reais de 2023)](C:/Users/clara/Downloads/RENDA_habit_RG.png){width=70%}
 
-<<<<<<< HEAD
 O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
 
-O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR). veja os dados no figura 5.
-
-
-=======
-O rendimento habitual médio do trabalhador brasileiro foi de R$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de `r max_renhab_ano`, com VALOR, enquanto `r qua_renhab_ano` tiveram o menor aumento (VALOR). veja os dados a abaixo:
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
+O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). Veja os dados no figura 5.
 
 # Distribuição: Índice de Gini
 
@@ -614,28 +524,26 @@ giniBR <- giniBR.sh$gini[giniBR.sh$Trimestre == "2023 Q4"]
 
 ```
 
-O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos.].
+O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos.
 
-  O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`, um índice mais próximo de um do que de zero. Esse índice não se alterou comparativamente ao trimestre anterior e o mesmo trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
+![Índice de Gini por Raça e Gênero](C:/Users/clara/Downloads/giniRG_2304.png){width=70%}
 
-<<<<<<< HEAD
-![Índice de Gini por Região](C:/Users/clara/Downloads/giniRG_2304.png){width=90%}
-=======
-![Índice de Gini por Região](C:/Users/clara/Downloads/giniRG.png){width=90%}
 
-![Índice de Gini por Região](C:/Users/clara/Downloads/GINI_REG.png){width=90%}
+![Índice de Gini por Região](C:/Users/clara/Downloads/gini_REG_2304.png){width=70%}
 
-Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado. Por fim, o índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
 
-# Tabelas completas
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
-
-Clique abaixo para dados completos:
-
-<<<<<<< HEAD
-![Índice de Gini por Região](C:/Users/clara/Downloads/gini_REG_2304.png){width=90%}
+O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`, um índice mais próximo de um do que de zero. Esse índice não se alterou comparativamente ao trimestre anterior e ao mesmo trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
 
 Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado. Por fim, o índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
+
+
+# Percentis de renda
+
+Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Aassim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
+
+![Apropriação da Renda Total por Decis e pelo topo 1%](C:/Users/clara/Downloads/percentis.png){width=70%}
+
+Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11,6% da renda nacional, no quarto trimestre de 2023. 
 
 # Tabelas completas
 
@@ -649,33 +557,4 @@ Clique abaixo para dados completos:
 
 [Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
 
-
-=======
-<<<<<<< HEAD
-[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
-=======
-#Percentis de renda
-
-
-
-Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os resultados encontram-se na Tabela 22: Percentis de renda.
-
-Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, essa população é ordenada por renda e, então, dividida em grupos com o mesmo número de pessoas. Os quantis representam a divisão dessas 100 pessoas em quatro grupos de 25 cada. Dito de outra maneira, os quantis são a população dividida em faixas de 25% cada. Dessa forma, o Q1 representa a separação dos 25% com menor renda, o Q2 corresponde à faixa de renda que separa os 50% mais pobres e Q3 corresponde aos 75% mais pobres. 
-
-Além disso, os quantis podem ser subdivididos em mais segmentos, como é o caso dos decis, em que se divide a população em 10 grupos – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
-
-
-Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Dito de outra maneira, significa encontrar o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de X% da renda nacional, no terceiro trimestre de 2023. Esse número é x% maior/ menor que sua participação no trimestre
-do ano anterior.
-
-A partir desses dados, podemos construir uma curva de Lorenz para o Brasil para o terceiro trimestre de 2023. Para construir a curva de Lorenz, acumulamos os dados reportados acima, da população e da renda:
-a curva mostra como a proporção da renda total aumenta em função da proporção da população (Hoffmann,
-1998).
-Na situação hipotética de total igualdade em que todas as pessoas possuem o mesmo rendimento efetivo,
-a curva de Lorenz da economia seria o segmento de reta desenhado no gráfico, que chamamos de linha de
-perfeita igualdade. Assim, quanto mais afastada dessa linha a curva de Lorenz de um país está, maior o grau
-de desigualdade de rendimentos. Por definição, o Índice de Gini é igual à razão entre: a área entre a linha
-de perfeita igualdade e a curva de Lorenz, e a área total abaixo da linha de perfeita igualdade (Hoffmann,
-1998).
->>>>>>> 0f64a1e3dc93815008b1331e779cdf254e1c5cbe
->>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
+[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/1HNiCJ2wPMjPWRs8-5EQQT5IMxP5qPdrG/view?usp=sharing)
