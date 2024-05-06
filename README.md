@@ -11,4 +11,5 @@ The structure of the repository is as follows:
 | `Long version` | Containing R Markdown file used to build the complete version of the report|
 | `Short version` | Containing R Markdown file used to build the abridged version of the report |
 
-The latest publication can be found on [MADE](https://madeusp.com.br/publicacoes/tipos/working-papers/).
+
+Our latest publication can be found on [MADE](https://madeusp.com.br/publicacoes/tipos/working-papers/).
