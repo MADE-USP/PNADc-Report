@@ -4,6 +4,11 @@ This repository contains the files and data used to generate MADE's quarterly re
 
 The structure of the repository is as follows:
 
-
+| ***Folder***| ***Description*** |
+|-----|-----|
+| `Database setup` | Files and R code necessary to build the microdata input files |
+| `Input` | Microdata input files (.txt) used to run the model|
+| `Long version` | Containing R Markdown file used to build the complete version of the report|
+| `Short version` | Containing R Markdown file used to build the abridged version of the report |
 
 The latest publication can be found on [MADE](https://madeusp.com.br/publicacoes/tipos/working-papers/).
