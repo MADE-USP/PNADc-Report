@@ -13,3 +13,5 @@ The structure of the repository is as follows:
 
 
 Our latest publication can be found on [MADE](https://madeusp.com.br/publicacoes/tipos/working-papers/).
+
+This is our project's [website page](https://made-usp.github.io/PNADc-Report/). 
