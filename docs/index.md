@@ -40,4 +40,4 @@ Containing R Markdown file used to build the abridged version of the report.
 </div>
 
 ## Contact
-For any queries regarding the data or our research work, please contact us at <hiaman.santos@usp.br>.
+For any queries regarding the data or our research work, please contact us at <made.feausp@gmail.com>.
