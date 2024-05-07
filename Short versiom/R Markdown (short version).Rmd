@@ -1,7 +1,7 @@
 ---
-title: "Relatório Trimestral da PNAD, versão reduzida^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito, Clara Brenck, Tainari Taioka e Marina Sanches e os pesquisadores José Bergamin e Hiaman Santos.]" 
+title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito e Clara Brenck e os pesquisadores José Bergamin e Hiaman Santos.]" 
 author: "Made USP"
-date: "20/02/2024"
+date: "21/02/2024"
 lang: pt-br
 output:
   pdf_document: default
@@ -29,6 +29,8 @@ library(openxlsx)
 library(kableExtra)
 library(zoo)
 library(gplots)
+#install.packages("xts")
+library(xts)
 
 
 #devtools::install_github("kupietz/kableExtra")
@@ -51,13 +53,104 @@ q=4
 
 # Introdução
 
-Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e às tabelas completas pode ser feito por meio do link ao final do documento. 
+Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link ao final do documento. Uma versão mais longa do relatório pode ser acessada [clicando aqui](https://drive.google.com/file/d/1DlokvpCUoUH0pga0PiafczzBhenKmwDH/view?usp=sharing).
 
 # Mercado de Trabalho
 
 ## Desemprego
 
-![Taxa de Ocupação por Raça e Gênero](C:/Users/clara/Downloads/ocupado_RG.png){width=70%}
+```{r include=FALSE}
+
+# Corrigindo as datas
+
+# Para lidar com datas no R, é preciso um formato bem especifico
+# vamos entao editar o formato atual, que esta em "caracter" para um formato data
+# Para isso, o R precisa da data num formato AA-MM-DD (ainda que o dia nao importe pra dados triemstrais)
+# Vamos fazer um passo a passo disso aqui
+
+# Primeiro, vamos dividir a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(EMPREGO.RG.sh$Trimestre, " ")) # dividindo a data pelo "espaco": ano e trimestre
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] # colocando nomes corretos nas colunas
+EMPREGO.RG.sh <- EMPREGO.RG.sh %>% 
+  select(Ocupado, Categoria)
+EMPREGO.RG.sh <- cbind(EMPREGO.RG.sh,date) # juntando com o data frame anterior
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+EMPREGO.RG.sh$Dia <- 01  # considere o dia igual para todos (o dia não vai importar)
+
+
+# Para criar o mes, temos que criar um padrao para que, a partir do mes, se identifique o trimestre
+# Fazemos entao pelo primeiro mes: mes 1 p/ o 1o trimestre; mes 4 p/ o 2o trimestre, etc
+# (aqui tambem tanto faz qual mes voce escolhe, so tem que estar dentro do trimestre certo)
+# criamos um loop para ajustar o mes a partir do trimestre:
+
+EMPREGO.RG.sh$Mes <- ifelse(EMPREGO.RG.sh$Trimestre=="Q1",1,
+                     ifelse(EMPREGO.RG.sh$Trimestre=="Q2",4,
+                     ifelse(EMPREGO.RG.sh$Trimestre=="Q3",7,10))) 
+# no comando "ifelse", nao precisamos o "10" vai aparecer caso nenhum das condicoes forem aceitas
+# ou seja, caso nao seja Q1, Q2 ou Q3 - isto e, estamos no Q4
+
+#Agora podemos dizer pro R a data, ja que temos todos os elementos que precisamos
+# Primeiro, vamos transformar o ano em numerico
+EMPREGO.RG.sh$Ano <- as.numeric(EMPREGO.RG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+EMPREGO.RG.sh$Data <-as.yearqtr(with(EMPREGO.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+
+# Por fim, vamos voltar a ter apenas a Taxa de Ocupação, Categoria e a Data:
+EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
+   select(Ocupado, Categoria, Data)
+
+
+```
+
+
+```{r echo=FALSE}
+
+# echo = FALSE não mostra o código, mas mostra o resultado
+# se a gente coloca include=FALSE o gráfico não aparece 
+# pq include=FALSE não mostra o resultado
+
+ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+ 
+  geom_line(size=2) + # definindo grossura da linha
+  ggtitle("Taxa de Ocupação por Raça e Gênero") + #titulo do grafico
+  theme_bw() # colocando fundo Branco
+
+```
+
+```{r include=FALSE}
+
+date <- do.call(rbind, strsplit(EMPREGO.REG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+EMPREGO.REG.sh <- EMPREGO.REG.sh %>% 
+  select(Ocupado, Regiao)
+EMPREGO.REG.sh <- cbind(EMPREGO.REG.sh,date) 
+
+EMPREGO.REG.sh$Dia <- 01  
+
+EMPREGO.REG.sh$Mes <- ifelse(EMPREGO.REG.sh$Trimestre=="Q1",1,
+                     ifelse(EMPREGO.REG.sh$Trimestre=="Q2",4,
+                     ifelse(EMPREGO.REG.sh$Trimestre=="Q3",7,10))) 
+
+EMPREGO.REG.sh$Ano <- as.numeric(EMPREGO.REG.sh$Ano)
+
+EMPREGO.REG.sh$Data <-as.yearqtr(with(EMPREGO.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+EMPREGO.REG.sh<- EMPREGO.REG.sh %>%
+   select(Ocupado, Regiao, Data)
+
+```
+
+```{r echo=FALSE}
+
+ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao))+ 
+  geom_line(size=2) + # definindo grossura da linha
+  ggtitle("Taxa de Ocupação por Região") + #titulo do grafico
+  theme_bw() # colocando fundo Branco
+
+```
 
 
 ![Taxa de Ocupação por Região](C:/Users/clara/Downloads/ocupado_REG.png){width=70%}
@@ -196,11 +289,10 @@ qui_desemanoREG <- ordem_desem_anoREG[5]
 
 ```
 
+
 Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. Assim, a taxa nacional de desemprego encerrou o trimestre em `r desemprego*100`%. A região Nordeste registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto o Sul teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, mulheres negras foram a maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada dentre homens brancos, de `r qua_desemRG*100`%. 
 
-Veja mais dados de ocupação nos figuras 1 e 2.
-
-Veja abaixo mais dados de desemprego:
+Veja mais dados de ocupação nas figuras 1 e 2.
 
 
 ```{r include=FALSE}
@@ -347,16 +439,17 @@ qua_infanoRG <- ordem_infanoRG[4]
 
 
 ```
-Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social, conforme Kassouf (1998) e Dalberto e Cirino (2018). A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi o Norte (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). O Sul registrou as menores taxas de informalidade (`r qui_infREG*100`%). 
+
+Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.]. A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi o Norte (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). O Sul registrou as menores taxas de informalidade (`r qui_infREG*100`%). 
 
 No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de homens negros, com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informal)*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
 
-Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. Veja mais nos figuras 3 e 4.
+Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. Veja mais nas figuras 3 e 4.
 
 ![Taxa de Informalidade por Raça e Gênero](C:/Users/clara/Downloads/informal_RG.png){width=70%}
 
 
-![Taxa de Informalidade por Região](C:/Users/clara/Downloads/informal_REG.png){width=70&}
+![Taxa de Informalidade por Região](C:/Users/clara/Downloads/informal_REG.png){width=70%}
 
 
 
@@ -460,7 +553,7 @@ qui_MN <- ordem_MN[5]
 
 ```
 
-A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN`%) estavam alocados no setor de comércio, seguido de construção (`r seg_HN*100`%), de indústria (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de indústria (`r seg_HB*100`%), de informação (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
+A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido de construção (`r seg_HN*100`%), de indústria (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de indústria (`r seg_HB*100`%), de informação (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
 
 Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Das mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
 
@@ -513,7 +606,7 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
 
-O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). Veja os dados no figura 5.
+O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). Veja os dados na figura 5.
 
 # Distribuição: Índice de Gini
 
@@ -521,10 +614,14 @@ O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reai
 ```{r include=FALSE}
 
 giniBR <- giniBR.sh$gini[giniBR.sh$Trimestre == "2023 Q4"]
+giniBR_ano <- giniBR.sh$gini[giniBR.sh$Trimestre == "2022 Q4"]
+giniBR_tri <- giniBR.sh$gini[giniBR.sh$Trimestre == "2023 Q3"]
+
+
 
 ```
 
-O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos.
+O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos].
 
 ![Índice de Gini por Raça e Gênero](C:/Users/clara/Downloads/giniRG_2304.png){width=70%}
 
@@ -532,14 +629,15 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 ![Índice de Gini por Região](C:/Users/clara/Downloads/gini_REG_2304.png){width=70%}
 
 
-O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`, um índice mais próximo de um do que de zero. Esse índice não se alterou comparativamente ao trimestre anterior e ao mesmo trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
+O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`.
+
 
 Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado. Por fim, o índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
 
 
 # Percentis de renda
 
-Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Aassim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
+Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
 
 ![Apropriação da Renda Total por Decis e pelo topo 1%](C:/Users/clara/Downloads/percentis.png){width=70%}
 
