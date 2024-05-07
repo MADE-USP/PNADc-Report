@@ -7,7 +7,7 @@
 <div style="text-align: justify;">
     Our latest results can be found on MADE's website. You may be interested in citing our report:
 </div>
-> MADE (2024) [Relatório Trimestral PNAD - Quarto Trimestre de 2023](https://madeusp.com.br/publicacoes/artigos/relatorio-trimestral-da-pnad-quarto-trimestre-de-2023/).
+> MADE (2024). [Relatório Trimestral PNAD - Quarto Trimestre de 2023](https://madeusp.com.br/publicacoes/artigos/relatorio-trimestral-da-pnad-quarto-trimestre-de-2023/).
 
 ## Data
 <div style="text-align: justify;">
@@ -40,4 +40,4 @@ Containing R Markdown file used to build the abridged version of the report.
 </div>
 
 ## Contact
-For any queries regarding the data or our research work, please contact us at <hiaman.santos@usp.br>.
+For any queries regarding the data or our research work, please contact us at <made.feausp@gmail.com>.
