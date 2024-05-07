@@ -1,0 +1,438 @@
+---
+title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito, Clara Brenck, Tainari Taioka e Marina Sanches e os pesquisadores José Bergamin e Hiaman Santos.]" 
+author: "Made USP"
+date: "20/02/2024"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+subtitle: 1º Trimestre de 2024 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=FALSE, warning=FALSE, message=FALSE)
+
+options(digits=2)
+```
+
+```{r include=FALSE}
+# SEMPRE CARREGAR ESTE CHUNK ANTES DE ABRIR O CÓDIGO COM OS DADOS
+
+#library(PNADcIBGE)
+library(survey)
+library(convey)
+library(tidyverse)
+library(dplyr)
+library(knitr)
+library(openxlsx)
+library(kableExtra)
+library(zoo)
+library(gplots)
+
+#devtools::install_github("kupietz/kableExtra")
+
+# <<<<<<< HEAD
+setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
+load("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua/PNAD_dados_relatorio_04_2023.RData")
+
+# =======
+#load("C:/Users/lauro/Desktop/PNADc/Enviados por Clara/CLARA_dados_serie_historica_042023.RData")
+# >>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
+```
+
+
+```{r include=FALSE}
+
+i=2023
+q=4
+
+#trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
+#mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
+
+#"R" (resultado) foi adicionado no início de objetos de resultado textual para algumas funções de automação
+
+```
+
+# A Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua)
+
+A PNAD Contínua, realizada pelo Instituto Brasileiro de Geografia e Estatística (IBGE), é, atualmente, a principal pesquisa domiciliar brasileira, com periodicidade trimestral e realizada de forma contínua ao longo do ano. A PNAD Contínua é conduzida para produzir indicadores trimestrais sobre a população brasileira, incluindo características socioeconômicas e demográficas. Suas informações são cruciais para a formulação e avaliação de políticas públicas e seus resultados são amplamente utilizados por governos e pesquisadores, bem como pelo Made em suas pesquisas. 
+
+Reportamos nossas estatísticas com recortes a partir de várias facetas das desigualdades no Brasil: de gênero, de raça e regionais. As variáveis de gênero e de raça são informações autodeclaradas pela(o) entrevistada(o). Nós utilizamos duas categorias de raça: negros (que considera pretos e pardos) e brancos. 
+
+Reportamos as estatísticas comparativamente ao mesmo trimestre de `r i-1`, bem como ao trimestre anterior (`r q-1`º trimestre de `r i`). Este relatório pretende ser informativo e, portanto, não busca discutir os motivos por trás de possíveis mudanças nos indicadores. O acesso às estatísticas e tabelas completas pode ser feito por meio de links disponibilizados no final do documento. 
+
+A PNAD Contínua divulgada em 16/02/2024 apresenta dados referentes ao `r q`º trimestre de `r i` - de setembro a dezembro.
+
+# Mercado de Trabalho
+
+## Taxa de Participação
+
+```{r include=FALSE}
+# Variáveis de Raça e Gênero:
+
+PEA_homem_branco <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q4"]
+PEA_homem_negro <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Negro" & PEA.RG.sh$Trimestre == "2023 Q4"]
+PEA_mulher_branca <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Branca" & PEA.RG.sh$Trimestre == "2023 Q4"]
+PEA_mulher_negra <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Negra" & PEA.RG.sh$Trimestre == "2023 Q4"]
+
+
+PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q3"]
+PEA_homem_negro_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Negro" & PEA.RG.sh$Trimestre == "2023 Q3"]
+PEA_mulher_branca_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Branca" & PEA.RG.sh$Trimestre == "2023 Q3"]
+PEA_mulher_negra_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Negra" & PEA.RG.sh$Trimestre == "2023 Q3"]
+
+PEA_HB_tri_ano_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2022 Q4"]
+PEA_HN_tri_ano_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Negro" & PEA.RG.sh$Trimestre == "2022 Q4"]
+PEA_MB_tri_ano_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Branca" & PEA.RG.sh$Trimestre == "2022 Q4"]
+PEA_MN_tri_ano_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Negra" & PEA.RG.sh$Trimestre == "2022 Q4"]
+
+# PEA_mulher_202250 <- c((PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Branca" & PEA.RG.sh$Trimestre == "2022 Q3"]), (PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Mulher Negra" & PEA.RG.sh$Trimestre == "2022 Q3"]))
+
+# mulher_min_202250 <- min(PEA_mulher_202250)
+# mulher_max_202250 <- max(PEA_mulher_202250)
+
+# PEA_homem_202250 <- c((PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q4"]), (PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Negro" & PEA.RG.sh$Trimestre == "2023 Q4"]))
+
+# homem_min_202250 <- min(PEA_homem_202250)
+# homem_max_202250 <- max(PEA_homem_202250)
+
+# Variáveis de Região
+
+PEA_Norte <- PEA.REG.sh$PEA[PEA.REG.sh$Regiao == "Norte" & PEA.REG.sh$Trimestre == "2023 Q4"]
+PEA_Nordeste <- PEA.REG.sh$PEA[PEA.REG.sh$Regiao == "Nordeste" & PEA.REG.sh$Trimestre == "2023 Q4"]
+PEA_CentroOeste <- PEA.REG.sh$PEA[PEA.REG.sh$Regiao == "Centro-Oeste" & PEA.REG.sh$Trimestre == "2023 Q4"]
+PEA_Sudeste <- PEA.REG.sh$PEA[PEA.REG.sh$Regiao == "Sudeste" & PEA.REG.sh$Trimestre == "2023 Q4"]
+PEA_Sul <- PEA.REG.sh$PEA[PEA.REG.sh$Regiao == "Sul" & PEA.REG.sh$Trimestre == "2023 Q4"]
+```
+
+A taxa de participação refere-se ao percentual da população em idade de trabalhar que participa da força de trabalho^[A metodologia de cálculo desta taxa exclui da força de trabalho os que não procuram emprego nem estão trabalhando, como aposentados, donas de casa e estudantes.]. No `r q`º trimestre de `r i`, a taxa de participação no mercado de trabalho de homens negros foi de `r (PEA_homem_negro)*100`% e a de homens brancos, `r (PEA_homem_branco)*100`%. A taxa de participação no mercado de trabalho ficou em `r (PEA_mulher_branca)*100`% para mulheres brancas e `r (PEA_mulher_negra)*100`% para mulheres negras.
+
+Em comparação com o trimestre anterior (`r q-1`º trimestre de `r i`), houve pouca variação na taxa de participação destes grupos. Isso também é verdade em relação ao mesmo trimestre do ano anterior (`r q`º trimestre de `r i-1`), em que a registraram-se taxas de participação de `r (PEA_MN_tri_ano_anterior)*100`% e `r (PEA_MB_tri_ano_anterior)*100`%, para mulheres negras e brancas, respectivamente; e de cerca de 72% para homens brancos e negros.
+
+Em relação às desigualdades regionais, percebemos grande variação na taxa de participação no mercado de trabalho por região do país. A região Nordeste é aquela que tem menor taxa de participação no mercado de trabalho, ficando em `r (PEA_Nordeste)*100`%, na média. Na região Nordeste, todos os grupos demográficos têm menor taxa de participação do que nas demais regiões. As regiões Centro-Oeste e Sul são as que apresentam maior taxa de participação no mercado de trabalho, de `r (PEA_CentroOeste)*100`% e `r (PEA_Sul)*100`%, respectivamente. Tais valores também se mantiveram estáveis quando comparados ao `r q-1`º trimestre de `r i` e ao `r q`º trimestre de `r i-1`. 
+
+![Taxa de Participação no Mercado de Trabalho por Gênero e Raça](C:/Users/clara/Downloads/PEA_RG.png){width=90%}
+
+
+![Taxa de Participação no Mercado de Trabalho por Região](C:/Users/clara/Downloads/PEA_REG.png){width=90%}
+
+## Emprego, desemprego e escolaridade
+
+### Ocupação 
+
+```{r include=FALSE}
+# Variáveis
+
+# Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q2"]
+
+colnames(Tx_desemprego)[colnames(Tx_desemprego) == "Taxa de desemprego"] ="Taxa_desemprego"
+colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] ="Taxa_desemprego"
+
+desemprego <- Tx_desemprego$`Taxa_desemprego`
+desemprego_tri_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
+desemprego_tri_ano_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2022 Q4"]
+                                                                   
+dif_desemprego <- ((desemprego)-(desemprego_tri_anterior))
+
+## Desemprego por raça e gênero
+
+desemprego_homem_branco <- 1 - (EMPREGO.RG$Ocupado[EMPREGO.RG$Categoria == "Homem Branco"])
+desemprego_homem_negro <- 1 - (EMPREGO.RG$Ocupado[EMPREGO.RG$Categoria == "Homem Negro"])
+desemprego_mulher_branca <- 1 - (EMPREGO.RG$Ocupado[EMPREGO.RG$Categoria == "Mulher Branca"])
+desemprego_mulher_negra <- 1 - (EMPREGO.RG$Ocupado[EMPREGO.RG$Categoria == "Mulher Negra"])
+
+### Trimestre anterior
+
+desemprego_hb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desemprego_hn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desemprego_mb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+
+### Mesmo trimestre do ano anterior
+
+desemprego_hb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
+desemprego_hn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
+desemprego_mb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
+desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
+
+### Mínimos e máximos
+
+# desemprego_mulher_202250 <- c(desemprego_mulher_branca, desemprego_mulher_negra)
+
+# desemprego_mulher_min <- min(desemprego_mulher_202250)
+# desemprego_mulher_max <- max(desemprego_mulher_202250)
+# desemprego_mulher_seg_max <- unique(sort(desemprego_mulher_202250, decreasing = TRUE))[2]
+
+
+# desemprego_homem_202250 <- c(desemprego_homem_branco, desemprego_homem_negro)
+
+# desemprego_homem_min <- min(desemprego_homem_202250)
+# desemprego_homem_seg_min <- unique(sort(desemprego_homem_202250))[2]
+
+## Por Região
+
+desemprego_norte <- 1 - (EMPREGO.REG$Ocupado[EMPREGO.REG$Regiao == "Norte"])
+desemprego_nordeste <- 1 - (EMPREGO.REG$Ocupado[EMPREGO.REG$Regiao == "Nordeste"])
+desemprego_centrooeste <- 1 - (EMPREGO.REG$Ocupado[EMPREGO.REG$Regiao == "Centro-Oeste"])
+desemprego_sudeste <- 1 - (EMPREGO.REG$Ocupado[EMPREGO.REG$Regiao == "Sudeste"])
+desemprego_sul <- 1 - (EMPREGO.REG$Ocupado[EMPREGO.REG$Regiao == "Sul"])
+
+### Trimestre anterior
+
+desemprego_norte_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_nordeste_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_centrooeste_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_sudeste_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+desemprego_sul_tri_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q3"])
+
+### Ano anterior, mesmo trimestre
+
+desemprego_norte_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_nordeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_centrooeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_sud_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
+
+### Diferenças anuais
+dif_desemprego_Norte <- ((desemprego_norte) - (desemprego_norte_tri_ano_anterior))
+dif_desemprego_Nordeste <- ((desemprego_nordeste) - (desemprego_nordeste_tri_ano_anterior))
+dif_desemprego_CentroOeste <- ((desemprego_centrooeste) - (desemprego_centrooeste_tri_ano_anterior))
+dif_desemprego_Sudeste <- ((desemprego_sudeste) - (desemprego_sud_tri_ano_anterior))
+dif_desemprego_Sul <- ((desemprego_sul) - (desemprego_sul_tri_ano_anterior))
+
+
+#ESCOLARIDADE
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
+
+
+  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
+  
+escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+
+```
+
+No `r q`º trimestre de `r i`, o desemprego ficou em `r (desemprego)*100`% no Brasil, uma queda de `r (dif_desemprego)*100` pontos percentuais em relação ao trimestre anterior. O desemprego no país no `r q`º trimestre de `r i-1` tinha atingido `r (desemprego_tri_ano_anterior)*100`%. Houve, portanto, uma importante queda deste indicador no período de um ano.
+
+Observamos que a taxa de desemprego das mulheres negras foi de `r (desemprego_mulher_negra)*100`%. Para as mulheres brancas, o desemprego ficou em `r (desemprego_mulher_branca)*100`%. Os homens brancos tiveram taxa de desemprego no patamar de `r (desemprego_homem_branco)*100`%, a menor para o período. Para os homens negros, o desemprego foi de `r (desemprego_homem_negro)*100`%. 
+
+No período de um ano, isto é, comparando-se os dados do trimestre de referência com o mesmo período de `r i-1`, a situação melhorou. O desemprego entre homens brancos caiu de `r (desemprego_hb_tri_ano_anterior)*100`%  para `r (desemprego_homem_branco)*100`%; e de homens negros recuou de `r (desemprego_hn_tri_ano_anterior)*100`% para `r (desemprego_homem_negro)*100`%. Para as mulheres brancas, o desemprego saiu de `r (desemprego_mb_tri_ano_anterior)*100`% para `r (desemprego_mulher_branca)*100`%; e, para mulheres negras, registrou-se queda de `r (desemprego_mn_tri_ano_anterior)*100`% para `r (desemprego_mulher_negra)*100`%, no período de um ano.
+
+Regionalmente, o desemprego também apresentou tendência de queda no `r q`º trimestre de `r i`. Na região Norte, registrou-se taxa de desemprego de `r (desemprego_norte)*100`% (queda de `r (dif_desemprego_Norte)*100` pontos percentuais em um ano). Na região Nordeste, a taxa de desemprego registrada foi de `r (desemprego_nordeste)*100`% (recuo de `r (dif_desemprego_Nordeste)*100` p.p. em um ano). Na região Centro-Oeste, a taxa de desemprego medida foi de `r (desemprego_centrooeste)*100`% (queda de `r (dif_desemprego_CentroOeste)*100` p.p. em um ano). Na região Sudeste, a taxa de desemprego registrada foi de `r (desemprego_sudeste)*100`% (recuo de `r (dif_desemprego_Sudeste)*100` p.p. em um ano). Por fim, na região Sul, registrou-se taxa de desemprego de `r (desemprego_sul)*100`% (diferença de `r (dif_desemprego_Sul)*100` p.p. em um ano).
+
+
+![Taxa Média de Emprego por Gênero e Raça](C:/Users/clara/Downloads/OCUPACAO_RG.png){width=90%}
+
+### Formalidade e Informalidade
+
+```{r include=FALSE}
+
+# Geral
+
+names(informal.RG)[names(informal.RG) == "não contribuinte INSS"] <- "nao_contribuinte"
+names(informal.REG)[names(informal.REG) == "não contribuinte INSS"] <- "nao_contribuinte"
+names(informal.RG.REG)[names(informal.RG.REG) == "não contribuinte INSS"] <- "nao_contribuinte"
+
+
+informalidade_homem_branco <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Homem Branco"]
+informalidade_homem_negro <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Homem Negro"]
+informalidade_mulher_branca <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Mulher Branca"]
+informalidade_mulher_negra <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Mulher Negra"]
+
+# Média e diferença
+
+colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "informalidade_mean"
+
+informalidade_media <- informalidadeMedia.sh$informalidade_mean[informalidadeMedia.sh$Trimestre == "2023 Q4"]
+
+informalidade_tri_ano_anterior <- informalidadeMedia.sh$informalidade_mean[informalidadeMedia.sh$Trimestre == "2022 Q4"]
+
+dif_informalidade_anual <- informalidade_media - informalidade_tri_ano_anterior
+
+# Máximo e mínimo
+
+#informalidade_norte <- informal.REG.sh$nao_contribuinte_INSS[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q4"]
+#informalidade_nordeste <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
+#informalidade_centrooeste <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
+#informalidade_sudeste <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
+#informalidade_sul <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q4" ]
+
+#informalidade_REG <- c(informalidade_norte, informalidade_nordeste, informalidade_centrooeste, informalidade_sudeste, informalidade_sul)
+
+#informalidade_REG_max <- max (informalidade_REG)
+#informalidade_REG_min <- min (informalidade_REG)
+
+```
+
+No Brasil, tradicionalmente adota-se a falta de carteira assinada como critério para a definição de informalidade do trabalho. Outro critério, bem estabelecido na literatura e utilizado neste relatório, considera a não contribuição à seguridade social para a caracterização da informalidade^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998. Disponível em: Vista do Wage gender discrimination and segmentation in the Brazilian labor market (usp.br). Acesso em: 16/11/2023; e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018. Disponível em: https://doi.org/10.1590/0103-6351/3191. Acesso em 16/11/2023.]. Esse critério é útil para a captura dos trabalhadores autônomos e empregados informais nas pesquisas, sobretudo ao levar-se em conta a questão da precariedade do trabalho. Sem amparo do sistema de seguridade social, tais trabalhadores encontram-se, portanto, em posição mais vulnerável. Benefícios relacionados à proteção da renda em caso de doença, velhice ou maternidade, por exemplo, não são recebidos por tais trabalhadores.
+
+Neste sentido, consideramos a porcentagem de trabalhadores que contribuem para o instituto de previdência (indicado por “contribuinte INSS”) e o percentual daqueles que não contribuem – que se encontram, portanto, em situação de informalidade. Reportamos que `r (informalidade_homem_branco)*100`% dos trabalhadores brancos e `r (informalidade_homem_negro)*100`% dos trabalhadores negros estavam na informalidade no `r q`º trimestre de `r i`. Entre as mulheres, `r (informalidade_mulher_branca)*100`% das trabalhadoras brancas e `r (informalidade_mulher_negra)*100`% das trabalhadoras negras não constavam como contribuintes da previdência.
+
+Percebe-se ainda que a taxa de informalidade entre as pessoas negras foi maior do que a taxa média para todos os trabalhadores, de `r (informalidade_media)*100`%, no `r q`º trimestre de `r i`. Registrou-se queda de `r (dif_informalidade_anual)*100` pontos percentuais na informalidade média da economia brasileira, em comparação com o mesmo trimestre de `r i-1`.
+
+As regiões com maiores taxas de informalidade são a Norte e Nordeste, com taxas iguais a `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Norte"]*100`% e `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Nordeste"]*100`%, respectivamente. A taxa de informalidade da região Sul é a menor, `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Sul"]*100`%, enquanto que as regiões Sudeste e Centro-Oeste registram `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Sudeste"]*100`% e `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Centro-Oeste"]*100`% de informalidade em sua força de trabalho, respectivamente. 
+
+## Escolaridade
+
+```{r}
+#ESCOLARIDADE
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
+colnames(ESCOLARIDADE.REG)[colnames(ESCOLARIDADE.REG) == "Ensino fundamental"] ="ensino_fundamental"
+colnames(ESCOLARIDADE.REG)[colnames(ESCOLARIDADE.REG) == "Ensino médio"] ="ensino_medio"
+colnames(ESCOLARIDADE.REG)[colnames(ESCOLARIDADE.REG) == "Ensino superior"] ="ensino_superior"
+
+
+  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
+  ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
+  
+escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+ ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
+  
+
+max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
+
+max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
+
+```
+
+Das mulheres negras, `r (escol_sup_mn)*100`% possuía ensino superior, `r (escol_medio_mn)*100`%, ensino médio, e `r (escol_fund_mn)*100`% possuía apenas ensino fundamental completo. Dentre as mulheres brancas, `r (escol_sup_mb)*100`% possuía ensino superior, `r (escol_medio_mb)*100`%, ensino médio, e `r (escol_fund_mb)*100`% havia completado apenas o ensino fundamental.
+
+Enquanto isso, `r (escol_sup_hb)*100`% dos homens brancos possuía ensino superior, `r (escol_medio_mb)*100`%, ensino médio, e `r (escol_fund_mb)*100`%, ensino fundamental. Dos homens negros, `r (escol_sup_hb)*100`% possuía ensino superior, `r (escol_medio_mb)*100`%, ensino médio, e `r (escol_fund_mb)*100`%, ensino fundamental.
+
+No âmbito regional, XX foi a região com maior percentual de escolarizados a nível de ensino superior (`r (max_escol_sup*100)`%). Por outro lado, XX apresentou a maioria de escolarizados com ensino fundamental somente (`r (max_escol_fund*100)`%).
+
+
+![Taxa Média de Informalidade por Gênero e Raça](C:/Users/clara/Downloads/INFORMALIDADE_RG.png){width=90%}
+
+
+![Taxa Média de Informalidade por Região](C:/Users/clara/Downloads/INFORMALIDADE_REG.png){width=90%}
+### Subocupação
+
+Reportamos as estatísticas de subocupação no mercado de trabalho. O intuito desse indicador é complementar o monitoramento do mercado de trabalho, para além da taxa de desocupação. Ela capta três informações principais, são elas: i) trabalhou habitualmente menos de 40 horas no seu único trabalho ou no conjunto de todos os seus trabalhos, ii) preferia trabalhar mais horas do que as habitualmente trabalhadas e, iii) estava disponível para trabalhar mais horas no período de 30 dias, contados a partir do primeiro dia da semana de referência. 
+
+No `r q`º trimestre de 2023, a taxa de subocupação foi de `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Homem Branco"]*100`% para os homens brancos e `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Homem Negro"]*100`% para os homens negros. Já para as mulheres, tal taxa foi de `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Mulher Branca"]*100`% para as trabalhadoras brancas e `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Mulher Negra"]*100`% para as negras. 
+
+A região Nordeste foi a que apresentou maior taxa média se subocupação, de `r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Nordeste"]*100`%, seguida pela região Centro-Oeste (`r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Centro-Oeste"]*100`%), Sudeste (`r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Sudeste"]*100`%), Norte (`r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Norte"]*100`%) e, por último, a região Sul, com `r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Sul"]*100`% dos trabalhadores subocupados.
+
+## Emprego por setor
+
+```{r include=FALSE}
+colnames(trabalhosetor.RG)[colnames(trabalhosetor.RG) == "Serviços domésticos"] ="ServicosDomesticos"
+```
+
+A ocupação por setores no Brasil também varia consideravelmente de acordo com a raça e o gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Homem Negro"])*100`%) estava alocada no setor de comércio. Seguem-se os setores de construção e de indústria, com `r (trabalhosetor.RG$Construção[trabalhosetor.RG$Categoria == "Homem Negro"])*100`% e `r (trabalhosetor.RG$Indústria[trabalhosetor.RG$Categoria == "Homem Negro"])*100`% da alocação da força de trabalho de homens negros, respectivamente.Para homens brancos, o setor que mais emprega também é o comércio (`r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%), além da indústria, com `r (trabalhosetor.RG$Indústria[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%, setor de informação, que emprega `r (trabalhosetor.RG$Informação[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%, e agricultura, com `r (trabalhosetor.RG$Agropecuária[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%.
+
+Para o total de mulheres brancas empregadas, `r (trabalhosetor.RG$Educação[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% estão no setor de educação, `r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% encontram-se no setor de comércio e `r (trabalhosetor.RG$Informação[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% no setor de informação. Das mulheres negras, `r (trabalhosetor.RG$Educação[trabalhosetor.RG$Categoria == "Mulher Negra"])*100`% estão alocadas no setor de educação, seguido do comércio, `r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Mulher Negra"])*100`%, e serviços domésticos, com 16.06%. Nota-se que o setor de informação emprega mais brancos que negros e os serviços domésticos são majoritariamente exercidos por mulheres negras.
+
+As composições em relação a gênero e raça dos setores para as diferentes regiões brasileiras apresentam algumas particularidades. Para as mulheres, os empregos setoriais são bem parecidos com os resultados gerais. Já no caso dos homens, há diferenças entre as regiões. Por exemplo, no Nordeste e no Centro-Oeste, a maioria dos homens (brancos e negros) estão no setor de agricultura, enquanto que no Sudeste e Norte, a maior parte deles encontra-se no setor de comércio. No Sul, o setor que mais emprega os homens é a indústria.
+
+# Rendimento
+
+
+## Rendimento Efetivo e Habitual 
+
+Nesta seção apresentamos os rendimentos mensais dos trabalhadores em seu trabalho principal com recorte de raça e gênero. Os rendimentos são reportados em termos reais, isto é, deflacionados e a preços do ano de `r i`.
+
+O rendimento habitual mensal do trabalho principal consiste no rendimento recebido pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. 
+
+```{r include=FALSE}
+
+#Quando olhamos para o recorte de grupos, a desigualdade de rendimentos entre gênero e raça fica bastante evidente. Por exemplo, o rendimento habitual mensal dos homens brancos é `r (RendaHabit.RG.sh$HabitualDef22[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Date == "2023 Q3"]/2900-1)*100`% maior do que a média de todos os trabalhadores. Além disso, é `r (RendaHabit.RG.sh$RendaHabit[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]/RendaHabit.RG.sh$RendaHabit[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]-1)*100`% maior do que a dos homens negros, `r (RendaHabit.RG.sh$RendaHabit[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]/RendaHabit.RG.sh$RendaHabit[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]-1)*100`% maior do que as mulheres negras e `r (RendaHabit.RG.sh$RendaHabit[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]/RendaHabit.RG.sh$RendaHabit[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]-1)*100`% maior do que a das mulheres brancas. O rendimento mensal das mulheres negras é `r (1-RendaHabit.RG.sh$RendaHabit[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre == "2023 Q3"]/RendaHabitualMedia[1])*100`% abaixo da média de todos os trabalhadores. 
+
+#Quando analisamos a evolução dos rendimentos dos trabalhadores no tempo, notamos que o rendimento efetivo médio no `r q`º trimestre de `r i`  é `r (RendaEfetivaMedia.sh$RendaEfetivaMedia[RendaEfetivaMedia.sh$Trimestre == "2023 Q3"]/RendaEfetivaMedia.sh$RendaEfetivaMedia[RendaEfetivaMedia.sh$Trimestre == "2022 Q3"]-1)*100`% maior do que no mesmo trimestre do ano de `r i-1`.
+
+#A [Tabela 18: Rendimento Efetivo por Grupo](https://docs.google.com/spreadsheets/d/1Hqdlog0SEqM74eHkd-fxW6ZAD9Yp49dO/edit?usp=sharing&ouid=115284899176275679612&rtpof=true&sd=true) e a [Tabela 19: Rendimento Habitual por Grupo]https://docs.google.com/spreadsheets/d/1HqbLwganD-7gGhjkjbEZUyXH_3l7nj7J/edit?usp=sharing&ouid=115284899176275679612&rtpof=true&sd=true) podem ser consultadas para mais informações.
+
+#Também reportamos o rendimento médio habitual e efetivo por raça, gênero e região. Como observamos, as desigualdades de gênero e de raça também se sobressaem em cada uma das regiões do país.
+```
+
+
+Os dados apontam que o rendimento habitual médio do trabalhador brasileiro foi de R\$ `r RendaHabitMedia.sh$RendaHabitMedia[RendaHabitMedia.sh$Trimestre=="2023 Q4"]` por mês no `r q`º trimestre de `r i`. Para mulheres e homens brancos, foram registrados rendimentos habituais acima da média: de R\$ `r RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Trimestre=="2023 Q4"]`/mês, para mulheres brancas; e de R\$ `r RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre=="2023 Q4"]`/mês, para homens brancos. A renda habitual foi menor do que a média para os negros: de R\$ `r RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre=="2023 Q4"]`/mês, para mulheres negras; e de R\$ `r RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Trimestre=="2023 Q4"]`/mês, para homens negros.
+
+
+Na média, o rendimento efetivo do brasileiro foi de R\$ `r RendaEfetivaMedia.sh$RendaEfetivaMedia[RendaEfetivaMedia.sh$Trimestre=="2023 Q4"]` mensais no `r q`º trimestre de `r i`. Novamente, operam desigualdades de raça e gênero. Para mulheres brancas e homens brancos, registraram-se rendimentos efetivos de R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Mulher Branca" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês e R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Homem Branco" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês, respectivamente. Para mulheres negras e homens negros, o rendimento efetivo foi de R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Mulher Negra" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês e R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Homem Negro" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês, respectivamente. 
+
+
+![Renda Efetiva por Gênero e Raça](C:/Users/clara/Downloads/RENDA_EFETIVA_RG.png){width=}
+
+
+![Renda Habitual por Gênero e Raça](C:/Users/clara/Downloads/RENDA_HABITUAL_RG.png){width=}
+
+
+## Distribuição: Gini 
+
+O índice de Gini varia de zero a um, sendo que quanto mais próximo de um, maior a desigualdade. Por exemplo, em uma situação hipotética em que o índice de Gini é igual a zero, todos os indivíduos de uma determinada sociedade possuem a mesma renda (igualdade). Já a outra situação hipotética extrema, com um índice igual a um, indica que somente uma pessoa detém toda a renda dessa economia^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos.].
+
+O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR$gini`. Esse índice não se alterou comparativamente ao trimestre anterior e ao `r q`º trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
+
+![Índice de Gini por Gênero e Raça](C:/Users/clara/Downloads/GINI_RG.png){width=}
+
+
+
+![Índice de Gini por Região](C:/Users/clara/Downloads/GINI_REG.png){width=90%}
+
+Observamos que as regiões Nordeste e Norte apresentam desigualdade levemente maior do que a reportada para todo o território nacional no trimestre analisado, com índices de Gini iguais a `r giniUF.sh$gini[giniUF.sh$Regiao == "Nordeste" & giniUF.sh$Trimestre == "2023 Q4"]` e `r giniUF.sh$gini[giniUF.sh$Regiao == "Norte" & giniUF.sh$Trimestre == "2023 Q4"]`, respectivamente. Para as outras regiões, calcularam-se os seguintes índices de Gini: Centro-Oeste, `r giniUF.sh$gini[giniUF.sh$Regiao == "Centro-Oeste" & giniUF.sh$Trimestre == "2023 Q4"]`; Sudeste, `r giniUF.sh$gini[giniUF.sh$Regiao == "Sudeste" & giniUF.sh$Trimestre == "2023 Q4"]`; e Sul, `r giniUF.sh$gini[giniUF.sh$Regiao == "Sul" & giniUF.sh$Trimestre == "2023 Q4"]`.
+
+Em relação ao recorte de raça e gênero, calcularam-se os seguintes índices de Gini: para os homens brancos, `r giniRG.sh$gini[giniRG.sh$Categoria == "Homem Branco" & giniRG.sh$Trimestre == "2023 Q4"]`; para os homens negros, `r giniRG.sh$gini[giniRG.sh$Categoria == "Homem Negro" & giniRG.sh$Trimestre == "2023 Q4"]`; para as mulheres brancas, `r giniRG.sh$gini[giniRG.sh$Categoria == "Mulher Branca" & giniRG.sh$Trimestre == "2023 Q4"]`; e, para as mulheres negras, `r giniRG.sh$gini[giniRG.sh$Categoria == "Mulher Negra" & giniRG.sh$Trimestre == "2023 Q4"]`.
+
+## Percentis de renda
+
+Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Se desejamos os quantis dessa economia, dividimos essas 100 pessoas em quatro grupos, cada grupo de tamanho igual, isto é, com 25 pessoas. Dito de outra maneira, para obter os quantis, a população é dividida em partes de 25% cada. Por exemplo: Q1 representa a renda que separa os 25% da população com menor renda dos demais, Q2 corresponde à renda que separa os 50% mais pobres e Q3 corresponde aos 75% mais pobres. 
+
+![Separação de Dados em Quantis: Exemplo](C:/Users/clara/Downloads/quantis_exemplo.png){width=90%}
+
+
+Além disso, os quantis podem ser subdivididos em mais segmentos, como é o caso dos decis, em que se divide a população em 10 grupos – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
+
+Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de X% da renda nacional, no terceiro trimestre de 2023. Esse número é x% maior/ menor que sua participação no trimestre do ano anterior. 
+
+A partir desses dados, podemos construir uma curva de Lorenz para o Brasil para o terceiro trimestre de 2023. Para construir a curva de Lorenz, acumulamos os dados reportados acima, da população e da renda: a curva mostra como a proporção da renda total aumenta em função da proporção da população (Hoffmann, 1998).
+
+Na situação hipotética de total igualdade em que todas as pessoas possuem o mesmo rendimento efetivo, a curva de Lorenz da economia seria o segmento de reta desenhado no gráfico, que chamamos de linha de perfeita igualdade. Assim, quanto mais afastada dessa linha a curva de Lorenz de um país está, maior o grau de desigualdade de rendimentos. Por definição, o Índice de Gini é igual à razão entre: a área entre a linha de perfeita igualdade e a curva de Lorenz, e a área total abaixo da linha de perfeita igualdade^[ver Hoffmann, 1998.]. 
+
+![Curva de Lorenz](C:/Users/clara/Downloads/curva_de_lorenz_2023_03.png){width=90%}
+
+# Tabelas completas
+
+Por fim, são disponibilizadas as tabelas com dados completos:
+
+[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
+
+[Tabela 2: Dados por Região](https://drive.google.com/file/d/1bCn8967ccAvB3idm5PiwU31HIFqY680K/view?usp=sharing)
+
+[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/10pwdVV6pGg4FgjZuXLQR6h7l1Zkplgmq/view?usp=sharing)
+
+[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
+
+
