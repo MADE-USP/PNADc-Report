@@ -201,30 +201,6 @@ dif_desemprego_Sudeste <- ((desemprego_sudeste) - (desemprego_sud_tri_ano_anteri
 dif_desemprego_Sul <- ((desemprego_sul) - (desemprego_sul_tri_ano_anterior))
 
 
-#ESCOLARIDADE
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
-
-
-  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
-  
-escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-
 ```
 
 No `r q`º trimestre de `r i`, o desemprego ficou em `r (desemprego)*100`% no Brasil, uma queda de `r (dif_desemprego)*100` pontos percentuais em relação ao trimestre anterior. O desemprego no país no `r q`º trimestre de `r i-1` tinha atingido `r (desemprego_tri_ano_anterior)*100`%. Houve, portanto, uma importante queda deste indicador no período de um ano.
@@ -317,11 +293,8 @@ escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Ho
 escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
 escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
 
- ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
-  
-
+#Região
 max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
-
 max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
 
 ```
