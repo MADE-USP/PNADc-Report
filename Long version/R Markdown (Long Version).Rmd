@@ -28,13 +28,17 @@ library(openxlsx)
 library(kableExtra)
 library(zoo)
 library(gplots)
+library(ggplot2)
 
 #devtools::install_github("kupietz/kableExtra")
 
 # <<<<<<< HEAD
-setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
-load("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua/dados_serie_historica_042023.RData")
+#setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
+#load("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua/dados_serie_historica_042023.RData")
 
+
+load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
+load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
 
 # =======
 #load("C:/Users/lauro/Desktop/PNADc/Enviados por Clara/CLARA_dados_serie_historica_042023.RData")
@@ -112,7 +116,7 @@ Em comparação com o trimestre anterior (`r q-1`º trimestre de `r i`), houve p
 
 Em relação às desigualdades regionais, percebemos grande variação na taxa de participação no mercado de trabalho por região do país. A região Nordeste é aquela que tem menor taxa de participação no mercado de trabalho, ficando em `r (PEA_Nordeste)*100`%, na média. Na região Nordeste, todos os grupos demográficos têm menor taxa de participação do que nas demais regiões. As regiões Centro-Oeste e Sul são as que apresentam maior taxa de participação no mercado de trabalho, de `r (PEA_CentroOeste)*100`% e `r (PEA_Sul)*100`%, respectivamente. Tais valores também se mantiveram estáveis quando comparados ao `r q-1`º trimestre de `r i` e ao `r q`º trimestre de `r i-1`. 
 
-```{r}
+```{r include=FALSE}
 
 date <- do.call(rbind, strsplit(PEA.RG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
@@ -135,17 +139,18 @@ PEA.RG.sh<- PEA.RG.sh %>%
    select(PEA, Categoria, Data)
 ```
 
-```{r}
+```{r echo=FALSE}
 
-ggplot(PEA.RG.sh, aes(x=Data, y=PEA, color=Categoria))+ 
+ggplot(PEA.RG.sh, aes(x=Data, y=PEA, colour = Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Ocupação por Raça e Gênero") + #titulo do grafico
+  ggtitle("Taxa de Participação por Raça e Gênero") + #titulo do grafico
+  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) + #cores Made
   theme_bw() # colocando fundo Branco
 
 ```
 
 
-```{r}
+```{r include=FALSE}
 
 date <- do.call(rbind, strsplit(PEA.REG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
@@ -168,11 +173,12 @@ PEA.REG.sh<- PEA.REG.sh %>%
    select(PEA, Regiao, Data)
 ```
 
-```{r}
+```{r echo=FALSE}
 
 ggplot(PEA.REG.sh, aes(x=Data, y=PEA, color=Regiao))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Ocupação por Região") + #titulo do grafico
+  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
+  ggtitle("Taxa de Participação por Região") + #titulo do grafico
   theme_bw() # colocando fundo Branco
 ```
 
@@ -217,17 +223,18 @@ desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categ
 
 ### Mínimos e máximos
 
-# desemprego_mulher_202250 <- c(desemprego_mulher_branca, desemprego_mulher_negra)
+# Máximo de 2023 Q4
+max_2023_04 <- EMPREGO.RG.sh %>%
+  filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
+  select(Categoria) #peço a categoria associada
 
-# desemprego_mulher_min <- min(desemprego_mulher_202250)
-# desemprego_mulher_max <- max(desemprego_mulher_202250)
-# desemprego_mulher_seg_max <- unique(sort(desemprego_mulher_202250, decreasing = TRUE))[2]
+# Mínimo de 2023 Q4      
+min_2023_04 <- EMPREGO.RG.sh %>%
+  filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Categoria) #peço a categoria associada
 
-
-# desemprego_homem_202250 <- c(desemprego_homem_branco, desemprego_homem_negro)
-
-# desemprego_homem_min <- min(desemprego_homem_202250)
-# desemprego_homem_seg_min <- unique(sort(desemprego_homem_202250))[2]
 
 ## Por Região
 
@@ -261,7 +268,7 @@ dif_desemprego_Sudeste <- ((desemprego_sudeste) - (desemprego_sud_tri_ano_anteri
 dif_desemprego_Sul <- ((desemprego_sul) - (desemprego_sul_tri_ano_anterior))
 ```
 
-No `r q`º trimestre de `r i`, o desemprego ficou em `r (desemprego)*100`% no Brasil, uma queda de `r (dif_desemprego)*100` pontos percentuais em relação ao trimestre anterior. O desemprego no país no `r q`º trimestre de `r i-1` tinha atingido `r (desemprego_tri_ano_anterior)*100`%. Houve, portanto, uma importante queda deste indicador no período de um ano.
+No `r q`º trimestre de `r i`, o desemprego ficou em `r (desemprego)*100`% no Brasil, uma queda de `r (dif_desemprego)*100` pontos percentuais em relação ao trimestre anterior. O desemprego no país no `r q`º trimestre de `r i-1` tinha atingido `r (desemprego_tri_ano_anterior)*100`%. Houve, portanto, uma importante queda deste indicador no período de um ano. A categoria de `r max_2023_04[,1]` foi quem teve a maior taxa de emprego, enquanto a de `r min_2023_04[,1]` foi quem teve a menor. 
 
 Observamos que a taxa de desemprego das mulheres negras foi de `r (desemprego_mulher_negra)*100`% e, para as mulheres brancas, o desemprego ficou em `r (desemprego_mulher_branca)*100`%. Os homens brancos tiveram taxa de desemprego no patamar de `r (desemprego_homem_branco)*100`%. Para os homens negros, a taxa foi de `r (desemprego_homem_negro)*100`%.
 
@@ -269,7 +276,7 @@ No período de um ano, isto é, comparando-se os dados do trimestre de referênc
 
 Regionalmente, o desemprego também apresentou tendência de queda no `r q`º trimestre de `r i`. Na região Norte, registrou-se taxa de desemprego de `r (desemprego_norte)*100`% (queda de `r (dif_desemprego_Norte)*100` pontos percentuais em um ano). Na região Nordeste, a taxa de desemprego registrada foi de `r (desemprego_nordeste)*100`% (recuo de `r (dif_desemprego_Nordeste)*100` p.p. em um ano). Na região Centro-Oeste, a taxa de desemprego medida foi de `r (desemprego_centrooeste)*100`% (queda de `r (dif_desemprego_CentroOeste)*100` p.p. em um ano). Na região Sudeste, a taxa de desemprego registrada foi de `r (desemprego_sudeste)*100`% (recuo de `r (dif_desemprego_Sudeste)*100` p.p. em um ano). Por fim, na região Sul, registrou-se taxa de desemprego de `r (desemprego_sul)*100`% (diferença de `r (dif_desemprego_Sul)*100` p.p. em um ano).
 
-```{r}
+```{r include=FALSE}
 # Primeiro, vamos dividir a coluna de data em uma de ano, e uma de trimestre:
 date <- do.call(rbind, strsplit(EMPREGO.RG.sh$Trimestre, " ")) # dividindo a data pelo "espaco": ano e trimestre
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] # colocando nomes corretos nas colunas
@@ -304,7 +311,7 @@ EMPREGO.RG.sh$Data <-as.yearqtr(with(EMPREGO.RG.sh,paste(Ano,Mes,Dia,sep="-")),"
 EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
    select(Ocupado, Categoria, Data)
 ```
-```{r}
+```{r echo=FALSE}
 
 # echo = FALSE não mostra o código, mas mostra o resultado
 # se a gente coloca include=FALSE o gráfico não aparece 
@@ -312,20 +319,14 @@ EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
 
 ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Ocupação por Raça e Gênero") + #titulo do grafico
+  ggtitle("Taxa de Ocupacao por Raça e Gênero") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) + #cores Made
   theme_bw() # colocando fundo Branco
-```
-```{r}
-
-```
-
-```{r}
-
 ```
 
 
 ### Escolaridade
-```{r}
+```{r include=FALSE}
 #ESCOLARIDADE
 colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
 colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
@@ -355,11 +356,38 @@ max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
 max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
 
 ```
+
 Dados de escolaridade representam o percentual de obtenção de um grau educacional dentro de um designado grupo da população economicamente ativa. Dentre as mulheres negras, `r (escol_sup_mn*100)`% possíam ensino superior, `r (escol_medio_mn*100)`%, ensino médio e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo, `r (escol_medio_mb*100)`%, ensino médio e `r (escol_fund_mb*100)`%, ensino fundamental.
 
 
 Dentre os homens negros, `r (escol_sup_hn*100)`% haviam obtido ensino superior, `r (escol_medio_hn*100)`%, ensino médio e `r (escol_fund_hn*100)`%, ensino fundamental. Dos homens brancos, `r (escol_sup_hb*100)`% tinham ensino superior, `r (escol_medio_hb*100)`% ensino médio e `r (escol_fund_hb*100)`%, apenas ensino fundamental.
 
+```{r echo=FALSE}
+
+ESCOLARIDADE_reshape <- reshape(ESCOLARIDADE.RG, idvar = "Categoria", direction = "long", varying = list(c("Pré-fundamental", "ensino_fundamental","ensino_medio","ensino_superior","Especializacao/pós-graduação","Mestrado/doutorado")))
+
+
+colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "Pré-fundamental"] = "Composição"
+colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "time"] = "Escolaridade"
+
+ESCOLARIDADE_reshape$Nivel <- ifelse(ESCOLARIDADE_reshape$Escolaridade ==1, "Pré-fundamental", 
+                                            ifelse(ESCOLARIDADE_reshape$Escolaridade==2, "Ensino Fundamental",
+                                                   ifelse(ESCOLARIDADE_reshape$Escolaridade==3, "Ensino Médio", 
+                                                          ifelse(ESCOLARIDADE_reshape$Escolaridade==4, "Ensino Superior", 
+                                                                 ifelse(
+                                                                   ESCOLARIDADE_reshape$Escolaridade ==5, "Especialização/pós-graduação", "Mestrado/Doutorado"
+                                                                 )
+                                                          ))))
+
+ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(Nivel,-Escolaridade)))+
+  geom_bar(stat="identity") +
+  scale_fill_manual(values=c("#FFAB4D","#eb52ff","#45ff66", "#3366ff","#feff41","#FF7276")) + #cores Made
+  theme_bw() + # colocando fundo Branco 
+  labs(title = "Nível de Escolaridade Máxima Atingida",
+       x = "Categoria",
+       y = "Percentual",
+       fill = "Nível de Escolaridade") 
+```
 
 ### Formalidade e Informalidade
 
@@ -410,9 +438,10 @@ Percebe-se ainda que a taxa de informalidade entre as pessoas negras foi maior d
 
 As regiões com maiores taxas de informalidade são a Norte e Nordeste, com taxas iguais a `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Norte"]*100`% e `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Nordeste"]*100`%, respectivamente. A taxa de informalidade da região Sul é a menor, `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Sul"]*100`%, enquanto que as regiões Sudeste e Centro-Oeste registram `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Sudeste"]*100`% e `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Centro-Oeste"]*100`% de informalidade em sua força de trabalho, respectivamente. 
 
-```{r}
+```{r include=FALSE}
 #GRAFICOS
-colnames(informal.RG.sh)[colnames(informal.RG.sh) == "não contribuinte INSS"] = "Informal"
+names(informal.RG.sh)[names(informal.RG.sh) == "não contribuinte INSS"] <- "Informal"
+
 
 date <- do.call(rbind, strsplit(informal.RG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
@@ -440,10 +469,13 @@ informal.RG.sh<- informal.RG.sh %>%
 ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
   ggtitle("Taxa de Informalidade por Raça e Gênero") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
+
   theme_bw() # colocando fundo Branco
 
 ```
-```{r}
+
+```{r include=FALSE}
 colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
 
 date <- do.call(rbind, strsplit(informal.REG.sh$Trimestre, " ")) 
@@ -468,10 +500,11 @@ informal.REG.sh<- informal.REG.sh %>%
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao))+ 
   geom_line(size=2) + # definindo grossura da linha
   ggtitle("Taxa de Informalidade por Região") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
 
@@ -494,36 +527,6 @@ A ocupação por setores no Brasil também varia consideravelmente de acordo com
 Para o total de mulheres brancas empregadas, `r (trabalhosetor.RG$Educação[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% estão no setor de educação, `r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% encontram-se no setor de comércio e `r (trabalhosetor.RG$Informação[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% no setor de informação. Das mulheres negras, `r (trabalhosetor.RG$Educação[trabalhosetor.RG$Categoria == "Mulher Negra"])*100`% estão alocadas no setor de educação, seguido do comércio, `r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Mulher Negra"])*100`%, e serviços domésticos, com 16.06%. Nota-se que o setor de informação emprega mais brancos que negros e os serviços domésticos são majoritariamente exercidos por mulheres negras.
 
 As composições em relação a gênero e raça dos setores para as diferentes regiões brasileiras apresentam algumas particularidades. Para as mulheres, os empregos setoriais são bem parecidos com os resultados gerais. Já no caso dos homens, há diferenças entre as regiões. Por exemplo, no Nordeste e no Centro-Oeste, a maioria dos homens (brancos e negros) estão no setor de agricultura, enquanto que no Sudeste e Norte, a maior parte deles encontra-se no setor de comércio. No Sul, o setor que mais emprega os homens é a indústria.
-
-```{r}
-date <- do.call(rbind, strsplit(trabalhosetor.RG.sh$Trimestre, " ")) 
-colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
-
-trabalhosetor.RG.sh <- trabalhosetor.RG.sh %>% 
-  select(Informal, Categoria)
-trabalhosetor.RG.sh <- cbind(trabalhosetor.RG.sh,date) 
-
-trabalhosetor.RG.sh$Dia <- 01  
-
-trabalhosetor.RG.sh$Mes <- ifelse(trabalhosetor.RG.sh$Trimestre=="Q1",1,
-                     ifelse(trabalhosetor.RG.sh$Trimestre=="Q2",4,
-                     ifelse(trabalhosetor.RG.sh$Trimestre=="Q3",7,10))) 
-
-trabalhosetor.RG.sh$Ano <- as.numeric(trabalhosetor.RG.sh$Ano)
-
-trabalhosetor.RG.sh$Data <-as.yearqtr(with(trabalhosetor.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
-
-trabalhosetor.RG.sh<- trabalhosetor.RG.sh %>%
-   select(Informal, Regiao, Data)
-```
-
-```{r}
-ggplot(trabalhosetor.RG.sh, aes(x=Data, y=Informal, color=Regiao))+ 
-  geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Informalidade por Região") + #titulo do grafico
-  theme_bw() # colocando fundo Branco
-```
-
 
 # Rendimento
 
@@ -548,7 +551,7 @@ Os dados apontam que o rendimento habitual médio do trabalhador brasileiro foi 
 
 Na média, o rendimento efetivo do brasileiro foi de R\$ `r RendaEfetivaMedia.sh$RendaEfetivaMedia[RendaEfetivaMedia.sh$Trimestre=="2023 Q4"]` mensais no `r q`º trimestre de `r i`. Novamente, operam desigualdades de raça e gênero. Para mulheres brancas e homens brancos, registraram-se rendimentos efetivos de R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Mulher Branca" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês e R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Homem Branco" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês, respectivamente. Para mulheres negras e homens negros, o rendimento efetivo foi de R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Mulher Negra" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês e R\$ `r RendaEfet.RG.sh$Renda_Efetiva_RG[RendaEfet.RG.sh$Categoria == "Homem Negro" & RendaEfet.RG.sh$Trimestre=="2023 Q4"]`/mês, respectivamente. 
 
-```{r}
+```{r include=FALSE}
 #GRAFICOS
 
 date <- do.call(rbind, strsplit(RendaEfet.RG.sh$Trimestre, " ")) 
@@ -572,14 +575,17 @@ RendaEfet.RG.sh <- RendaEfet.RG.sh %>%
    select(Renda_Efetiva_RG, Categoria, Data)
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(RendaEfet.RG.sh, aes(x=Data, y=Renda_Efetiva_RG, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Renda Efetiva por Raça e Gênero") + #titulo do grafico
-  theme_bw() # colocando fundo Branco
-
+  ggtitle("Renda Efetiva por Raca e Genero") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
+  theme_bw() + # colocando fundo Branco
+  labs(x = "Data",
+       y = "Renda Efetiva")
 ```
-```{r}
+
+```{r include=FALSE}
 date <- do.call(rbind, strsplit(RendaHabit.RG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
@@ -601,11 +607,14 @@ RendaHabit.RG.sh<- RendaHabit.RG.sh %>%
    select(Renda_Habitual_RG, Categoria, Data)
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Renda Habitual por Raça e Gênero") + #titulo do grafico
-  theme_bw() # colocando fundo Branco
+  ggtitle("Renda Habitual por Raca e Genero") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
+  theme_bw() + # colocando fundo Branco
+  labs(x = "Data",
+       y = "Renda Habitual")
 
 ```
 
@@ -616,7 +625,7 @@ O índice de Gini varia de zero a um, sendo que quanto mais próximo de um, maio
 
 O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR$gini`. Esse índice não se alterou comparativamente ao trimestre anterior e ao `r q`º trimestre de `r i-1`, indicando uma estabilidade do nível de desigualdade dos rendimentos no último ano^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. 
 
-```{r}
+```{r include=FALSE}
 #GRAFICOS
 #colnames(gini.RG.sh)[colnames(gini.RG.sh) == "não contribuinte INSS"] = "Informal"
 
@@ -646,10 +655,12 @@ giniRG.sh<- giniRG.sh %>%
 
 ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Índice de Gini por Raça e Gênero") + #titulo do grafico
+  ggtitle("Indice de Gini por Raca e Genero") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
-```{r}
+
+```{r include=FALSE}
 
 date <- do.call(rbind, strsplit(giniUF.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
@@ -674,11 +685,12 @@ giniUF.sh<- giniUF.sh %>%
 ```
 
 
-```{r}
+```{r echo=FALSE}
 
 ggplot(giniUF.sh, aes(x=Data, y=gini, color=Regiao))+ 
   geom_line(size=2) + # definindo grossura da linha
   ggtitle("Índice de Gini por Região") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
 
@@ -701,7 +713,37 @@ A partir desses dados, podemos construir uma curva de Lorenz para o Brasil para 
 
 Na situação hipotética de total igualdade em que todas as pessoas possuem o mesmo rendimento efetivo, a curva de Lorenz da economia seria o segmento de reta desenhado no gráfico, que chamamos de linha de perfeita igualdade. Assim, quanto mais afastada dessa linha a curva de Lorenz de um país está, maior o grau de desigualdade de rendimentos. Por definição, o Índice de Gini é igual à razão entre: a área entre a linha de perfeita igualdade e a curva de Lorenz, e a área total abaixo da linha de perfeita igualdade^[ver Hoffmann, 1998.]. 
 
-![Curva de Lorenz](C:/Users/clara/Downloads/curva_de_lorenz_2023_03.png){width=90%}
+```{r echo=FALSE}
+
+percentis$percentis <- c(paste(seq(0, .9, .1)), "0.99")
+colnames(percentis)[colnames(percentis) == "% da renda apropriado"] ="apropriado"
+
+
+ggplot(percentis, aes(x=percentis, y=apropriado))+ 
+  geom_bar(stat = "identity", fill="#45ff66") + # definindo grossura da linha
+  labs(title = "Apropriação da Renda por Percentis",
+       x = "Percentil",
+       y = "Percentual Apropriado") +
+  theme_bw() # colocando fundo Branco
+```
+
+
+```{r echo=FALSE}
+# Cria o gráfico com ggplot2
+grafico <- ggplot(data.frame(x, y), aes(x, y)) +
+  geom_line(color = "#45ff66", size=1.5) +
+  labs(x = "Quantil", y = "% da Renda", title = "Curva de Lorenz") +
+      theme_bw() # colocando fundo Branco
+
+
+# Adiciona a linha de 45 graus
+grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7)
+curva_de_lorenz <- grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7) 
+
+
+
+
+```
 
 # Tabelas completas
 
