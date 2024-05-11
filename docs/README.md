@@ -1,3 +1,3 @@
 # PNADc Report
 
-The quaterly PNADc report is MADE's quaterly publication about the Brazilian inequality. 
+The PNADc report is MADE's quarterly publication about the Brazilian inequality. 
