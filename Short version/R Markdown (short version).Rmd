@@ -32,11 +32,30 @@ library(gplots)
 #install.packages("xts")
 library(xts)
 
-
 #devtools::install_github("kupietz/kableExtra")
 
-load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
-load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
+# Setting work directory (Github)-----------------------------------------------
+
+file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
+  gsub("\\Short version", "", .)
+
+setwd(file_directory)
+
+getwd()
+
+# Reading PNADc file------------------------------------------------------------
+
+i=2023
+q=4
+
+folder_path <- "Input/"
+
+file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
+
+load(file_path)
+
+#load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
+#load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
 
 ```
 
@@ -114,9 +133,9 @@ EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
 
 ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Ocupação por Raça e Gênero") + #titulo do grafico
+  ggtitle("Taxa de Ocupacao por Raça e Gênero") + #titulo do grafico
+    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) + #cores Made
   theme_bw() # colocando fundo Branco
-
 ```
 
 ```{r include=FALSE}
@@ -145,9 +164,10 @@ EMPREGO.REG.sh<- EMPREGO.REG.sh %>%
 
 ```{r echo=FALSE}
 
-ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao))+ 
+ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) + 
   geom_line(size=2) + # definindo grossura da linha
   ggtitle("Taxa de Ocupação por Região") + #titulo do grafico
+  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
   theme_bw() # colocando fundo Branco
 
 ```
