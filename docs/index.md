@@ -1,11 +1,11 @@
 # PNADc Report    
 <div style="text-align: justify;">
-    MADE's PNADc Report is our quaterly publication reviewing inequality trends in Brazil.  
+    MADE's PNADc Report is our quarterly publication reviewing inequality trends in Brazil.  
 </div>
 
 ## Paper and Citation
 <div style="text-align: justify;">
-    Our latest results can be found on MADE's website. You may be interested in citing our report:
+    Our latest publications can be found on MADE's website. You may be interested in citing our report:
 </div>
 > MADE (2024). [Relatório Trimestral PNAD - Quarto Trimestre de 2023](https://madeusp.com.br/publicacoes/artigos/relatorio-trimestral-da-pnad-quarto-trimestre-de-2023/).
 
@@ -36,7 +36,7 @@ Containing R Markdown file used to build the abridged version of the report.
 
 ## Sources
 <div style="text-align: justify;">
-    The microdata sets used to build the report were built using the Pesquina Nacional por Amostra de Domícilios contínua (PNADc), the main national household survey conducted by the Brazilian Institute of Geography and Statistics (IBGE).
+    The microdata sets used to write the report were built using the Pesquisa Nacional por Amostra de Domícilios contínua (PNADc), the main national household survey conducted by the Brazilian Institute of Geography and Statistics (IBGE).
 </div>
 
 ## Contact
