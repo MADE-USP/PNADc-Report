@@ -10,11 +10,24 @@ output:
 subtitle: 1º Trimestre de 2024 
 ---
 
+```{r include=FALSE}
+# Definindo trimestre e ano de referência
+
+i=2023
+q=4
+
+#trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
+#mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
+
+```
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, error=FALSE, warning=FALSE, message=FALSE)
 
 options(digits=2)
 ```
+
 
 ```{r include=FALSE}
 # SEMPRE CARREGAR ESTE CHUNK ANTES DE ABRIR O CÓDIGO COM OS DADOS
@@ -45,9 +58,6 @@ getwd()
 
 # Reading PNADc file------------------------------------------------------------
 
-i=2023
-q=4
-
 folder_path <- "Input/"
 
 file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
@@ -56,17 +66,6 @@ load(file_path)
 
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
-
-```
-
-
-```{r include=FALSE}
-
-i=2023
-q=4
-
-#trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
-#mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
 
 ```
 
@@ -83,8 +82,8 @@ Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Naciona
 # Corrigindo as datas
 
 # Para lidar com datas no R, é preciso um formato bem especifico
-# vamos entao editar o formato atual, que esta em "caracter" para um formato data
-# Para isso, o R precisa da data num formato AA-MM-DD (ainda que o dia nao importe pra dados triemstrais)
+# vamos entao editar o formato atual, que esta em "character" para um formato data
+# Para isso, o R precisa da data num formato AA-MM-DD (ainda que o dia nao importe pra dados trimestrais)
 # Vamos fazer um passo a passo disso aqui
 
 # Primeiro, vamos dividir a coluna de data em uma de ano, e uma de trimestre:
@@ -140,12 +139,19 @@ ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+
 
 ```{r include=FALSE}
 
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
 date <- do.call(rbind, strsplit(EMPREGO.REG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
+# Retornamos a data atualizada para o dataframe anterior
 EMPREGO.REG.sh <- EMPREGO.REG.sh %>% 
   select(Ocupado, Regiao)
 EMPREGO.REG.sh <- cbind(EMPREGO.REG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
 
 EMPREGO.REG.sh$Dia <- 01  
 
@@ -153,13 +159,18 @@ EMPREGO.REG.sh$Mes <- ifelse(EMPREGO.REG.sh$Trimestre=="Q1",1,
                      ifelse(EMPREGO.REG.sh$Trimestre=="Q2",4,
                      ifelse(EMPREGO.REG.sh$Trimestre=="Q3",7,10))) 
 
+
 EMPREGO.REG.sh$Ano <- as.numeric(EMPREGO.REG.sh$Ano)
 
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
 EMPREGO.REG.sh$Data <-as.yearqtr(with(EMPREGO.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
+# Voltamos para colunas originais
 EMPREGO.REG.sh<- EMPREGO.REG.sh %>%
    select(Ocupado, Regiao, Data)
 
+#Checando formato
+class(EMPREGO.REG.sh$Data)
 ```
 
 ```{r echo=FALSE}
@@ -171,10 +182,6 @@ ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) +
   theme_bw() # colocando fundo Branco
 
 ```
-
-
-![Taxa de Ocupação por Região](C:/Users/clara/Downloads/ocupado_REG.png){width=70%}
-
 
 ``` {r include=FALSE}
 
