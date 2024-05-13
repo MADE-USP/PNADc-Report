@@ -1,7 +1,7 @@
 ---
 title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito e Clara Brenck e os pesquisadores José Bergamin e Hiaman Santos.]" 
 author: "Made USP"
-date: "21/02/2024"
+date: "17/05/2024"
 lang: pt-br
 output:
   pdf_document: default
