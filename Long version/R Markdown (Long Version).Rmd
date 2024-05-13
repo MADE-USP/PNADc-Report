@@ -32,15 +32,15 @@ library(ggplot2)
 
 #devtools::install_github("kupietz/kableExtra")
 
-# <<<<<<< HEAD
-#setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
-#load("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua/dados_serie_historica_042023.RData")
+#Eslen
+setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
+load("C:/Users/USER/Desktop/GitHub/.github/PNADc-Report/Input/PNADc_complete_time_series_042023.RData")
 
+#Clara
+#load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
+#load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
 
-load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
-load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
-
-# =======
+#Hiaman
 #load("C:/Users/lauro/Desktop/PNADc/Enviados por Clara/CLARA_dados_serie_historica_042023.RData")
 # >>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 ```
@@ -51,7 +51,6 @@ load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.R
 i=2023
 q=4
 
-#LINHA TESTE
 
 #trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
 #mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
@@ -321,7 +320,7 @@ EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
 
 ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Ocupacao por Raça e Gênero") + #titulo do grafico
+  ggtitle("Taxa de Ocupação por Raça e Gênero") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
@@ -397,15 +396,15 @@ ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(
 
 # Geral
 
-names(informal.RG)[names(informal.RG) == "não contribuinte INSS"] <- "nao_contribuinte"
-names(informal.REG)[names(informal.REG) == "não contribuinte INSS"] <- "nao_contribuinte"
-names(informal.RG.REG)[names(informal.RG.REG) == "não contribuinte INSS"] <- "nao_contribuinte"
+colnames(informal.RG.sh)[names(informal.RG.sh) == "não contribuinte INSS"] <- "Informal"
+colnames(informal.REG.sh)[names(informal.REG.sh) == "não contribuinte INSS"] <- "Informal"
+names(informal.RG.REG.sh)[names(informal.RG.REG.sh) == "não contribuinte INSS"] <- "Informal"
 
 
-informalidade_homem_branco <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Homem Branco"]
-informalidade_homem_negro <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Homem Negro"]
-informalidade_mulher_branca <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Mulher Branca"]
-informalidade_mulher_negra <- informal.RG$nao_contribuinte[informal.RG$Categoria == "Mulher Negra"]
+informalidade_homem_branco <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco"]
+informalidade_homem_negro <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro"]
+informalidade_mulher_branca <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca"]
+informalidade_mulher_negra <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra"]
 
 # Média e diferença
 
@@ -417,18 +416,22 @@ informalidade_tri_ano_anterior <- informalidadeMedia.sh$informalidade_mean[infor
 
 dif_informalidade_anual <- informalidade_media - informalidade_tri_ano_anterior
 
-# Máximo e mínimo
+# Região
 
-#informalidade_norte <- informal.REG.sh$nao_contribuinte_INSS[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q4"]
-#informalidade_nordeste <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
-#informalidade_centrooeste <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
-#informalidade_sudeste <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
-#informalidade_sul <- informal.REG.sh$nao_contribuinte[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q4" ]
+informalidade_norte <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q4"]
+informalidade_nordeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
+informalidade_centrooeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
+informalidade_sudeste <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q4" ]
+informalidade_sul <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q4" ]
 
-#informalidade_REG <- c(informalidade_norte, informalidade_nordeste, informalidade_centrooeste, informalidade_sudeste, informalidade_sul)
-
-#informalidade_REG_max <- max (informalidade_REG)
-#informalidade_REG_min <- min (informalidade_REG)
+#Consulta de máximos e mínimos (tiramos se for irrelavante)
+informalidade_REG <- c(informalidade_norte, informalidade_nordeste, informalidade_centrooeste, informalidade_sudeste, informalidade_sul)
+ordem_infREG <- sort(informalidade_REG, decreasing = TRUE)
+max_infREG <- ordem_infREG[1]
+seg_infREG <- ordem_infREG[2]
+ter_infREG <- ordem_infREG[3]
+qua_infREG <- ordem_infREG[4]
+qui_infREG <- ordem_infREG[5]
 
 ```
 
@@ -438,12 +441,10 @@ Neste sentido, consideramos a porcentagem de trabalhadores que contribuem para o
 
 Percebe-se ainda que a taxa de informalidade entre as pessoas negras foi maior do que a taxa média para todos os trabalhadores, de `r (informalidade_media)*100`%, no `r q`º trimestre de `r i`. Registrou-se queda de `r (dif_informalidade_anual)*100` pontos percentuais na informalidade média da economia brasileira, em comparação com o mesmo trimestre de `r i-1`.
 
-As regiões com maiores taxas de informalidade são a Norte e Nordeste, com taxas iguais a `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Norte"]*100`% e `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Nordeste"]*100`%, respectivamente. A taxa de informalidade da região Sul é a menor, `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Sul"]*100`%, enquanto que as regiões Sudeste e Centro-Oeste registram `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Sudeste"]*100`% e `r informal.REG$nao_contribuinte[informal.REG$Regiao == "Centro-Oeste"]*100`% de informalidade em sua força de trabalho, respectivamente. 
+As regiões com maiores taxas de informalidade são a Norte e Nordeste, com taxas iguais a `r (informalidade_norte*100)`% e `r (informalidade_nordeste*100)`%, respectivamente. A taxa de informalidade da região Sul é a menor, `r (informalidade_sul*100)`%, enquanto que as regiões Sudeste e Centro-Oeste registram `r (informalidade_sudeste*100)`% e `r (informalidade_centrooeste)*100`% de informalidade em sua força de trabalho, respectivamente. 
 
 ```{r include=FALSE}
 #GRAFICOS
-names(informal.RG.sh)[names(informal.RG.sh) == "não contribuinte INSS"] <- "Informal"
-
 
 date <- do.call(rbind, strsplit(informal.RG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
@@ -514,19 +515,115 @@ ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao))+
 
 Reportamos as estatísticas de subocupação no mercado de trabalho. O intuito desse indicador é complementar o monitoramento do mercado de trabalho, para além da taxa de desocupação. Ela capta três informações principais, são elas: i) trabalhou habitualmente menos de 40 horas no seu único trabalho ou no conjunto de todos os seus trabalhos, ii) preferia trabalhar mais horas do que as habitualmente trabalhadas e, iii) estava disponível para trabalhar mais horas no período de 30 dias, contados a partir do primeiro dia da semana de referência. 
 
-No `r q`º trimestre de 2023, a taxa de subocupação foi de `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Homem Branco"]*100`% para os homens brancos e `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Homem Negro"]*100`% para os homens negros. Já para as mulheres, tal taxa foi de `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Mulher Branca"]*100`% para as trabalhadoras brancas e `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Mulher Negra"]*100`% para as negras. 
+No `r q`º trimestre de `r i`, a taxa de subocupação foi de `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Homem Branco"]*100`% para os homens brancos e `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Homem Negro"]*100`% para os homens negros. Já para as mulheres, tal taxa foi de `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Mulher Branca"]*100`% para as trabalhadoras brancas e `r SUBOCUPHORAS.RG$Subocupado[SUBOCUPHORAS.RG$Categoria=="Mulher Negra"]*100`% para as negras. 
 
 A região Nordeste foi a que apresentou maior taxa média se subocupação, de `r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Nordeste"]*100`%, seguida pela região Centro-Oeste (`r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Centro-Oeste"]*100`%), Sudeste (`r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Sudeste"]*100`%), Norte (`r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Norte"]*100`%) e, por último, a região Sul, com `r SUBOCUPHORAS.REG$Subocupado[SUBOCUPHORAS.REG$Regiao=="Sul"]*100`% dos trabalhadores subocupados.
 
 ## Emprego por setor
 
 ```{r include=FALSE}
-colnames(trabalhosetor.RG)[colnames(trabalhosetor.RG) == "Serviços domésticos"] ="ServicosDomesticos"
+
+#colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Homem Branco"] = "Homem_Branco"
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Administração Pública"] = "Adm_pública"
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Outros serviços"] = "Outros_serviços"
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Serviços domésticos"] = "Ser_domesticos"
+
+#Homem Branco
+HB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+
+setores_HB <- c(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
+ordem_HB <- sort(setores_HB, decreasing = TRUE)
+max_HB <- ordem_HB[1]
+seg_HB <- ordem_HB[2]
+ter_HB <- ordem_HB[3]
+qua_HB <- ordem_HB[4]
+qui_HB <- ordem_HB[5]
+
+
+#Homem negro
+HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+HN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+
+setores_HN <- c(HN_agro, HN_ind, HN_const, HN_comercio, HN_tran, HN_alimen, HN_info, HN_publico, HN_educa, HN_oserv, HN_domes)
+ordem_HN <- sort(setores_HN, decreasing = TRUE)
+
+max_HN <- ordem_HN[1]
+seg_HN <- ordem_HN[2]
+ter_HN <- ordem_HN[3]
+qua_HN <- ordem_HN[4]
+qui_HN <- ordem_HN[5]
+
+
+#Mulher Branca
+MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+
+
+setores_MB <- c(MB_agro, MB_ind, MB_const, MB_comercio, MB_tran, MB_alimen, MB_info, MB_publico, MB_educa, MB_oserv, MB_domes)
+ordem_MB <- sort(setores_MB, decreasing = TRUE)
+max_MB <- ordem_MB[1]
+seg_MB <- ordem_MB[2]
+ter_MB <- ordem_MB[3]
+qua_MB <- ordem_MB[4]
+qui_MB <- ordem_MB[5]
+
+
+#Mulher Negra
+MN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+MN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"]
+
+
+setores_MN <- c(MN_agro, MN_ind, MN_const, MN_comercio, MN_tran, MN_alimen, MN_info, MN_publico, MN_educa, MN_oserv, MN_domes)
+ordem_MN <- sort(setores_MN, decreasing = TRUE)
+max_MN <- ordem_MN[1]
+seg_MN <- ordem_MN[2]
+ter_MN <- ordem_MN[3]
+qua_MN <- ordem_MN[4]
+qui_MN <- ordem_MN[5]
+
+
 ```
 
-A ocupação por setores no Brasil também varia consideravelmente de acordo com a raça e o gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Homem Negro"])*100`%) estava alocada no setor de comércio. Seguem-se os setores de construção e de indústria, com `r (trabalhosetor.RG$Construção[trabalhosetor.RG$Categoria == "Homem Negro"])*100`% e `r (trabalhosetor.RG$Indústria[trabalhosetor.RG$Categoria == "Homem Negro"])*100`% da alocação da força de trabalho de homens negros, respectivamente.Para homens brancos, o setor que mais emprega também é o comércio (`r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%), além da indústria, com `r (trabalhosetor.RG$Indústria[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%, setor de informação, que emprega `r (trabalhosetor.RG$Informação[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%, e agricultura, com `r (trabalhosetor.RG$Agropecuária[trabalhosetor.RG$Categoria == "Homem Branco"])*100`%.
+A ocupação por setores no Brasil também varia consideravelmente de acordo com a raça e o gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r (max_HN)*100`%) estava alocada no setor de comércio. Seguem-se os setores de construção e de indústria, com `r (seg_HN)*100`% e `r (ter_HN)*100`% da alocação da força de trabalho de homens negros, respectivamente. Para homens brancos, o setor que mais emprega também é o comércio `r (max_HB)*100`%), além da indústria, com `r (seg_HB)*100`%, setor de informação, que emprega `r (ter_HB)*100`%, e agricultura, com `r (qua_HB)*100`%.
 
-Para o total de mulheres brancas empregadas, `r (trabalhosetor.RG$Educação[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% estão no setor de educação, `r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% encontram-se no setor de comércio e `r (trabalhosetor.RG$Informação[trabalhosetor.RG$Categoria == "Mulher Branca"])*100`% no setor de informação. Das mulheres negras, `r (trabalhosetor.RG$Educação[trabalhosetor.RG$Categoria == "Mulher Negra"])*100`% estão alocadas no setor de educação, seguido do comércio, `r (trabalhosetor.RG$Comércio[trabalhosetor.RG$Categoria == "Mulher Negra"])*100`%, e serviços domésticos, com 16.06%. Nota-se que o setor de informação emprega mais brancos que negros e os serviços domésticos são majoritariamente exercidos por mulheres negras.
+Para o total de mulheres brancas empregadas, `r (max_MB)*100`% estão no setor de educação, `r (seg_MB)*100`% encontram-se no setor de comércio e `r (ter_MB*100)`% no setor de informação. Das mulheres negras, `r (max_MN)*100`% estão alocadas no setor de educação, seguido do comércio, `r (seg_MN)*100`%, e serviços domésticos, com `r ter_MN*100`%. Nota-se que o setor de informação emprega mais brancos que negros e os serviços domésticos são majoritariamente exercidos por mulheres negras.
 
 As composições em relação a gênero e raça dos setores para as diferentes regiões brasileiras apresentam algumas particularidades. Para as mulheres, os empregos setoriais são bem parecidos com os resultados gerais. Já no caso dos homens, há diferenças entre as regiões. Por exemplo, no Nordeste e no Centro-Oeste, a maioria dos homens (brancos e negros) estão no setor de agricultura, enquanto que no Sudeste e Norte, a maior parte deles encontra-se no setor de comércio. No Sul, o setor que mais emprega os homens é a indústria.
 
@@ -580,7 +677,7 @@ RendaEfet.RG.sh <- RendaEfet.RG.sh %>%
 ```{r echo=FALSE}
 ggplot(RendaEfet.RG.sh, aes(x=Data, y=Renda_Efetiva_RG, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Renda Efetiva por Raca e Genero") + #titulo do grafico
+  ggtitle("Renda Efetiva por Raça e Gênero") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() + # colocando fundo Branco
   labs(x = "Data",
@@ -612,7 +709,7 @@ RendaHabit.RG.sh<- RendaHabit.RG.sh %>%
 ```{r echo=FALSE}
 ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Renda Habitual por Raca e Genero") + #titulo do grafico
+  ggtitle("Renda Habitual por Raça e Gênero") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() + # colocando fundo Branco
   labs(x = "Data",
@@ -657,7 +754,7 @@ giniRG.sh<- giniRG.sh %>%
 
 ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Indice de Gini por Raca e Genero") + #titulo do grafico
+  ggtitle("Índice de Gini por RaÇa e Gênero") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
@@ -716,12 +813,15 @@ A partir desses dados, podemos construir uma curva de Lorenz para o Brasil para 
 Na situação hipotética de total igualdade em que todas as pessoas possuem o mesmo rendimento efetivo, a curva de Lorenz da economia seria o segmento de reta desenhado no gráfico, que chamamos de linha de perfeita igualdade. Assim, quanto mais afastada dessa linha a curva de Lorenz de um país está, maior o grau de desigualdade de rendimentos. Por definição, o Índice de Gini é igual à razão entre: a área entre a linha de perfeita igualdade e a curva de Lorenz, e a área total abaixo da linha de perfeita igualdade^[ver Hoffmann, 1998.]. 
 
 ```{r echo=FALSE}
+colnames(quantis_de_renda23_04)[colnames(quantis_de_renda23_04) == "Percentual da Renda Apropriada"] = "apropriado"
 
-percentis$percentis <- c(paste(seq(0, .9, .1)), "0.99")
-colnames(percentis)[colnames(percentis) == "% da renda apropriado"] ="apropriado"
+quantis_de_renda23_04 <- quantis_de_renda23_04 %>% mutate("Percentis" = row.names(quantis_de_renda23_04))
+
+#percentis$percentis <- c(paste(seq(0, 0.9, 0.1)), "0.99")
+#colnames(percentis)[colnames(percentis) == "% da renda apropriado"] ="apropriado"
 
 
-ggplot(percentis, aes(x=percentis, y=apropriado))+ 
+ggplot(quantis_de_renda23_04, aes(x=Percentis, y=apropriado))+ 
   geom_bar(stat = "identity", fill="#45ff66") + # definindo grossura da linha
   labs(title = "Apropriação da Renda por Percentis",
        x = "Percentil",
