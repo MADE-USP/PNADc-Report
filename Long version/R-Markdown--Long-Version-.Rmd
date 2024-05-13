@@ -3,8 +3,8 @@ title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesqu
 author: "Made USP"
 date: "20/02/2024"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 subtitle: 4º Trimestre de 2023 
 ---
