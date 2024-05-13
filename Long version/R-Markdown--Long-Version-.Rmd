@@ -32,9 +32,31 @@ library(ggplot2)
 
 #devtools::install_github("kupietz/kableExtra")
 
+# Setting work directory (Github)-----------------------------------------------
+
+file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
+  gsub("\\Long version", "", .)
+
+setwd(file_directory)
+
+getwd()
+
+# Reading PNADc file------------------------------------------------------------
+
+i=2023
+q=4
+
+folder_path <- "Input/"
+
+file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
+
+load(file_path)
+
+
+
 #Eslen
-setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
-load("C:/Users/USER/Desktop/GitHub/.github/PNADc-Report/Input/PNADc_complete_time_series_042023.RData")
+#setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
+#load("C:/Users/USER/Desktop/GitHub/.github/PNADc-Report/Input/PNADc_complete_time_series_042023.RData")
 
 #Clara
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
