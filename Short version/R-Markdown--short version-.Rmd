@@ -360,54 +360,216 @@ Veja mais dados de ocupação nas figuras 1 e 2.
 
 ## Informalidade
 
+
 ```{r include=FALSE}
 
-colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "informalidade_media"
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
 
-colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
+#Renomeando colunas
 
 colnames(informal.RG.sh)[colnames(informal.RG.sh) == "não contribuinte INSS"] = "Informal"
+colnames(informal.RG.sh)[colnames(informal.RG.sh) == "contribuinte INSS"] = "Formal"
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(informal.RG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+informal.RG.sh <- informal.RG.sh %>% 
+  select(Categoria, Formal, Informal)
+informal.RG.sh <- cbind(informal.RG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+informal.RG.sh$Dia <- 01  
+
+informal.RG.sh$Mes <- ifelse(informal.RG.sh$Trimestre=="Q1",1,
+                     ifelse(informal.RG.sh$Trimestre=="Q2",4,
+                     ifelse(informal.RG.sh$Trimestre=="Q3",7,10))) 
 
 
-informalidade <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q4"]
+informal.RG.sh$Ano <- as.numeric(informal.RG.sh$Ano)
 
-informal_tri <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2023 Q3"]
-diftri_informal <- informalidade - informal_tri
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+informal.RG.sh$Data <-as.yearqtr(with(informal.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+informal.RG.sh<- informal.RG.sh %>%
+   select(Categoria, Formal, Informal, Data)
+
+#Checando formato
+class(informal.RG.sh$Data)
+```
+
+```{r echo=FALSE}
+
+ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) + 
+  geom_line(size=2) + # definindo grossura da linha
+  ggtitle("Figura 3: Taxa de Informalidade por Raça e Gênero") + #titulo do grafico
+  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) +
+  theme_bw() # colocando fundo Branco
+
+```
+
+
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+#Renomeando colunas
+
+colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
+colnames(informal.REG.sh)[colnames(informal.REG.sh) == "contribuinte INSS"] = "Formal"
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(informal.REG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+informal.REG.sh <- informal.REG.sh %>% 
+  select(Regiao, Formal, Informal)
+informal.REG.sh <- cbind(informal.REG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+informal.REG.sh$Dia <- 01  
+
+informal.REG.sh$Mes <- ifelse(informal.REG.sh$Trimestre=="Q1",1,
+                     ifelse(informal.REG.sh$Trimestre=="Q2",4,
+                     ifelse(informal.REG.sh$Trimestre=="Q3",7,10))) 
+
+
+informal.REG.sh$Ano <- as.numeric(informal.REG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+informal.REG.sh$Data <-as.yearqtr(with(informal.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+informal.REG.sh<- informal.REG.sh %>%
+   select(Regiao, Formal, Informal, Data)
+
+#Checando formato
+class(informal.RG.sh$Data)
+```
+
+```{r echo=FALSE}
+
+ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) + 
+  geom_line(size=2) + # definindo grossura da linha
+  ggtitle("Figura 4: Taxa de Informalidade por Região") + #titulo do grafico
+  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
+  theme_bw() # colocando fundo Branco
+
+```
+
+
+
+
+
+```{r include=FALSE}
+# Informalidade média - atualizando data
+
+#Renomeando colunas
+colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "informalidade_media"
+
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(informalidadeMedia.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+informalidadeMedia.sh <- informalidadeMedia.sh %>% 
+  select(informalidade_media)
+informalidadeMedia.sh <- cbind(informalidadeMedia.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+informalidadeMedia.sh$Dia <- 01  
+
+informalidadeMedia.sh$Mes <- ifelse(informalidadeMedia.sh$Trimestre=="Q1",1,
+                     ifelse(informalidadeMedia.sh$Trimestre=="Q2",4,
+                     ifelse(informalidadeMedia.sh$Trimestre=="Q3",7,10))) 
+
+
+informalidadeMedia.sh$Ano <- as.numeric(informalidadeMedia.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+informalidadeMedia.sh$Data <-as.yearqtr(with(informalidadeMedia.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+informalidadeMedia.sh<- informalidadeMedia.sh %>%
+   select(informalidade_media, Data)
+
+#Checando formato
+class(informal.RG.sh$Data)
+
+
+
+# Informalidade média (Atualizar tri e ano)
+
+informalidade <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Data == "2023 Q4"]
+
+informalidade_tri_anterior <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Data == "2023 Q3"]
+
+dif_informalidade_tri <- informalidade - informalidade_tri_anterior
 
 #Região
-inf_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q4"]
-inf_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q4"]
-inf_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q4"]
-inf_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q4"]
-inf_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q4"]
+inf_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Data == "2023 Q4"]
+inf_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Data == "2023 Q4"]
+inf_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Data == "2023 Q4"]
+inf_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Data == "2023 Q4"]
+inf_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Data == "2023 Q4"]
 
 
 ## Tri anterior
-informal_triNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2023 Q3"]
-informal_triNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2023 Q3"]
-informal_triCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2023 Q3"]
-informal_triSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2023 Q3"]
-informal_triSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2023 Q3"]
+informal_tri_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Data == "2023 Q3"]
+informal_tri_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Data == "2023 Q3"]
+informal_tri_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Data == "2023 Q3"]
+informal_tri_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Data == "2023 Q3"]
+informal_tri_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Data == "2023 Q3"]
 
-inf_triNO <- ((inf_NO) - (informal_triNO))
-inf_triNE <- inf_NE - informal_triNE
-inf_triCO <- inf_CO - informal_triCO
-inf_triSE <- inf_SE - informal_triSE
-inf_triSU <- inf_SU - informal_triSU
+#inf_triNO <- ((inf_NO) - (informal_triNO))
+#inf_triNE <- inf_NE - informal_triNE
+#inf_triCO <- inf_CO - informal_triCO
+#inf_triSE <- inf_SE - informal_triSE
+#inf_triSU <- inf_SU - informal_triSU
 
-## Ano anterior
+## Ano anterior (Atualizar ano e tri)
 
-informal_anoNO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Trimestre == "2022 Q4"]
-informal_anoNE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Trimestre == "2022 Q4"]
-informal_anoCO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Trimestre == "2022 Q4"]
-informal_anoSE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Trimestre == "2022 Q4"]
-informal_anoSU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Trimestre == "2022 Q4"]
+informal_ano_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Data == "2022 Q4"]
+informal_ano_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Data == "2022 Q4"]
+informal_ano_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Data == "2022 Q4"]
+informal_ano_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Data == "2022 Q4"]
+informal_ano_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Data == "2022 Q4"]
 
-inf_anoNO <- inf_NO - informal_anoNO
-inf_anoNE <- inf_NE - informal_anoNE
-inf_anoCO <- inf_CO - informal_anoCO
-inf_anoSE <- inf_SE - informal_anoSE
-inf_anoSU <- inf_SU - informal_anoSU
+#inf_anoNO <- inf_NO - informal_anoNO
+#inf_anoNE <- inf_NE - informal_anoNE
+#inf_anoCO <- inf_CO - informal_anoCO
+#inf_anoSE <- inf_SE - informal_anoSE
+#inf_anoSU <- inf_SU - informal_anoSU
+
+
+
+### Mínimos e máximos
+
+# Máximo de 2023 Q4
+max_Inf_REG_2023_04 <- informal.REG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
+  select(Regiao) #peço a categoria associada
+
+# Mínimo de 2023 Q4      
+min_INF_REG_2023_04 <- informal.REG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Regiao) #peço a categoria associada
+
 
 #Ordem
 
@@ -419,57 +581,74 @@ ter_infREG <- ordem_infREG[3]
 qua_infREG <- ordem_infREG[4]
 qui_infREG <- ordem_infREG[5]
 
-inftri_REG <- c(inf_triNO, inf_triNE, inf_triCO, inf_triSE, inf_triSU)
-ordem_inftriREG <- sort(inftri_REG, decreasing = TRUE)
-max_inftriREG <- ordem_inftriREG[1]
-seg_inftriREG <- ordem_inftriREG[2]
-ter_inftriREG <- ordem_inftriREG[3]
-qua_inftriREG <- ordem_inftriREG[4]
-qui_inftriREG <- ordem_inftriREG[5]
+#inftri_REG <- c(inf_triNO, inf_triNE, inf_triCO, inf_triSE, inf_triSU)
+#ordem_inftriREG <- sort(inftri_REG, decreasing = TRUE)
+#max_inftriREG <- ordem_inftriREG[1]
+#seg_inftriREG <- ordem_inftriREG[2]
+#ter_inftriREG <- ordem_inftriREG[3]
+#qua_inftriREG <- ordem_inftriREG[4]
+#qui_inftriREG <- ordem_inftriREG[5]
 
  
-infano_REG <- c(inf_anoNO, inf_anoNE, inf_anoCO, inf_anoSE, inf_anoSU)
-ordem_infanoREG <- sort(infano_REG, decreasing = TRUE)
-max_infanoREG <- ordem_infanoREG[1]
-seg_infanoREG <- ordem_infanoREG[2]
-ter_infanoREG <- ordem_infanoREG[3]
-qua_infanoREG <- ordem_infanoREG[4]
-qui_infanoREG <- ordem_infanoREG[5]
+#infano_REG <- c(inf_anoNO, inf_anoNE, inf_anoCO, inf_anoSE, inf_anoSU)
+#ordem_infanoREG <- sort(infano_REG, decreasing = TRUE)
+#max_infanoREG <- ordem_infanoREG[1]
+#seg_infanoREG <- ordem_infanoREG[2]
+#ter_infanoREG <- ordem_infanoREG[3]
+#qua_infanoREG <- ordem_infanoREG[4]
+#qui_infanoREG <- ordem_infanoREG[5]
 
 
 # Raça e gênero
 
-informal_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q4"]
-informal_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q4"]
-informal_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q4"]
-informal_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q4"]
+informal_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Data == "2023 Q4"]
+informal_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Data == "2023 Q4"]
+informal_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Data == "2023 Q4"]
+informal_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Data == "2023 Q4"]
 
 
 ##Tri anterior
-informal_triHB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2023 Q3"]
-informal_triHN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2023 Q3"]
-informal_triMB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2023 Q3"]
-informal_triMN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2023 Q3"]
+informal_tri_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Data == "2023 Q3"]
+informal_tri_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Data == "2023 Q3"]
+informal_tri_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Data == "2023 Q3"]
+informal_tri_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Data == "2023 Q3"]
 
-diftri_informalidadeHB <- informal_HB - informal_triHB
-diftri_informalidadeHN <- informal_HN - informal_triHN
-diftri_informalidadeMB <- informal_HB - informal_triMB
-diftri_informalidadeMN <- informal_HN - informal_triMN
+diftri_informalidadeHB <- informal_HB - informal_tri_anterior_HB
+diftri_informalidadeHN <- informal_HN - informal_tri_anterior_HN
+diftri_informalidadeMB <- informal_HB - informal_tri_anterior_MB
+diftri_informalidadeMN <- informal_HN - informal_tri_anterior_MN
 
 
 ## Ano anterior
-informalidade_ano <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Trimestre == "2022 Q4"]
-difano_informalRG <- informalidade - informalidade_ano
+informalidade_ano_anterior <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Data == "2022 Q4"]
+difano_informalRG <- informalidade - informalidade_ano_anterior
 
-informal_anoHB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Trimestre == "2022 Q4"]
-informal_anoHN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Trimestre == "2022 Q4"]
-informal_anoMB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Trimestre == "2022 Q4"]
-informal_anoMN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Trimestre == "2022 Q4"]
+informal_ano_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Data == "2022 Q4"]
+informal_ano_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Data == "2022 Q4"]
+informal_ano_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Data == "2022 Q4"]
+informal_ano_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Data == "2022 Q4"]
 
-infanoHB <- informal_HB - informal_anoHB
-infanoHN <- informal_HN - informal_anoHN
-infanoMB <- informal_MB - informal_anoMB
-infanoMN <- informal_MB - informal_anoMN
+dif_infanoHB <- informal_HB - informal_ano_anterior_HB
+dif_infanoHN <- informal_HN - informal_ano_anterior_HN
+dif_infanoMB <- informal_MB - informal_ano_anterior_MB
+dif_infanoMN <- informal_MB - informal_ano_anterior_MN
+
+
+### Mínimos e máximos
+
+# Máximo de 2023 Q4
+max_Inf_RG_2023_04 <- informal.RG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
+  select(Categoria) #peço a categoria associada
+
+# Mínimo de 2023 Q4      
+min_INF_RG_2023_04 <- informal.RG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Categoria) #peço a categoria associada
+
+
 
 # Ordem
 
@@ -487,7 +666,7 @@ seg_inftriRG <- ordem_diftri[2]
 ter_inftriRG <- ordem_diftri[3]
 qua_inftriRG <- ordem_diftri[4]
 
-infano_RG <- c(infanoHB, infanoHN, infanoMB, infanoMN)
+infano_RG <- c(dif_infanoHB, dif_infanoHN, dif_infanoMB, dif_infanoMN)
 ordem_infanoRG <- sort(infano_RG, decreasing = TRUE)
 max_infanoRG <- ordem_infanoRG[1]
 seg_infanoRG <- ordem_infanoRG[2]
@@ -497,16 +676,11 @@ qua_infanoRG <- ordem_infanoRG[4]
 
 ```
 
-Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.]. A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi o Norte (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). O Sul registrou as menores taxas de informalidade (`r qui_infREG*100`%). 
+Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.]. A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de informalidade (`r qui_infREG*100`%). 
 
-No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi o de homens negros, com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (diftri_informal)*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
+No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria `r max_Inf_RG_2023_04$Categoria`, com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (dif_informalidade_tri)*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
 
 Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. Veja mais nas figuras 3 e 4.
-
-![Taxa de Informalidade por Raça e Gênero](C:/Users/clara/Downloads/informal_RG.png){width=70%}
-
-
-![Taxa de Informalidade por Região](C:/Users/clara/Downloads/informal_REG.png){width=70%}
 
 
 
@@ -659,8 +833,6 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 ```
 
-![Rendimento Habitual por Raça e Gênero (reais de 2023)](C:/Users/clara/Downloads/RENDA_habit_RG.png){width=70%}
-
 O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
 
 O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). Veja os dados na figura 5.
@@ -680,12 +852,6 @@ giniBR_tri <- giniBR.sh$gini[giniBR.sh$Trimestre == "2023 Q3"]
 
 O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos].
 
-![Índice de Gini por Raça e Gênero](C:/Users/clara/Downloads/giniRG_2304.png){width=70%}
-
-
-![Índice de Gini por Região](C:/Users/clara/Downloads/gini_REG_2304.png){width=70%}
-
-
 O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`.
 
 
@@ -695,8 +861,6 @@ Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que
 # Percentis de renda
 
 Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
-
-![Apropriação da Renda Total por Decis e pelo topo 1%](C:/Users/clara/Downloads/percentis.png){width=70%}
 
 Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11,6% da renda nacional, no quarto trimestre de 2023. 
 
