@@ -51,6 +51,8 @@ load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.R
 i=2023
 q=4
 
+#LINHA TESTE
+
 #trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
 #mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
 
