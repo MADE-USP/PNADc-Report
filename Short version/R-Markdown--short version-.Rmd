@@ -132,7 +132,7 @@ EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
 
 ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Ocupacao por Raça e Gênero") + #titulo do grafico
+  ggtitle("Figura 1: Taxa de Ocupacao por Raça e Gênero") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
@@ -177,7 +177,7 @@ class(EMPREGO.REG.sh$Data)
 
 ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) + 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Taxa de Ocupação por Região") + #titulo do grafico
+  ggtitle("Figura 2: Taxa de Ocupação por Região") + #titulo do grafico
   scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
   theme_bw() # colocando fundo Branco
 
@@ -189,45 +189,67 @@ ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) +
 
 # Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q3"]
 
+
+# Renomeando colunas
+colnames(Tx_emprego.sh)[colnames(Tx_emprego.sh) == "Taxa de emprego"] ="Taxa_emprego"
 colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
 
+# Criando objetos (atualizar trimestre de referência)
 desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q4"]
-desemprego_tri <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
-desemprego_ano <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2022 Q3"]
+desemprego_tri_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q3"]
+desemprego_ano_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2022 Q4"]
+
+# Diferenças entre taxas de desemprego
                                                                    
-desem_tri <- ((desemprego)-(desemprego_tri))
-desem_ano <- ((desemprego)-(desemprego_ano))
+dif_desem_tri <- ((desemprego)-(desemprego_tri_anterior))
+dif_desem_ano <- ((desemprego)-(desemprego_ano_anterior))
 
-## Desemprego por raça e gênero
+## Desemprego por raça e gênero (Atualizar trimestre de referência)
 
-desemprego_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
-desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
-desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
-desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+desemprego_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q4"])
+desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q4"])
+desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q4"])
+desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q4"])
 
 
-##Trimestre anterior
+##Trimestre anterior (atualizar trimestre de referência)
 
-desem_triHB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
-desem_triHN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
-desem_triMB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
-desem_triMN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desemprego_hb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q3"])
+desemprego_hn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q3"])
+desemprego_mb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q3"])
+desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q3"])
 
-desemtriMB <- (desemprego_MB - desem_triMB)
-desemtriMN <- (desemprego_MN - desem_triMN)
-desemtriHB <- (desemprego_HB - desem_triHB)
-desemtriHN <- (desemprego_HN - desem_triHN)
+#desemtriMB <- (desemprego_MB - desem_triMB)
+#desemtriMN <- (desemprego_MN - desem_triMN)
+#desemtriHB <- (desemprego_HB - desem_triHB)
+#desemtriHN <- (desemprego_HN - desem_triHN)
 
-##Ano anterior
-desemano_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
-desemano_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
-desemano_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
-desemano_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2022 Q4"])
+##Ano anterior (Atualizar data)
+desemprego_hb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2022 Q4"])
+desemprego_hn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2022 Q4"])
+desemprego_mb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2022 Q4"])
+desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2022 Q4"])
 
-desemanoMB <- (desemprego_MB - desemano_MB)
-desemanoMN <- (desemprego_MN - desemano_MN)
-desemanoHB <- (desemprego_HB - desemano_HB)
-desemanoHN <- (desemprego_HN - desemano_HN)
+#desemanoMB <- (desemprego_MB - desemano_MB)
+#desemanoMN <- (desemprego_MN - desemano_MN)
+#desemanoHB <- (desemprego_HB - desemano_HB)
+#desemanoHN <- (desemprego_HN - desemano_HN)
+
+
+### Mínimos e máximos
+
+# Máximo de 2023 Q4
+max_RG_2023_04 <- EMPREGO.RG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
+  select(Categoria) #peço a categoria associada
+
+# Mínimo de 2023 Q4      
+min_RG_2023_04 <- EMPREGO.RG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Categoria) #peço a categoria associada
+
 
 #Ordem
 
@@ -238,59 +260,75 @@ seg_desemRG <- ordem_desemRG[2]
 ter_desemRG <- ordem_desemRG[3]
 qua_desemRG <- ordem_desemRG[4]
 
-desemtri_RG <- c(desemtriMB, desemtriMN, desemtriHB, desemtriHN)
-ordem_desemtri_RG <- sort (desemtri_RG, decreasing = TRUE)
-max_desemtriRG <- ordem_desemtri_RG[1]
-seg_desemtriRG <- ordem_desemtri_RG[2]
-ter_desemtriRG <- ordem_desemtri_RG[3]
-qua_desemtriRG <- ordem_desemtri_RG[4]
-
-desemano_RG <- c(desemanoMB, desemanoMN, desemanoHB, desemanoHN)
-ordem_desemano_RG <- sort (desemano_RG, decreasing = TRUE)
-max_desemanoRG <- ordem_desemano_RG[1]
-seg_desemanoRG <- ordem_desemano_RG[2]
-ter_desemanoRG <- ordem_desemano_RG[3]
-qua_desemanoRG <- ordem_desemano_RG[4]
-
-
-#Região
-desemprego_NO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
-desemprego_NE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
-desemprego_CO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
-desemprego_SE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
-desemprego_SU <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q4"]))
+#desemtri_RG <- c(desemtriMB, desemtriMN, desemtriHB, desemtriHN)
+#ordem_desemtri_RG <- sort (desemtri_RG, decreasing = TRUE)
+#max_desemtriRG <- ordem_desemtri_RG[1]
+#seg_desemtriRG <- ordem_desemtri_RG[2]
+#ter_desemtriRG <- ordem_desemtri_RG[3]
+#qua_desemtriRG <- ordem_desemtri_RG[4]
+#
+#desemano_RG <- c(desemanoMB, desemanoMN, desemanoHB, desemanoHN)
+#ordem_desemano_RG <- sort (desemano_RG, decreasing = TRUE)
+#max_desemanoRG <- ordem_desemano_RG[1]
+#seg_desemanoRG <- ordem_desemano_RG[2]
+#ter_desemanoRG <- ordem_desemano_RG[3]
+#qua_desemanoRG <- ordem_desemano_RG[4]
 
 
-### Trimestre anterior
-desemtri_NO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
-desemtri_NE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
-desemtri_CO <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
-desemtri_SE <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
-desemtri_SU <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2023 Q3"]))
+##Região (atualizar trimestre)
 
-desemtriNO <- desemprego_NO - desemtri_NO
-desemtriNE <- desemprego_NE - desemtri_NE
-desemtriCO <- desemprego_CO - desemtri_CO
-desemtriSE <- desemprego_SE - desemtri_SE
-desemtriSU <- desemprego_SU - desemtri_SU
-
-## Ano anterior
-desemano_NO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
-desemano_NE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
-desemano_CO <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
-desemano_SE <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
-desemano_SU <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Trimestre == "2022 Q4"])
-
-desemanoNO <- desemprego_NO - desemano_NO
-desemanoNE <- desemprego_NE - desemano_NE
-desemanoCO <- desemprego_CO - desemano_CO
-desemanoSE <- desemprego_SE - desemano_SE
-desemanoSU <- desemprego_SU - desemano_SU
+desemprego_norte <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2023 Q4"]))
+desemprego_nordeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2023 Q4"]))
+desemprego_centrooeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2023 Q4"]))
+desemprego_sudeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2023 Q4"]))
+desemprego_sul <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2023 Q4"]))
 
 
-#Ordem
+### Trimestre anterior (Atualizar data)
+desemprego_norte_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2023 Q3"]))
+desemprego_nordeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2023 Q3"]))
+desemprego_centrooeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2023 Q3"]))
+desemprego_sudeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2023 Q3"]))
+desemprego_sul_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2023 Q3"]))
 
-desemprego_REG <- c(desemprego_NO, desemprego_NE, desemprego_CO, desemprego_SE, desemprego_SU)
+#desemtriNO <- desemprego_NO - desemtri_NO
+#desemtriNE <- desemprego_NE - desemtri_NE
+#desemtriCO <- desemprego_CO - desemtri_CO
+#desemtriSE <- desemprego_SE - desemtri_SE
+#desemtriSU <- desemprego_SU - desemtri_SU
+
+## Ano anterior, mesmo tri (atualizar datas)
+desemprego_norte_tri_ano_anterio <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2022 Q4"])
+desemprego_nordeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2022 Q4"])
+desemprego_centrooeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2022 Q4"])
+desemprego_sud_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2022 Q4"])
+desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2022 Q4"])
+
+#desemanoNO <- desemprego_NO - desemano_NO
+#desemanoNE <- desemprego_NE - desemano_NE
+#desemanoCO <- desemprego_CO - desemano_CO
+#desemanoSE <- desemprego_SE - desemano_SE
+#desemanoSU <- desemprego_SU - desemano_SU
+
+
+### Mínimos e máximos
+
+# Máximo de 2023 Q4
+max_REG_2023_04 <- EMPREGO.REG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
+  select(Regiao) #peço a categoria associada
+
+# Mínimo de 2023 Q4      
+min_REG_2023_04 <- EMPREGO.REG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Regiao) #peço a categoria associada
+
+
+##Ordem
+
+desemprego_REG <- c(desemprego_norte, desemprego_nordeste, desemprego_centrooeste, desemprego_sudeste, desemprego_sul)
 ordem_desemREG <- sort (desemprego_REG, decreasing = TRUE)
 max_desemREG <- ordem_desemREG[1]
 seg_desemREG <- ordem_desemREG[2]
@@ -298,35 +336,27 @@ ter_desemREG <- ordem_desemREG[3]
 qua_desemREG <- ordem_desemREG[4]
 qui_desemREG <- ordem_desemREG[5]
 
-desem_triREG <- c(desemtriNO, desemtriNE, desemtriCO, desemtriSE, desemtriSU)
-ordem_desem_triREG <- sort(desem_triREG, decreasing = TRUE)
-max_desemtriREG <- ordem_desem_triREG[1]
-seg_desemtriREG <- ordem_desem_triREG[2]
-ter_desemtriREG <- ordem_desem_triREG[3]
-qua_desemtriREG <- ordem_desem_triREG[4]
-qui_desemtriREG <- ordem_desem_triREG[5]
+#desem_triREG <- c(desemtriNO, desemtriNE, desemtriCO, desemtriSE, desemtriSU)
+#ordem_desem_triREG <- sort(desem_triREG, decreasing = TRUE)
+#max_desemtriREG <- ordem_desem_triREG[1]
+#seg_desemtriREG <- ordem_desem_triREG[2]
+#ter_desemtriREG <- ordem_desem_triREG[3]
+#qua_desemtriREG <- ordem_desem_triREG[4]
+#qui_desemtriREG <- ordem_desem_triREG[5]
 
-desem_anoREG <- c(desemanoNO, desemanoNE, desemanoCO, desemanoSE, desemanoSU)
-ordem_desem_anoREG <- sort(desem_anoREG, decreasing = TRUE)
-max_desemanoREG <- ordem_desem_anoREG[1]
-seg_desemanoREG <- ordem_desem_anoREG[2]
-ter_desemanoREG <- ordem_desem_anoREG[3]
-qua_desemanoREG <- ordem_desem_anoREG[4]
-qui_desemanoREG <- ordem_desem_anoREG[5]
-
+#desem_anoREG <- c(desemanoNO, desemanoNE, desemanoCO, desemanoSE, desemanoSU)
+#ordem_desem_anoREG <- sort(desem_anoREG, decreasing = TRUE)
+#max_desemanoREG <- ordem_desem_anoREG[1]
+#seg_desemanoREG <- ordem_desem_anoREG[2]
+#ter_desemanoREG <- ordem_desem_anoREG[3]
+#qua_desemanoREG <- ordem_desem_anoREG[4]
+#qui_desemanoREG <- ordem_desem_anoREG[5]
 ```
 
 
-Inicialmente, destacamos a variação da taxa de desemprego geral de `r desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. Assim, a taxa nacional de desemprego encerrou o trimestre em `r desemprego*100`%. A região Nordeste registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto o Sul teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, mulheres negras foram a maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada dentre homens brancos, de `r qua_desemRG*100`%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o trimestre em `r desemprego*100`%. A região (`r min_REG_2023_04$Regiao`) registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto a região (`r max_REG_2023_04$Regiao`) teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, `r min_RG_2023_04$Categoria` foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria `r max_RG_2023_04$Categoria`, de `r qua_desemRG*100`%. 
 
 Veja mais dados de ocupação nas figuras 1 e 2.
-
-
-```{r include=FALSE}
-
-#INCLUIR GRÁFICO/TABELA/SH
-#PODEMOS INCLUIR ALGUM PARÁGRAFO COMPARATIVO A ANO OU TRIMESTRE ANTERIROR A DEPENDER DO RESULTADO DOS DADOS
-```
 
 ## Informalidade
 
