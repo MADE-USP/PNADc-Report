@@ -124,18 +124,19 @@ EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
 ```
 
 
+
+
 ```{r echo=FALSE}
 
-# echo = FALSE não mostra o código, mas mostra o resultado
-# se a gente coloca include=FALSE o gráfico não aparece 
-# pq include=FALSE não mostra o resultado
-
-ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+ 
-  geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Figura 1: Taxa de Ocupacao por Raça e Gênero") + #titulo do grafico
-    scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) + #cores Made
-  theme_bw() # colocando fundo Branco
+ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
+  ggtitle("Figura 1: Taxa de Ocupacao por Raça e Gênero") + # plot title
+  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Categoria") # setting legend title
 ```
+
 
 ```{r include=FALSE}
 
@@ -173,14 +174,55 @@ EMPREGO.REG.sh<- EMPREGO.REG.sh %>%
 class(EMPREGO.REG.sh$Data)
 ```
 
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+colnames(Tx_emprego.sh)[colnames(Tx_emprego.sh) == "Taxa de emprego"] = "Taxa_emprego"
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(Tx_emprego.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+Tx_emprego.sh <- Tx_emprego.sh %>% 
+  select(Taxa_emprego)
+Tx_emprego.sh <- cbind(Tx_emprego.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+Tx_emprego.sh$Dia <- 01  
+
+Tx_emprego.sh$Mes <- ifelse(Tx_emprego.sh$Trimestre=="Q1",1,
+                     ifelse(Tx_emprego.sh$Trimestre=="Q2",4,
+                     ifelse(Tx_emprego.sh$Trimestre=="Q3",7,10))) 
+
+
+Tx_emprego.sh$Ano <- as.numeric(Tx_emprego.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+Tx_emprego.sh$Data <-as.yearqtr(with(Tx_emprego.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+Tx_emprego.sh<- Tx_emprego.sh %>%
+   select(Taxa_emprego, Data)
+
+#Checando formato
+class(Tx_emprego.sh$Data)
+```
+
+
 ```{r echo=FALSE}
 
 ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) + 
-  geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Figura 2: Taxa de Ocupação por Região") + #titulo do grafico
-  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
-  theme_bw() # colocando fundo Branco
-
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
+  ggtitle("Figura 2: Taxa de Ocupação por Região") + # plot title
+  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Regiao") # setting legend title
 ```
 
 ``` {r include=FALSE}
