@@ -837,48 +837,43 @@ Nota-se que os serviços de informação, educação e serviços domésticos sã
 
 #Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
 
-#Renomeando colunas
-
-colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
-colnames(informal.REG.sh)[colnames(informal.REG.sh) == "contribuinte INSS"] = "Formal"
-
 # Dividimos a coluna de data em uma de ano, e uma de trimestre:
-date <- do.call(rbind, strsplit(informal.REG.sh$Trimestre, " ")) 
+date <- do.call(rbind, strsplit(RendaHabit.RG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
 # Retornamos a data atualizada para o dataframe anterior
-informal.REG.sh <- informal.REG.sh %>% 
-  select(Regiao, Formal, Informal)
-informal.REG.sh <- cbind(informal.REG.sh,date) 
+RendaHabit.RG.sh <- RendaHabit.RG.sh %>% 
+  select(Categoria, Renda_Habitual_RG)
+RendaHabit.RG.sh <- cbind(RendaHabit.RG.sh,date) 
 
 # Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
 # Definimos padrão para a criação dos trimestres, a partir do mês
 
-informal.REG.sh$Dia <- 01  
+RendaHabit.RG.sh$Dia <- 01  
 
-informal.REG.sh$Mes <- ifelse(informal.REG.sh$Trimestre=="Q1",1,
-                     ifelse(informal.REG.sh$Trimestre=="Q2",4,
-                     ifelse(informal.REG.sh$Trimestre=="Q3",7,10))) 
+RendaHabit.RG.sh$Mes <- ifelse(RendaHabit.RG.sh$Trimestre=="Q1",1,
+                     ifelse(RendaHabit.RG.sh$Trimestre=="Q2",4,
+                     ifelse(RendaHabit.RG.sh$Trimestre=="Q3",7,10))) 
 
 
-informal.REG.sh$Ano <- as.numeric(informal.REG.sh$Ano)
+RendaHabit.RG.sh$Ano <- as.numeric(RendaHabit.RG.sh$Ano)
 
 # Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
-informal.REG.sh$Data <-as.yearqtr(with(informal.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+RendaHabit.RG.sh$Data <-as.yearqtr(with(RendaHabit.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 # Voltamos para colunas originais
-informal.REG.sh<- informal.REG.sh %>%
-   select(Regiao, Formal, Informal, Data)
+RendaHabit.RG.sh<- RendaHabit.RG.sh %>%
+   select(Categoria, Renda_Habitual_RG, Data)
 
 #Checando formato
-class(informal.RG.sh$Data)
+class(RendaHabit.RG.sh$Data)
 ```
 
 ```{r echo=FALSE}
 
-ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) + 
+ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria)) + 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Figura 4: Taxa de Informalidade por Região") + #titulo do grafico
+  ggtitle("Figura 5: Rendimento Habitual por Raça e Gênero (reais de 2024)") + #titulo do grafico
   scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
   theme_bw() # colocando fundo Branco
 
@@ -887,19 +882,21 @@ ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) +
 
 
 ```{r include=FALSE}
+#Renda média
+
 renda_med <- RendaHabitMedia.sh$RendaHabitMedia[RendaHabitMedia.sh$Trimestre == "2023 Q4"]
 
 # Raça e gênero
-rendahabitHB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre == "2023 Q4"]
-rendahabitHN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Trimestre == "2023 Q4"]
-rendahabitMB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Trimestre == "2023 Q4"]
-rendahabitMN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre == "2023 Q4"]
+rendahabitHB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2023 Q4"]
+rendahabitHN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2023 Q4"]
+rendahabitMB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2023 Q4"]
+rendahabitMN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2023 Q4"]
 
 ##Ano anterior
-rendahabitano_HB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Trimestre == "2022 Q4"]
-rendahabitano_HN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Trimestre == "2022 Q4"]
-rendahabitano_MB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Trimestre == "2022 Q4"]
-rendahabitano_MN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Trimestre == "2022 Q4"]
+rendahabitano_HB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2022 Q4"]
+rendahabitano_HN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2022 Q4"]
+rendahabitano_MB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2022 Q4"]
+rendahabitano_MN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2022 Q4"]
 
 rendahabitanoHB <- (rendahabitHB - rendahabitano_HB)
 rendahabitanoHN <- (rendahabitHN - rendahabitano_HN)
@@ -931,12 +928,144 @@ O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reai
 
 # Distribuição: Índice de Gini
 
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(giniRG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+giniRG.sh <- giniRG.sh %>% 
+  select(Categoria, gini)
+giniRG.sh <- cbind(giniRG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+giniRG.sh$Dia <- 01  
+
+giniRG.sh$Mes <- ifelse(giniRG.sh$Trimestre=="Q1",1,
+                     ifelse(giniRG.sh$Trimestre=="Q2",4,
+                     ifelse(giniRG.sh$Trimestre=="Q3",7,10))) 
+
+
+giniRG.sh$Ano <- as.numeric(giniRG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+giniRG.sh$Data <-as.yearqtr(with(giniRG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+giniRG.sh<- giniRG.sh %>%
+   select(Categoria, gini, Data)
+
+#Checando formato
+class(giniRG.sh$Data)
+```
 
 ```{r include=FALSE}
 
-giniBR <- giniBR.sh$gini[giniBR.sh$Trimestre == "2023 Q4"]
-giniBR_ano <- giniBR.sh$gini[giniBR.sh$Trimestre == "2022 Q4"]
-giniBR_tri <- giniBR.sh$gini[giniBR.sh$Trimestre == "2023 Q3"]
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(giniBR.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+giniBR.sh <- giniBR.sh %>% 
+  select(gini)
+giniBR.sh <- cbind(giniBR.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+giniBR.sh$Dia <- 01  
+
+giniBR.sh$Mes <- ifelse(giniBR.sh$Trimestre=="Q1",1,
+                     ifelse(giniBR.sh$Trimestre=="Q2",4,
+                     ifelse(giniBR.sh$Trimestre=="Q3",7,10))) 
+
+
+giniBR.sh$Ano <- as.numeric(giniBR.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+giniBR.sh$Data <-as.yearqtr(with(giniBR.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+giniBR.sh<- giniBR.sh %>%
+   select(gini, Data)
+
+#Checando formato
+class(giniBR.sh$Data)
+```
+
+```{r echo=FALSE}
+
+ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil"), linetype = "dashed") + # adding average Gini line
+  ggtitle("Figura 6: Índice de Gini por Raça e Gênero") + # plot title
+  scale_colour_manual(name = "Categoria", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Categoria") # setting legend title
+```
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(giniUF.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+giniUF.sh <- giniUF.sh %>% 
+  select(Regiao, gini)
+giniUF.sh <- cbind(giniUF.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+giniUF.sh$Dia <- 01  
+
+giniUF.sh$Mes <- ifelse(giniUF.sh$Trimestre=="Q1",1,
+                     ifelse(giniUF.sh$Trimestre=="Q2",4,
+                     ifelse(giniUF.sh$Trimestre=="Q3",7,10))) 
+
+
+giniUF.sh$Ano <- as.numeric(giniUF.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+giniUF.sh$Data <-as.yearqtr(with(giniUF.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+giniUF.sh<- giniUF.sh %>%
+   select(Regiao, gini, Data)
+
+#Checando formato
+class(giniUF.sh$Data)
+```
+```{r echo=FALSE}
+
+ggplot(giniUF.sh, aes(x=Data, y=gini, color=Regiao)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil"), linetype = "dashed") + # adding average Gini line
+  ggtitle("Figura 7: Índice de Gini por Região") + # plot title
+  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Regiao") # setting legend title
+```
+
+
+```{r include=FALSE}
+
+giniBR <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q4"]
+giniBR_ano_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2022 Q4"]
+giniBR_tri_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q3"]
+
+
+
 
 
 
