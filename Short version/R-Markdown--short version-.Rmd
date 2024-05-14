@@ -443,20 +443,16 @@ class(informalidadeMedia.sh$Data)
 ```
 
 
-
-
-
-
 ```{r echo=FALSE}
 
 ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) + 
-  geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Figura 3: Taxa de Informalidade por Raça e Gênero") + #titulo do grafico
-  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41")) +
-  theme_bw() # colocando fundo Branco
-
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
+  ggtitle("Figura 3: Taxa de Informalidade por Raça e Gênero") + # plot title
+  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Categoria") # setting legend title
 ```
-
 
 
 ```{r include=FALSE}
