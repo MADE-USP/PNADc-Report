@@ -354,7 +354,7 @@ qui_desemREG <- ordem_desemREG[5]
 ```
 
 
-Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o trimestre em `r desemprego*100`%. A região (`r min_REG_2023_04$Regiao`) registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto a região (`r max_REG_2023_04$Regiao`) teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, `r min_RG_2023_04$Categoria` foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria `r max_RG_2023_04$Categoria`, de `r qua_desemRG*100`%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o trimestre em `r desemprego*100`%. A região `r min_REG_2023_04$Regiao` registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, `r min_RG_2023_04$Categoria` foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria `r max_RG_2023_04$Categoria`, de `r qua_desemRG*100`%. 
 
 Veja mais dados de ocupação nas figuras 1 e 2.
 
