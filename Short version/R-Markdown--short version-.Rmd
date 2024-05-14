@@ -209,9 +209,9 @@ ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria)) +
   geom_line(size=2) + # defining line thickness
   geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
   ggtitle("Figura 1: Taxa de Ocupação por Raça e Gênero") + # plot title
-  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  scale_colour_manual(name = "Categoria", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41")) + # specifying legend and colors
   theme_bw() + # setting white background
-  labs(color = "Categoria", x = "Trimestre", y = "Taxa de ocupação") + # setting legend title
+  labs(color = "Categoria", x = "Trimestre", y = "Taxa de ocupacão") + # setting legend title
    theme(plot.title = element_text(hjust = 0.5))
 ```
 
