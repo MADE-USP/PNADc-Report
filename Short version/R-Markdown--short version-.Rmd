@@ -1064,9 +1064,34 @@ giniBR <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q4"]
 giniBR_ano_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2022 Q4"]
 giniBR_tri_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q3"]
 
+### Mínimos e máximos (Regiao)
+
+# Máximo de 2023 Q4
+max_GINI_REG_2023_04 <- giniUF.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(gini == max(gini)) %>% # e peço a linha correspondente ao valor máximo
+  select(Regiao) #peço a categoria associada
+
+# Mínimo de 2023 Q4      
+min_GINI_REG_2023_04 <- giniUF.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(gini == min(gini)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Regiao) #peço a categoria associada
 
 
+### Mínimos e máximos (Raça e gênero)
 
+# Máximo de 2023 Q4
+max_GINI_RG_2023_04 <- giniRG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(gini == max(gini)) %>% # e peço a linha correspondente ao valor máximo
+  select(Categoria) #peço a categoria associada
+
+# Mínimo de 2023 Q4      
+min_GINI_RG_2023_04 <- giniRG.sh %>%
+  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero 
+  filter(gini == min(gini)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Categoria) #peço a categoria associada
 
 
 ```
@@ -1075,11 +1100,27 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 
 O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`.
 
-
-Observamos que as regiões Nordeste e Norte apresentam desigualdade maior do que a reportada para todo o território nacional no trimestre analisado. Por fim, o índice de Gini para os grupos mulher negra e homem negro, por exemplo, é maior do que o nacional, indicando maior desigualdade entre os integrantes destes grupos.
+Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao`, acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, o índice de Gini é maior para a categoria `r max_GINI_RG_2023_04$Categoria` e menor na categoria `r min_GINI_RG_2023_04$Categoria`.
 
 
 # Percentis de renda
+
+```{r echo=FALSE}
+colnames(quantis_de_renda23_04)[colnames(quantis_de_renda23_04) == "Percentual da Renda Apropriada"] = "apropriado"
+
+quantis_de_renda23_04 <- quantis_de_renda23_04 %>% mutate("Percentis" = row.names(quantis_de_renda23_04))
+
+#percentis$percentis <- c(paste(seq(0, 0.9, 0.1)), "0.99")
+#colnames(percentis)[colnames(percentis) == "% da renda apropriado"] ="apropriado"
+
+
+ggplot(quantis_de_renda23_04, aes(x=Percentis, y=apropriado))+ 
+  geom_bar(stat = "identity", fill="#45ff66") + # definindo grossura da linha
+  labs(title = "Apropriação da Renda por Percentis",
+       x = "Percentil",
+       y = "Percentual Apropriado") +
+  theme_bw() # colocando fundo Branco
+```
 
 Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
 
