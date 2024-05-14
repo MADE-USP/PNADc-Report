@@ -402,6 +402,51 @@ informal.RG.sh<- informal.RG.sh %>%
 class(informal.RG.sh$Data)
 ```
 
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+#Renomeando colunas
+
+colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "Taxa_media_informalidade"
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(informalidadeMedia.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+informalidadeMedia.sh <- informalidadeMedia.sh %>% 
+  select(Taxa_media_informalidade)
+informalidadeMedia.sh <- cbind(informalidadeMedia.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+informalidadeMedia.sh$Dia <- 01  
+
+informalidadeMedia.sh$Mes <- ifelse(informalidadeMedia.sh$Trimestre=="Q1",1,
+                     ifelse(informalidadeMedia.sh$Trimestre=="Q2",4,
+                     ifelse(informalidadeMedia.sh$Trimestre=="Q3",7,10))) 
+
+
+informalidadeMedia.sh$Ano <- as.numeric(informalidadeMedia.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+informalidadeMedia.sh$Data <-as.yearqtr(with(informalidadeMedia.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+informalidadeMedia.sh<- informalidadeMedia.sh %>%
+   select(Taxa_media_informalidade, Data)
+
+#Checando formato
+class(informalidadeMedia.sh$Data)
+```
+
+
+
+
+
+
 ```{r echo=FALSE}
 
 ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) + 
@@ -455,17 +500,17 @@ informal.REG.sh<- informal.REG.sh %>%
 class(informal.RG.sh$Data)
 ```
 
+
 ```{r echo=FALSE}
 
 ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) + 
-  geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Figura 4: Taxa de Informalidade por Região") + #titulo do grafico
-  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
-  theme_bw() # colocando fundo Branco
-
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
+  ggtitle("Figura 4: Taxa de Informalidade por Região") + # plot title
+  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Regiao") # setting legend title
 ```
-
-
 
 
 
