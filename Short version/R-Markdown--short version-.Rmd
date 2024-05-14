@@ -77,6 +77,47 @@ Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Naciona
 
 ## Desemprego
 
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+colnames(Tx_emprego.sh)[colnames(Tx_emprego.sh) == "Taxa de emprego"] = "Taxa_emprego"
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(Tx_emprego.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+Tx_emprego.sh <- Tx_emprego.sh %>% 
+  select(Taxa_emprego)
+Tx_emprego.sh <- cbind(Tx_emprego.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+Tx_emprego.sh$Dia <- 01  
+
+Tx_emprego.sh$Mes <- ifelse(Tx_emprego.sh$Trimestre=="Q1",1,
+                     ifelse(Tx_emprego.sh$Trimestre=="Q2",4,
+                     ifelse(Tx_emprego.sh$Trimestre=="Q3",7,10))) 
+
+
+Tx_emprego.sh$Ano <- as.numeric(Tx_emprego.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+Tx_emprego.sh$Data <-as.yearqtr(with(Tx_emprego.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+Tx_emprego.sh<- Tx_emprego.sh %>%
+   select(Taxa_emprego, Data)
+
+#Checando formato
+class(Tx_emprego.sh$Data)
+```
+
+
+
 ```{r include=FALSE}
 
 # Corrigindo as datas
@@ -125,19 +166,6 @@ EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
 
 
 
-
-```{r echo=FALSE}
-
-ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria)) + 
-  geom_line(size=2) + # defining line thickness
-  geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
-  ggtitle("Figura 1: Taxa de Ocupacao por Raça e Gênero") + # plot title
-  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
-  theme_bw() + # setting white background
-  labs(color = "Categoria") # setting legend title
-```
-
-
 ```{r include=FALSE}
 
 #Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
@@ -175,43 +203,19 @@ class(EMPREGO.REG.sh$Data)
 ```
 
 
-```{r include=FALSE}
+```{r echo=FALSE}
 
-#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
-
-colnames(Tx_emprego.sh)[colnames(Tx_emprego.sh) == "Taxa de emprego"] = "Taxa_emprego"
-
-# Dividimos a coluna de data em uma de ano, e uma de trimestre:
-date <- do.call(rbind, strsplit(Tx_emprego.sh$Trimestre, " ")) 
-colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
-
-# Retornamos a data atualizada para o dataframe anterior
-Tx_emprego.sh <- Tx_emprego.sh %>% 
-  select(Taxa_emprego)
-Tx_emprego.sh <- cbind(Tx_emprego.sh,date) 
-
-# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
-# Definimos padrão para a criação dos trimestres, a partir do mês
-
-Tx_emprego.sh$Dia <- 01  
-
-Tx_emprego.sh$Mes <- ifelse(Tx_emprego.sh$Trimestre=="Q1",1,
-                     ifelse(Tx_emprego.sh$Trimestre=="Q2",4,
-                     ifelse(Tx_emprego.sh$Trimestre=="Q3",7,10))) 
-
-
-Tx_emprego.sh$Ano <- as.numeric(Tx_emprego.sh$Ano)
-
-# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
-Tx_emprego.sh$Data <-as.yearqtr(with(Tx_emprego.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
-
-# Voltamos para colunas originais
-Tx_emprego.sh<- Tx_emprego.sh %>%
-   select(Taxa_emprego, Data)
-
-#Checando formato
-class(Tx_emprego.sh$Data)
+ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
+  ggtitle("Figura 1: Taxa de Ocupação por Raça e Gênero") + # plot title
+  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Categoria", x = "Trimestre", y = "Taxa de ocupação") + # setting legend title
+   theme(plot.title = element_text(hjust = 0.5))
 ```
+
+
 
 
 ```{r echo=FALSE}
@@ -220,9 +224,10 @@ ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) +
   geom_line(size=2) + # defining line thickness
   geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
   ggtitle("Figura 2: Taxa de Ocupação por Região") + # plot title
-  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
-  labs(color = "Regiao") # setting legend title
+  labs(color = "Regiao", x = "Trimestre", y = "Taxa de ocupação")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 ``` {r include=FALSE}
@@ -396,9 +401,9 @@ qui_desemREG <- ordem_desemREG[5]
 ```
 
 
-Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o trimestre em `r desemprego*100`%. A região `r min_REG_2023_04$Regiao` registrou maior desemprego ao fim do último trimestre (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor resultado no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, `r min_RG_2023_04$Categoria` foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria `r max_RG_2023_04$Categoria`, de `r qua_desemRG*100`%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o `r q`º trimestre de `r i` em `r desemprego*100`%. A região `r min_REG_2023_04$Regiao` registrou maior desemprego no trimestre de referência (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor desemprego no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, "`r min_RG_2023_04$Categoria`" foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria "`r max_RG_2023_04$Categoria`", de `r qua_desemRG*100`%. 
 
-Veja mais dados de ocupação nas figuras 1 e 2.
+Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
 
 ## Informalidade
 
@@ -491,9 +496,10 @@ ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) +
   geom_line(size=2) + # defining line thickness
   geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
   ggtitle("Figura 3: Taxa de Informalidade por Raça e Gênero") + # plot title
-  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
-  labs(color = "Categoria") # setting legend title
+  labs(color = "Categoria", x = "Trimestre", y = "Taxa de Informalidade")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
@@ -535,7 +541,7 @@ informal.REG.sh<- informal.REG.sh %>%
    select(Regiao, Formal, Informal, Data)
 
 #Checando formato
-class(informal.RG.sh$Data)
+class(informal.REG.sh$Data)
 ```
 
 
@@ -545,60 +551,20 @@ ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) +
   geom_line(size=2) + # defining line thickness
   geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
   ggtitle("Figura 4: Taxa de Informalidade por Região") + # plot title
-  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
-  labs(color = "Regiao") # setting legend title
+  labs(color = "Regiao", x = "Trimestre", y = "Taxa de Informalidade")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
 
 ```{r include=FALSE}
-# Informalidade média - atualizando data
-
-#Renomeando colunas
-colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "informalidade_media"
-
-
-#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
-
-# Dividimos a coluna de data em uma de ano, e uma de trimestre:
-date <- do.call(rbind, strsplit(informalidadeMedia.sh$Trimestre, " ")) 
-colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
-
-# Retornamos a data atualizada para o dataframe anterior
-informalidadeMedia.sh <- informalidadeMedia.sh %>% 
-  select(informalidade_media)
-informalidadeMedia.sh <- cbind(informalidadeMedia.sh,date) 
-
-# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
-# Definimos padrão para a criação dos trimestres, a partir do mês
-
-informalidadeMedia.sh$Dia <- 01  
-
-informalidadeMedia.sh$Mes <- ifelse(informalidadeMedia.sh$Trimestre=="Q1",1,
-                     ifelse(informalidadeMedia.sh$Trimestre=="Q2",4,
-                     ifelse(informalidadeMedia.sh$Trimestre=="Q3",7,10))) 
-
-
-informalidadeMedia.sh$Ano <- as.numeric(informalidadeMedia.sh$Ano)
-
-# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
-informalidadeMedia.sh$Data <-as.yearqtr(with(informalidadeMedia.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
-
-# Voltamos para colunas originais
-informalidadeMedia.sh<- informalidadeMedia.sh %>%
-   select(informalidade_media, Data)
-
-#Checando formato
-class(informal.RG.sh$Data)
-
-
-
 # Informalidade média (Atualizar tri e ano)
 
-informalidade <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Data == "2023 Q4"]
+informalidade <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 Q4"]
 
-informalidade_tri_anterior <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Data == "2023 Q3"]
+informalidade_tri_anterior <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 Q3"]
 
 dif_informalidade_tri <- informalidade - informalidade_tri_anterior
 
@@ -703,7 +669,7 @@ diftri_informalidadeMN <- informal_HN - informal_tri_anterior_MN
 
 
 ## Ano anterior
-informalidade_ano_anterior <- informalidadeMedia.sh$informalidade_media[informalidadeMedia.sh$Data == "2022 Q4"]
+informalidade_ano_anterior <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2022 Q4"]
 difano_informalRG <- informalidade - informalidade_ano_anterior
 
 informal_ano_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Data == "2022 Q4"]
@@ -759,11 +725,13 @@ qua_infanoRG <- ordem_infanoRG[4]
 
 ```
 
-Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.]. A taxa de informalidade média do Brasil ficou em `r (informalidade)*100`% e a região com maior informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de informalidade (`r qui_infREG*100`%). 
+Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.]. A taxa de informalidade média do Brasil ficou em `r informalidade*100`% e a região com maior informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de informalidade (`r qui_infREG*100`%). 
 
-No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria `r max_Inf_RG_2023_04$Categoria`, com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r (dif_informalidade_tri)*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
+No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r dif_informalidade_tri*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
 
-Na comparação anual, a variação média do Brasil foi de `r (difano_informalRG)*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. Veja mais nas figuras 3 e 4.
+Na comparação anual, a variação média do Brasil foi de `r difano_informalRG*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. 
+
+Veja o comportamento das séries de informalidade nas figuras 3 e 4.
 
 
 
@@ -956,9 +924,11 @@ class(RendaHabit.RG.sh$Data)
 
 ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria)) + 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Figura 5: Rendimento Habitual por Raça e Gênero (reais de 2024)") + #titulo do grafico
+  ggtitle("Figura 5: Rendimento Habitual por Raça e Gênero (Reais de 2024)") + #titulo do grafico
   scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
-  theme_bw() # colocando fundo Branco
+  theme_bw() + # colocando fundo Branco
+  labs(color = "Categoria", x = "Trimestre", y = "Renda Habitual") + # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
@@ -1007,7 +977,9 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
 
-O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). Veja os dados na figura 5.
+O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). 
+
+As séries estão plotadas na figura 5.
 
 # Distribuição: Índice de Gini
 
@@ -1087,11 +1059,12 @@ class(giniBR.sh$Data)
 
 ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria)) + 
   geom_line(size=2) + # defining line thickness
-  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil"), linetype = "dashed") + # adding average Gini line
+  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil (média)"), linetype = "dashed") + # adding average Gini line
   ggtitle("Figura 6: Índice de Gini por Raça e Gênero") + # plot title
   scale_colour_manual(name = "Categoria", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
-  labs(color = "Categoria") # setting legend title
+  labs(color = "Categoria", x = "Trimestre", y = "Índice de Gini")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 ```{r include=FALSE}
@@ -1133,11 +1106,12 @@ class(giniUF.sh$Data)
 
 ggplot(giniUF.sh, aes(x=Data, y=gini, color=Regiao)) + 
   geom_line(size=2) + # defining line thickness
-  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil"), linetype = "dashed") + # adding average Gini line
+  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil (média)"), linetype = "dashed") + # adding average Gini line
   ggtitle("Figura 7: Índice de Gini por Região") + # plot title
-  scale_colour_manual(name = "Regiao", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
-  labs(color = "Regiao") # setting legend title
+  labs(color = "Regiao", x = "Trimestre", y = "Índice de Gini")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 
@@ -1183,7 +1157,7 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 
 O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`.
 
-Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao`, acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, o índice de Gini é maior para a categoria `r max_GINI_RG_2023_04$Categoria` e menor na categoria `r min_GINI_RG_2023_04$Categoria`.
+Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao`, acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, o índice de Gini é maior para a categoria "`r max_GINI_RG_2023_04$Categoria`" e menor na categoria "`r min_GINI_RG_2023_04$Categoria`".
 
 
 # Percentis de renda
