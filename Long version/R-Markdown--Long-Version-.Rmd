@@ -266,13 +266,13 @@ qua_desemRG <- ordem_desemRG[4]
 
 # Máximo de 2023 Q4
 maxRG_2023_04 <- EMPREGO.RG.sh %>%
-  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero
+  filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero
   filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
   select(Categoria) #peço a categoria associada
 
 # Mínimo de 2023 Q4      
 minRG_2023_04 <- EMPREGO.RG.sh %>%
-  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero
+  filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero
   filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Categoria) #peço a categoria associada
 
@@ -353,13 +353,13 @@ min_2023_04 <- EMPREGO.REG.sh %>%
   select(Regiao) #peço a categoria associada
 ```
 
-No `r q`º trimestre de `r i`, o desemprego ficou em `r (desemprego)*100`% no Brasil, uma queda de `r (dif_desemprego)*100` pontos percentuais em relação ao trimestre anterior. O desemprego no país no `r q`º trimestre de `r i-1` tinha atingido `r (desemprego_ano)*100`%. Houve, portanto, uma importante queda deste indicador no período de um ano. A categoria de `r maxRG_2023_04[,1]` foi quem teve a maior taxa de emprego, enquanto a de `r minRG_2023_04[,1]` foi quem teve a menor. 
+No `r q`º trimestre de `r i`, o desemprego ficou em `r (desemprego)*100`% no Brasil, uma queda de `r desem_tri*100` pontos percentuais em relação ao trimestre anterior. O desemprego no país no `r q`º trimestre de `r i-1` tinha atingido `r (desemprego_ano)*100`%. Houve, portanto, uma importante queda deste indicador no período de um ano. A categoria de `r maxRG_2023_04[,1]` foi quem teve a maior taxa de emprego, enquanto a de `r minRG_2023_04[,1]` foi quem teve a menor. 
 
 Observamos que a taxa de desemprego das mulheres negras foi de `r (desemprego_MN)*100`% e, para as mulheres brancas, o desemprego ficou em `r (desemprego_MB)*100`%. Os homens brancos tiveram taxa de desemprego no patamar de `r (desemprego_HB)*100`%. Para os homens negros, a taxa foi de `r (desemprego_HN)*100`%.
 
 No período de um ano, isto é, comparando-se os dados do trimestre de referência com o mesmo período de `r i-1`, a situação melhorou. O desemprego entre homens brancos caiu `r (desemanoHB)*100` pontos percentuais e, o de homens negros, `r (desemanoHN)*100` p.p. Para as mulheres brancas, o desemprego teve um recuo de `r (desemanoMB)*100` p.p. e, para mulheres negras, registrou-se queda de `r (desemanoMN)*100` pontos percentuais.
 
-Regionalmente, o desemprego também apresentou tendência de queda no `r q`º trimestre de `r i`. A região Norte, registrou a maior taxa de desemprego de `r (max_desemRG)*100`% (queda de `r (desemanoNO)*100` pontos percentuais em um ano). A menor taxa de desemprego foi registrada na região Sul, `r (desemprego_sul)*100`%, com diferença de `r (dif_desemprego_Sul)*100` p.p. em um ano. Na região Nordeste, a taxa de desemprego registrada foi de `r (desemprego_nordeste)*100`% (recuo de `r (dif_desemprego_Nordeste)*100` p.p. em um ano). Na região Centro-Oeste, a taxa de desemprego medida foi de `r (desemprego_centrooeste)*100`% (queda de `r (dif_desemprego_CentroOeste)*100` p.p. em um ano). Por fim, na região Sudeste, a taxa de desemprego registrada foi de `r (desemprego_sudeste)*100`% (recuo de `r (dif_desemprego_Sudeste)*100` p.p. em um ano).
+Regionalmente, o desemprego também apresentou tendência de queda no `r q`º trimestre de `r i`. A região Norte, registrou a maior taxa de desemprego de `r (max_desemREG)*100`% (queda de `r (desemanoNO)*100` pontos percentuais em um ano). A menor taxa de desemprego foi registrada na região Sul, `r (desemprego_SU)*100`%, com diferença de `r (desemanoSU)*100` p.p. em um ano. Na região Nordeste, a taxa de desemprego registrada foi de `r (desemprego_NE)*100`% (recuo de `r (desemanoNE)*100` p.p. em um ano). Na região Centro-Oeste, a taxa de desemprego medida foi de `r (desemprego_CO)*100`% (queda de `r (desemanoCO)*100` p.p. em um ano). Por fim, na região Sudeste, a taxa de desemprego registrada foi de `r (desemprego_SE)*100`% (recuo de `r (desemanoSE)*100` p.p. em um ano).
 
 ```{r include=FALSE}
 # Primeiro, vamos dividir a coluna de data em uma de ano, e uma de trimestre:
