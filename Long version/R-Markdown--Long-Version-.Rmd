@@ -29,34 +29,33 @@ library(kableExtra)
 library(zoo)
 library(gplots)
 library(ggplot2)
-
 #devtools::install_github("kupietz/kableExtra")
 
 # Setting work directory (Github)-----------------------------------------------
 
-file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
-  gsub("\\Long version", "", .)
+#file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
+#  gsub("\\Long version", "", .)
 
-setwd(file_directory)
+#setwd(file_directory)
 
-getwd()
+#getwd()
 
 # Reading PNADc file------------------------------------------------------------
 
 i=2023
 q=4
 
-folder_path <- "Input/"
+#folder_path <- "Input/"
 
-file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
+#file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
 
-load(file_path)
+#load(file_path)
 
 
 
 #Eslen
-#setwd("C:/Users/USER/Desktop/GitHub/Relatorio_PNAD_Continua")
-#load("C:/Users/USER/Desktop/GitHub/.github/PNADc-Report/Input/PNADc_complete_time_series_042023.RData")
+#setwd("C:/Users/USER/Desktop/GitHub/.github/PNADc-Report/Input/Relatorio_PNAD_Continua")
+load("C:/Users/USER/Desktop/GitHub/.github/PNADc-Report/Input/PNADc_complete_time_series_042023.RData")
 
 #Clara
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
@@ -174,12 +173,13 @@ ggplot(PEA.RG.sh, aes(x=Data, y=PEA, colour = Categoria))+
 
 
 ```{r include=FALSE}
+colnames(PEA.REG.sh)[colnames(PEA.REG.sh) == "Regiao"] = "Região"
 
 date <- do.call(rbind, strsplit(PEA.REG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
 PEA.REG.sh <- PEA.REG.sh %>% 
-  select(PEA, Regiao)
+  select(PEA, Região)
 PEA.REG.sh <- cbind(PEA.REG.sh,date) 
 
 PEA.REG.sh$Dia <- 01  
@@ -193,12 +193,12 @@ PEA.REG.sh$Ano <- as.numeric(PEA.REG.sh$Ano)
 PEA.REG.sh$Data <-as.yearqtr(with(PEA.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 PEA.REG.sh<- PEA.REG.sh %>%
-   select(PEA, Regiao, Data)
+   select(PEA, Região, Data)
 ```
 
 ```{r echo=FALSE}
 
-ggplot(PEA.REG.sh, aes(x=Data, y=PEA, color=Regiao))+ 
+ggplot(PEA.REG.sh, aes(x=Data, y=PEA, color=Região))+ 
   geom_line(size=2) + # definindo grossura da linha
   scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   ggtitle("Taxa de Participação por Região") + #titulo do grafico
@@ -416,7 +416,9 @@ ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+
 colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
 colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
 colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
-
+colnames(ESCOLARIDADE.REG)[colnames(ESCOLARIDADE.REG) == "Ensino fundamental"] ="ensino_fundamental"
+colnames(ESCOLARIDADE.REG)[colnames(ESCOLARIDADE.REG) == "Ensino médio"] ="ensino_medio"
+colnames(ESCOLARIDADE.REG)[colnames(ESCOLARIDADE.REG) == "Ensino superior"] ="ensino_superior"
 
   ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
   ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
@@ -437,8 +439,24 @@ escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mu
 escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
 
 #Região
-max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
-max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
+escol_fund_NO <- ESCOLARIDADE.REG$ensino_fundamental[ESCOLARIDADE.REG$Categoria == "Norte"]
+escol_fund_NE <- ESCOLARIDADE.REG$ensino_fundamental[ESCOLARIDADE.REG$Categoria == "Nordeste"]
+escol_fund_CO <- ESCOLARIDADE.REG$ensino_fundamental[ESCOLARIDADE.REG$Categoria == "Centro-Oeste"]
+escol_fund_SE <- ESCOLARIDADE.REG$ensino_fundamental[ESCOLARIDADE.REG$Categoria == "Sudeste"]
+escol_fund_SU <- ESCOLARIDADE.REG$ensino_fundamental[ESCOLARIDADE.REG$Categoria == "Sul"]
+
+escol_sup_NO <- ESCOLARIDADE.REG$ensino_superior[ESCOLARIDADE.REG$Categoria == "Norte"]
+escol_sup_NE <- ESCOLARIDADE.REG$ensino_superior[ESCOLARIDADE.REG$Categoria == "Nordeste"]
+escol_sup_CO <- ESCOLARIDADE.REG$ensino_superior[ESCOLARIDADE.REG$Categoria == "Centro-Oeste"]
+escol_sup_SE <- ESCOLARIDADE.REG$ensino_superior[ESCOLARIDADE.REG$Categoria == "Sudeste"]
+escol_sup_SU <- ESCOLARIDADE.REG$ensino_superior[ESCOLARIDADE.REG$Categoria == "Sul"]
+
+
+sup_regs <- c(escol_sup_NO, escol_sup_NE, escol_sup_CO, escol_sup_SE, escol_sup_SU)
+fund_regs <- c(escol_fund_NO, escol_fund_NE, escol_fund_CO, escol_fund_SE, escol_fund_SU)
+
+max_escol_sup <- max(sup_regs)
+max_escol_fund <- max(fund_regs)
 
 ```
 
@@ -564,12 +582,13 @@ ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria))+
 
 ```{r include=FALSE}
 colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
+colnames(informal.REG.sh)[colnames(informal.REG.sh) == "Regiao"] = "Região"
 
 date <- do.call(rbind, strsplit(informal.REG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
 informal.REG.sh <- informal.REG.sh %>% 
-  select(Informal, Regiao)
+  select(Informal, Região)
 informal.REG.sh <- cbind(informal.REG.sh,date) 
 
 informal.REG.sh$Dia <- 01  
@@ -583,12 +602,12 @@ informal.REG.sh$Ano <- as.numeric(informal.REG.sh$Ano)
 informal.REG.sh$Data <-as.yearqtr(with(informal.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 informal.REG.sh<- informal.REG.sh %>%
-   select(Informal, Regiao, Data)
+   select(Informal, Região, Data)
 ```
 
 
 ```{r echo=FALSE}
-ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao))+ 
+ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Região))+ 
   geom_line(size=2) + # definindo grossura da linha
   ggtitle("Taxa de Informalidade por Região") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
@@ -830,26 +849,28 @@ giniRG.sh$Ano <- as.numeric(giniRG.sh$Ano)
 giniRG.sh$Data <-as.yearqtr(with(giniRG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 giniRG.sh<- giniRG.sh %>%
-   select(gini, Categoria, Data)
+   select(gini, Categoria, Trimestre)
 
 ```
 
 ```{r echo=FALSE}
 
-ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria))+ 
+ggplot(giniRG.sh, aes(x=Trimestre, y=gini, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Índice de Gini por RaÇa e Gênero") + #titulo do grafico
+  ggtitle("Índice de Gini por Raça e Gênero") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
 
 ```{r include=FALSE}
 
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Regiao"] = "Região"
+
 date <- do.call(rbind, strsplit(giniUF.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
 giniUF.sh <- giniUF.sh %>% 
-  select(gini, Regiao)
+  select(gini, Região)
 giniUF.sh <- cbind(giniUF.sh,date) 
 
 giniUF.sh$Dia <- 01  
@@ -863,14 +884,14 @@ giniUF.sh$Ano <- as.numeric(giniUF.sh$Ano)
 giniUF.sh$Data <-as.yearqtr(with(giniUF.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 giniUF.sh<- giniUF.sh %>%
-   select(gini, Regiao, Data)
+   select(gini, Região, Data)
 
 ```
 
 
 ```{r echo=FALSE}
 
-ggplot(giniUF.sh, aes(x=Data, y=gini, color=Regiao))+ 
+ggplot(giniUF.sh, aes(x=Data, y=gini, color=Região))+ 
   geom_line(size=2) + # definindo grossura da linha
   ggtitle("Índice de Gini por Região") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
