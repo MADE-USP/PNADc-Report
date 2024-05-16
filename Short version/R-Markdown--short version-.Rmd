@@ -13,8 +13,8 @@ subtitle: 1º Trimestre de 2024
 ```{r include=FALSE}
 # Definindo trimestre e ano de referência
 
-i=2023
-q=4
+i=2024
+q=1
 
 #trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
 #mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
