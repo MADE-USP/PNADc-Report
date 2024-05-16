@@ -34,23 +34,23 @@ library(ggplot2)
 
 # Setting work directory (Github)-----------------------------------------------
 
-file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
-  gsub("\\Long version", "", .)
+#file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
+#  gsub("\\Long version", "", .)
 
-setwd(file_directory)
+#setwd(file_directory)
 
-getwd()
+#getwd()
 
 # Reading PNADc file------------------------------------------------------------
 
 i=2023
 q=4
 
-folder_path <- "Input/"
+#folder_path <- "Input/"
 
-file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
+#file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
 
-load(file_path)
+#load(file_path)
 
 
 
@@ -63,7 +63,8 @@ load(file_path)
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
 
 #Hiaman
-#load("C:/Users/lauro/Desktop/PNADc/Enviados por Clara/CLARA_dados_serie_historica_042023.RData")
+load("C:/Users/lauro/Desktop/PNADc/Enviados por Clara/CLARA_dados_serie_historica_042023.RData")
+load("C:/Users/lauro/Desktop/PNADc/Enviados por Clara/CLARA_PNAD_dados_relatorio_04_2023.RData")
 # >>>>>>> d652c9436dab38d2a95b598e7f8d757feee55249
 ```
 
@@ -174,6 +175,8 @@ ggplot(PEA.RG.sh, aes(x=Data, y=PEA, colour = Categoria))+
 
 
 ```{r include=FALSE}
+colnames(PEA.RG.sh)[colnames(PEA.RG.sh) == "Data"] = "Trimestre"
+
 
 date <- do.call(rbind, strsplit(PEA.REG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
@@ -197,8 +200,8 @@ PEA.REG.sh<- PEA.REG.sh %>%
 ```
 
 ```{r echo=FALSE}
-
-ggplot(PEA.REG.sh, aes(x=Data, y=PEA, color=Regiao))+ 
+colnames(PEA.REG.sh)[colnames(PEA.REG.sh) == "Regiao"] = "Região"
+ggplot(PEA.REG.sh, aes(x=Data, y=PEA, color=Região))+ 
   geom_line(size=2) + # definindo grossura da linha
   scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   ggtitle("Taxa de Participação por Região") + #titulo do grafico
@@ -214,6 +217,9 @@ ggplot(PEA.REG.sh, aes(x=Data, y=PEA, color=Regiao))+
 
 # Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q2"]
 
+colnames(PEA.REG.sh)[colnames(PEA.REG.sh) == "Data"] = "Trimestre"
+
+
 
 colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
 
@@ -226,18 +232,18 @@ desem_ano <- ((desemprego)-(desemprego_ano))
 
 ## Desemprego por raça e gênero
 
-desemprego_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q4"])
-desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q4"])
-desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q4"])
-desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q4"])
+desemprego_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
+desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q4"])
 
 
 ##Trimestre anterior
 
-desem_triHB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q3"])
-desem_triHN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q3"])
-desem_triMB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q3"])
-desem_triMN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q3"])
+desem_triHB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desem_triHN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desem_triMB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
+desem_triMN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Trimestre == "2023 Q3"])
 
 desemtriMB <- (desemprego_MB - desem_triMB)
 desemtriMN <- (desemprego_MN - desem_triMN)
@@ -266,13 +272,13 @@ qua_desemRG <- ordem_desemRG[4]
 
 # Máximo de 2023 Q4
 maxRG_2023_04 <- EMPREGO.RG.sh %>%
-  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero
+  filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero
   filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
   select(Categoria) #peço a categoria associada
 
-# Mínimo de 2023 Q4      
+ #Mínimo de 2023 Q4      
 minRG_2023_04 <- EMPREGO.RG.sh %>%
-  filter(Data == "2023 Q4") %>% #filtro pelo trimestre que quero
+  filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero
   filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Categoria) #peço a categoria associada
 
@@ -341,25 +347,23 @@ qua_desemanoREG <- ordem_desem_anoREG[4]
 qui_desemanoREG <- ordem_desem_anoREG[5]
 
 # Máximo de 2023 Q4
-max_2023_04 <- EMPREGO.REG.sh %>%
+maxREG_2023_04 <- EMPREGO.REG.sh %>%
   filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero
-  filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
-  select(Regiao) #peço a categoria associada
+filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
+select(Regiao) #peço a categoria associada
 
 # Mínimo de 2023 Q4      
-min_2023_04 <- EMPREGO.REG.sh %>%
-  filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero
+minREG_2023_04 <- EMPREGO.REG.sh %>%
+filter(Trimestre == "2023 Q4") %>% #filtro pelo trimestre que quero
   filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Regiao) #peço a categoria associada
 ```
 
-No `r q`º trimestre de `r i`, o desemprego ficou em `r (desemprego)*100`% no Brasil, uma queda de `r (dif_desemprego)*100` pontos percentuais em relação ao trimestre anterior. O desemprego no país no `r q`º trimestre de `r i-1` tinha atingido `r (desemprego_ano)*100`%. Houve, portanto, uma importante queda deste indicador no período de um ano. A categoria de `r maxRG_2023_04[,1]` foi quem teve a maior taxa de emprego, enquanto a de `r minRG_2023_04[,1]` foi quem teve a menor. 
 
-Observamos que a taxa de desemprego das mulheres negras foi de `r (desemprego_MN)*100`% e, para as mulheres brancas, o desemprego ficou em `r (desemprego_MB)*100`%. Os homens brancos tiveram taxa de desemprego no patamar de `r (desemprego_HB)*100`%. Para os homens negros, a taxa foi de `r (desemprego_HN)*100`%.
+Observamos que a taxa de desemprego das mulheres negras foi de `r (desemprego_MN)*100`% e, para as mulheres brancas, o desemprego ficou em `r (desemprego_MB)*100`%. Os homens brancos tiveram taxa de desemprego no patamar de `r (desemprego_HB)*100`%. Para os homens negros, a taxa foi de `r (desemprego_HN)*100`%. A categoria de `r maxRG_2023_04[,1]` foi quem teve a maior taxa de emprego, enquanto a de `r minRG_2023_04[,1]` foi quem teve a menor.
 
-No período de um ano, isto é, comparando-se os dados do trimestre de referência com o mesmo período de `r i-1`, a situação melhorou. O desemprego entre homens brancos caiu `r (desemanoHB)*100` pontos percentuais e, o de homens negros, `r (desemanoHN)*100` p.p. Para as mulheres brancas, o desemprego teve um recuo de `r (desemanoMB)*100` p.p. e, para mulheres negras, registrou-se queda de `r (desemanoMN)*100` pontos percentuais.
 
-Regionalmente, o desemprego também apresentou tendência de queda no `r q`º trimestre de `r i`. A região Norte, registrou a maior taxa de desemprego de `r (max_desemRG)*100`% (queda de `r (desemanoNO)*100` pontos percentuais em um ano). A menor taxa de desemprego foi registrada na região Sul, `r (desemprego_sul)*100`%, com diferença de `r (dif_desemprego_Sul)*100` p.p. em um ano. Na região Nordeste, a taxa de desemprego registrada foi de `r (desemprego_nordeste)*100`% (recuo de `r (dif_desemprego_Nordeste)*100` p.p. em um ano). Na região Centro-Oeste, a taxa de desemprego medida foi de `r (desemprego_centrooeste)*100`% (queda de `r (dif_desemprego_CentroOeste)*100` p.p. em um ano). Por fim, na região Sudeste, a taxa de desemprego registrada foi de `r (desemprego_sudeste)*100`% (recuo de `r (dif_desemprego_Sudeste)*100` p.p. em um ano).
+Regionalmente, o desemprego também apresentou tendência de queda no `r q`º trimestre de `r i`. A região Norte, registrou a maior taxa de desemprego de `r (max_desemRG)*100`% (queda de `r (desemanoNO)*100` pontos percentuais em um ano). A menor taxa de desemprego foi registrada na região Sul, `r (desemprego_SU)*100`%, com diferença de `r (desemanoSU)*100` p.p. em um ano. Na região Nordeste, a taxa de desemprego registrada foi de `r (desemprego_NO)*100`% (recuo de `r (desemano_NO)*100` p.p. em um ano). Na região Centro-Oeste, a taxa de desemprego medida foi de `r (desemprego_CO)*100`% (queda de `r (desemano_CO)*100` p.p. em um ano). Por fim, na região Sudeste, a taxa de desemprego registrada foi de `r (desemprego_SE)*100`% (recuo de `r (desemano_SE)*100` p.p. em um ano).
 
 ```{r include=FALSE}
 # Primeiro, vamos dividir a coluna de data em uma de ano, e uma de trimestre:
@@ -412,6 +416,8 @@ ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria))+
 
 ### Escolaridade
 ```{r include=FALSE}
+colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
+
 #ESCOLARIDADE
 colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
 colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
@@ -563,6 +569,8 @@ ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria))+
 ```
 
 ```{r include=FALSE}
+
+colnames(informal.RG.sh)[colnames(informal.RG.sh) == "Data"] = "Trimestre"
 colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
 
 date <- do.call(rbind, strsplit(informal.REG.sh$Trimestre, " ")) 
@@ -588,7 +596,10 @@ informal.REG.sh<- informal.REG.sh %>%
 
 
 ```{r echo=FALSE}
-ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao))+ 
+colnames(informal.REG.sh)[colnames(informal.REG.sh) == "Regiao"] = "Região"
+
+
+ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Região))+ 
   geom_line(size=2) + # definindo grossura da linha
   ggtitle("Taxa de Informalidade por Região") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
@@ -606,6 +617,8 @@ A região Nordeste foi a que apresentou maior taxa média se subocupação, de `
 ## Emprego por setor
 
 ```{r include=FALSE}
+
+colnames(informal.REG.sh)[colnames(informal.REG.sh) == "Data"] = "Trimestre"
 
 #colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Homem Branco"] = "Homem_Branco"
 colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Administração Pública"] = "Adm_pública"
@@ -769,6 +782,8 @@ ggplot(RendaEfet.RG.sh, aes(x=Data, y=Renda_Efetiva_RG, color=Categoria))+
 ```
 
 ```{r include=FALSE}
+colnames(RendaEfet.RG.sh)[colnames(RendaEfet.RG.sh) == "Data"] = "Trimestre"
+
 date <- do.call(rbind, strsplit(RendaHabit.RG.sh$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
@@ -838,7 +853,7 @@ giniRG.sh<- giniRG.sh %>%
 
 ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria))+ 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Índice de Gini por RaÇa e Gênero") + #titulo do grafico
+  ggtitle("Índice de Gini por Raça e Gênero") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() # colocando fundo Branco
 ```
@@ -869,12 +884,15 @@ giniUF.sh<- giniUF.sh %>%
 
 
 ```{r echo=FALSE}
-
-ggplot(giniUF.sh, aes(x=Data, y=gini, color=Regiao))+ 
-  geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Índice de Gini por Região") + #titulo do grafico
+colnames(giniUF.sh)[colnames(giniUF.sh) == "Regiao"] = "Região"
+ggplot(giniUF.sh, aes(x=Trimestre, y=gini, color=Região))+ 
+  geom_line(size=2) + #definindo grossura da linha
+  ggtitle("Indice de Gini por Região") + #titulo do grafico
     scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41","#FFAB4D")) + #cores Made
   theme_bw() # colocando fundo Branco
+```
+```{r include=FALSE}
+colnames(giniUF.sh)[colnames(giniUF.sh) == "Região"] = "Regiao"
 ```
 
 Observamos que as regiões Nordeste e Norte apresentam desigualdade levemente maior do que a reportada para todo o território nacional no trimestre analisado, com índices de Gini iguais a `r giniUF.sh$gini[giniUF.sh$Regiao == "Nordeste" & giniUF.sh$Trimestre == "2023 Q4"]` e `r giniUF.sh$gini[giniUF.sh$Regiao == "Norte" & giniUF.sh$Trimestre == "2023 Q4"]`, respectivamente. Para as outras regiões, calcularam-se os seguintes índices de Gini: Centro-Oeste, `r giniUF.sh$gini[giniUF.sh$Regiao == "Centro-Oeste" & giniUF.sh$Trimestre == "2023 Q4"]`; Sudeste, `r giniUF.sh$gini[giniUF.sh$Regiao == "Sudeste" & giniUF.sh$Trimestre == "2023 Q4"]`; e Sul, `r giniUF.sh$gini[giniUF.sh$Regiao == "Sul" & giniUF.sh$Trimestre == "2023 Q4"]`.
