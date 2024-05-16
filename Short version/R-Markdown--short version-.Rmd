@@ -1196,3 +1196,8 @@ Clique abaixo para dados completos:
 [Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
 
 [Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/1HNiCJ2wPMjPWRs8-5EQQT5IMxP5qPdrG/view?usp=sharing)
+
+
+# Dados e códigos
+
+Os arquivos de código e dados extraídos da PNADc (IBGE, 2024) utilizados para gerar esta publicação trimestral estão disponíveis [neste repositório no GitHub](https://made-usp.github.io/PNADc-Report/. 
