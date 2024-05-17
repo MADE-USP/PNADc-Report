@@ -1025,5 +1025,5 @@ Por fim, são disponibilizadas as tabelas com dados completos:
 
 # Dados e códigos
 
-Os arquivos de código e dados extraídos da PNADc (IBGE, 2024) utilizados para gerar esta publicação trimestral estão disponíveis [neste repositório no GitHub](https://made-usp.github.io/PNADc-Report/. 
+Os arquivos de código e dados extraídos da PNADc (IBGE, 2024) utilizados para gerar esta publicação trimestral estão disponíveis [neste repositório no GitHub](https://made-usp.github.io/PNADc-Report/). 
 
