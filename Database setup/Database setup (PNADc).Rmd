@@ -36,8 +36,8 @@ library(ggplot2)
 ```{r include=FALSE}
 #Comando para importar os dados da PNADC
 
-i=2023 #ano
-q=4 #trimestre
+i=2024 #ano
+q=1 #trimestre
 
 pnad <- get_pnadc(year = i,                        
                   quarter = q,
@@ -73,18 +73,18 @@ pnad <- get_pnadc(year = i,
 
 
 #save(pnad,file='C:/Users/Marina Sanches/OneDrive/Made/pnadc_042023.RData')
-#save(pnad,file="H:/Meu Drive/Documentos/Made/relatorio_pnad/pnadc_042023.RData")
+save(pnad,file="H:/Meu Drive/Documentos/Made/relatorio_pnad/pnadc_012024.RData")
 #save(pnad,file='C:/Users/Tainari/Documents/1.1-Mestrado/1.2 - Doutorado/MADE/Relatorio_PNAD/pnadc_042023.RData')
-save(pnad,file='C:/Users/USER/Documents/PNAD/pnadc_042023.RData')
+#save(pnad,file='C:/Users/USER/Documents/PNAD/pnadc_042023.RData')
 
-load('C:/Users/USER/Documents/PNAD/pnadc_042023.RData')
-load('C:/Users/USER/Documents/PNAD/dados_serie_historica_032023_FINAL_ze_08_02.RData')
-
+#load('C:/Users/USER/Documents/PNAD/pnadc_042023.RData')
+#load('C:/Users/USER/Documents/PNAD/dados_serie_historica_032023_FINAL_ze_08_02.RData')
 #load('C:/Users/USER/Documents/PNAD/pnadc_032023.RData')
 #load('C:/Users/Marina Sanches/OneDrive/Made/pnadc_012023.RData')
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/pnadc_012023.RData")
 #load('C:/Users/Tainari/Documents/1.1-Mestrado/1.2 - Doutorado/MADE/Relatorio_PNAD/pnadc_012023.RData')
 
+load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
 
 
 
@@ -181,6 +181,7 @@ PEA.RG <- PEA.RG %>%
 
 PEA.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
 
+PEA.RG$Trimestre <- as.character(PEA.RG$Trimestre)
 
 PEA.RG.sh <- rbind(PEA.RG.sh,PEA.RG)
 
@@ -228,7 +229,7 @@ PEA.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Centro-O
                     "Homem Branco Sul", "Homem Negro Sul",
                     "Mulher Branca Sul", "Mulher Negra Sul")
 
-
+PEA.RG.REG$Trimestre <- as.character(PEA.RG.REG$Trimestre)
 
 PEA.RG.REG.sh <- rbind(PEA.RG.REG.sh,PEA.RG.REG)
 
@@ -267,7 +268,7 @@ PEA.REG <- PEA.REG %>%
 
 PEA.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
 
-
+PEA.REG$Trimestre <- as.character(PEA.REG$Trimestre)
 
 PEA.REG.sh <- rbind(PEA.REG.sh,PEA.REG)
 
@@ -309,6 +310,9 @@ Tx_emprego$Trimestre<-as.yearqtr(with(Tx_emprego,paste(Ano,Month,Day,sep="-")),"
 Tx_emprego <- Tx_emprego %>%
   select(-'Ano', -'Quarter', -'Day',-'Month')
 
+Tx_emprego$Trimestre <- as.character(Tx_emprego$Trimestre)
+
+
 Tx_emprego.sh<- rbind(Tx_emprego.sh,Tx_emprego)
 
 
@@ -326,6 +330,8 @@ Tx_desemprego$Trimestre<-as.yearqtr(with(Tx_desemprego,paste(Ano,Month,Day,sep="
 
 Tx_desemprego <- Tx_desemprego %>%
   select(-'Ano', -'Quarter', -'Day',-'Month')
+
+Tx_desemprego$Trimestre <- as.character(Tx_desemprego$Trimestre)
 
 Tx_desemprego.sh<- rbind(Tx_desemprego.sh,Tx_desemprego)
 
@@ -361,6 +367,7 @@ EMPREGO.RG <- EMPREGO.RG %>%
 
 EMPREGO.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
 
+EMPREGO.RG$Trimestre <- as.character(EMPREGO.RG$Trimestre)
 
 EMPREGO.RG.sh <- rbind(EMPREGO.RG.sh,EMPREGO.RG)
 
@@ -405,6 +412,7 @@ EMPREGO.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Cent
                     "Homem Branco Sul", "Homem Negro Sul",
                     "Mulher Branca Sul", "Mulher Negra Sul")
 
+EMPREGO.RG.REG$Trimestre <- as.character(EMPREGO.RG.REG$Trimestre)
 
 EMPREGO.RG.REG.sh <- rbind(EMPREGO.RG.REG.sh,EMPREGO.RG.REG)
 
@@ -442,7 +450,7 @@ EMPREGO.REG <- EMPREGO.REG %>%
 
 EMPREGO.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
 
-
+EMPREGO.REG$Trimestre <- as.character(EMPREGO.REG$Trimestre)
 
 EMPREGO.REG.sh <- rbind(EMPREGO.REG.sh,EMPREGO.REG)
 
@@ -476,6 +484,8 @@ informalidadeMedia$Trimestre<-as.yearqtr(with(informalidadeMedia,paste(Ano,Month
 
 informalidadeMedia <- informalidadeMedia %>%
   select(-'Ano', -'Quarter', -'Day',-'Month')
+
+informalidadeMedia$Trimestre <- as.character(informalidadeMedia$Trimestre)
 
 informalidadeMedia.sh<- rbind(informalidadeMedia.sh,informalidadeMedia)
 
@@ -511,6 +521,8 @@ informal.RG <- informal.RG %>%
   select(-'Ano', -'Quarter', -'Day',-'Month')
 
 informal.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
+
+informal.RG$Trimestre <- as.character(informal.RG$Trimestre)
 
 
 informal.RG.sh <- rbind(informal.RG.sh,informal.RG)
@@ -557,7 +569,7 @@ informal.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Cen
                     "Homem Branco Sul", "Homem Negro Sul",
                     "Mulher Branca Sul", "Mulher Negra Sul")
 
-
+informal.RG.REG$Trimestre <- as.character(informal.RG.REG$Trimestre)
 
 informal.RG.REG.sh <- rbind(informal.RG.REG.sh,informal.RG.REG)
 
@@ -594,6 +606,7 @@ informal.REG <- informal.REG %>%
 
 informal.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
 
+informal.REG$Trimestre <- as.character(informal.REG$Trimestre)
 
 
 informal.REG.sh <- rbind(informal.REG.sh,informal.REG)
@@ -681,6 +694,8 @@ trabalhosetor.RG <- trabalhosetor.RG %>%
 trabalhosetor.RG <- trabalhosetor.RG %>%
   rename('Agropecuária'='agropecuária', 'Indústria'='indústria', 'Construção'='construção', 'Comércio'='comércio', 'Transporte'='transporte', 'Alimentação'='alimentação', 'Informação'='informação', 'Administração Pública'='administraçãopública', 'Educação'='educação', 'Outros serviços'='outrosserviços', 'Serviços domésticos'='serviçosdomésticos', 'Mal definido'='maldefinido') 
 
+trabalhosetor.RG$Trimestre <- as.character(trabalhosetor.RG$Trimestre)
+
 trabalhosetor.RG.sh <- rbind(trabalhosetor.RG.sh,trabalhosetor.RG)
 
 
@@ -750,6 +765,8 @@ trabalhosetor.REG <- trabalhosetor.REG %>%
 
 trabalhosetor.REG <- trabalhosetor.REG %>%
   rename('Agropecuária'='agropecuária', 'Indústria'='indústria', 'Construção'='construção', 'Comércio'='comércio', 'Transporte'='transporte', 'Alimentação'='alimentação', 'Informação'='informação', 'Administração Pública'='administraçãopública', 'Educação'='educação', 'Outros serviços'='outrosserviços', 'Serviços domésticos'='serviçosdomésticos', 'Mal definido'='maldefinido') 
+
+trabalhosetor.REG$Trimestre <- as.character(trabalhosetor.REG$Trimestre)
 
 trabalhosetor.REG.sh <- rbind(trabalhosetor.REG.sh,trabalhosetor.REG)
 
@@ -841,6 +858,8 @@ RendaEfetivaMedia$Trimestre<-as.yearqtr(with(RendaEfetivaMedia,paste(Ano,Month,D
 RendaEfetivaMedia <- RendaEfetivaMedia %>%
   select('Trimestre','RendaEfetivaMedia',-'Ano', -'Quarter', -'Day',-'Month')
 
+RendaEfetivaMedia$Trimestre <- as.character(RendaEfetivaMedia$Trimestre)
+
 RendaEfetivaMedia.sh<- rbind(RendaEfetivaMedia.sh,RendaEfetivaMedia)
 
 
@@ -880,6 +899,9 @@ RendaEfet.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher
 RendaEfet.RG <- RendaEfet.RG %>%
   select('Categoria','Trimestre', 'Renda_Efetiva_RG')
 
+RendaEfet.RG$Trimestre <- as.character(RendaEfet.RG$Trimestre)
+
+
 RendaEfet.RG.sh <- rbind(RendaEfet.RG.sh,RendaEfet.RG)
 
 
@@ -907,6 +929,9 @@ RendaHabitMedia$Trimestre<-as.yearqtr(with(RendaHabitMedia,paste(Ano,Month,Day,s
 
 RendaHabitMedia <- RendaHabitMedia %>%
   select('Trimestre','RendaHabitMedia',-'Ano', -'Quarter', -'Day',-'Month')
+
+RendaHabitMedia$Trimestre <- as.character(RendaHabitMedia$Trimestre)
+
 
 RendaHabitMedia.sh<- rbind(RendaHabitMedia.sh,RendaHabitMedia)
 
@@ -945,6 +970,7 @@ RendaHabit.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulhe
 RendaHabit.RG <- RendaHabit.RG %>%
   select("Categoria", "Trimestre", "Renda_Habitual_RG")
 
+RendaHabit.RG$Trimestre <- as.character(RendaHabit.RG$Trimestre)
 
 RendaHabit.RG.sh <- rbind(RendaHabit.RG.sh,RendaHabit.RG)
 
@@ -979,6 +1005,8 @@ giniUF$Trimestre<-as.yearqtr(with(giniUF,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d
 giniUF <- giniUF %>%
   select(-'Ano', -'Quarter', -'Day',-'Month')
 
+giniUF$Trimestre <- as.character(giniUF$Trimestre)
+
 
 giniUF.sh <- rbind(giniUF.sh,giniUF)
 
@@ -1011,7 +1039,7 @@ giniBR$Trimestre<-as.yearqtr(with(giniBR,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d
 giniBR <- giniBR %>%
   select(-'Ano', -'Quarter', -'Day',-'Month',-'SE')
 
-colnames(giniBR.sh)[colnames(giniBR.sh) == "Gini Brasil"] ="gini"
+giniBR$Trimestre <- as.character(giniBR$Trimestre)
 
 giniBR.sh <- rbind(giniBR.sh,giniBR)
 
@@ -1045,7 +1073,7 @@ giniRG$Trimestre<-as.yearqtr(with(giniRG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d
 giniRG <- giniRG %>%
   select(-'Ano', -'Quarter', -'Day',-'Month')
 
-colnames(giniRG.sh)[colnames(giniRG.sh) == "Gini Brasil"] ="gini"
+giniRG$Trimestre <- as.character(giniRG$Trimestre)
 
 giniRG.sh <- rbind(giniRG.sh,giniRG)
 
@@ -1145,161 +1173,9 @@ quantis_de_renda23_04 <- quantis_de_renda23_04 %>%
 
 ```
 
-```{r include=FALSE}
-
-# Carrega o pacote ggplot2
-library(ggplot2)
-
-# Dados
-x <- seq(0, 1, 0.1)
-y <- c(cumsum(totquant2303[-11]/rentot2303), 1)
-
-# Cria o gráfico com ggplot2
-grafico <- ggplot(data.frame(x, y), aes(x, y)) +
-  geom_line(color = "#45ff66", size=1.5) +
-  labs(x = "Quantil", y = "% da Renda", title = "Curva de Lorenz") 
-
-# Adiciona a linha de 45 graus
-grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7)
-curva_de_lorenz <- grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7)
-ggsave("curva_de_lorenz_2023_03.png", plot = curva_de_lorenz)
-
-```
-
-# Referências 
-
-# Tabelas Completas para o Segundo Trimestre de 2023
-
-## Mercado de Trabalho
-
-
-```{r}
-(PEA.RG)%>%
-  kbl(caption="PEA por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(PEA.REG)%>%
-  kbl(caption="PEA por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(PEA.RG.REG)%>%
-  kbl(caption="PEA por grupo e região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(Tx_emprego.sh)%>%
- kbl(caption="Taxa de emprego no Brasil",row.names = FALSE)%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(EMPREGO.RG)%>%
- kbl(caption="Taxa de ocupação/emprego por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(EMPREGO.RG.REG)%>%
- kbl(caption="Taxa de ocupação/emprego por grupo e por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(EMPREGO.REG)%>%
- kbl(caption="Taxa de ocupação/emprego por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(informalidadeMedia.sh)%>%
- kbl(caption="Taxa de informalidade média no Brasil",row.names = FALSE)%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(informal.RG) %>%
-  kbl(caption="Taxa de informalidade por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-
-(informal.RG.REG)  %>%
-kbl(caption="Taxa de informalidade por grupo e por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(informal.REG) %>%
- kbl(caption="Taxa de informalidade por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(SUBOCUPHORAS.RG) %>%
- kbl(caption="Subocupação por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(SUBOCUPHORAS.REG) %>%
-  kbl(caption="Subocupação por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(trabalhosetor.RG) %>%
-  kbl(caption="Setor do trabalho principal por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(trabalhosetor.RG.REG) %>%
-  kbl(caption="Setor do trabalho principal por grupo e por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(trabalhosetor.REG)  %>%
-  kbl(caption="Setor do trabalho principal por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-#(ESCOLARIDADE.RG)  %>%
-# kbl(caption="Escolaridade por grupo")%>%
-#  kable_classic_2(full_width=F,html_font="Cambria")
-
-#(ESCOLARIDADE.RG.REG)  %>%
-#  kbl(caption="Escolaridade por grupo e por região")%>%
-#  kable_classic_2(full_width=F,html_font="Cambria")
-
-#(ESCOLARIDADE.REG)  %>%
-#  kbl(caption="Escolaridade por região")%>%
-#  kable_classic_2(full_width=F,html_font="Cambria")
-
-```
-
-## Rendimento
 
 ```{r}
 
-format_real <- function(values, nsmall = 0) {
-  values %>%
-    as.numeric() %>%
-    format(nsmall = nsmall, decimal.mark = ",", big.mark = ".") %>%
-    str_trim() %>%
-    str_c("R$ ", .)
-}
-
-RendaEfet.RG[1]<-format_real(RendaEfet.RG$`Renda Efetiva`)
-RendaHabit.RG[1] <- format_real(RendaHabit.RG$`Renda Habitual`)
-RendaEfetivaMedia.sh[2] <- format_real(RendaEfetivaMedia.sh$`Renda Habitual`)
-
-
-(RendaEfetivaMedia.sh)%>%
- kbl(caption="Renda Efetiva média no Brasil",row.names = FALSE)%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-(RendaEfet.RG)  %>%
- kbl(caption="Rendimento efetivo por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-
-(RendaHabit.RG) %>%
- kbl(caption="Rendimento habitual por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(giniUF) %>%
-  kbl(caption="Índice de Gini por região")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
-
-
-(giniRG) %>%
-  kbl(caption="Índice de Gini por grupo")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
 
 percentis <- totquant2303/rentot2303 * 100
 
@@ -1307,9 +1183,7 @@ percentis <- as.data.frame(percentis)
 
 colnames(percentis)[colnames(percentis) == "percentis"] ="% da renda apropriado"
 
-(percentis) %>%
-  kbl(caption="Apropriação da Renda por percentil")%>%
-  kable_classic_2(full_width=F,html_font="Cambria")
+
 
 
 ```
@@ -1318,14 +1192,16 @@ colnames(percentis)[colnames(percentis) == "percentis"] ="% da renda apropriado"
 
 rm(pnad,pnad.Quant0)
 #load("C:/Users/USER/Documents/PNAD/PNAD_dados_relatorio_04_2023.RData")
-save.image("C:/Users/USER/Documents/PNAD/PNAD_dados_relatorio_04_2023.RData")
+save.image("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_01_2024.RData")
 ```
 
 ```{r}
 
 rm (EMPREGO.REG, EMPREGO.RG, EMPREGO.RG.REG, giniBR, giniRG, giniUF, informal.REG, informal.RG, informal.RG.REG, informalidadeMedia, PEA.REG, PEA.RG, PEA.RG.REG, RendaEfet.RG, RendaEfetivaMedia, RendaHabit.RG, trabalhosetor.REG, trabalhosetor.RG, trabalhosetor.RG.REG, Tx_desemprego, Tx_emprego,  i, q, SUBOCUPHORAS.REG, SUBOCUPHORAS.RG, percentis, curva_de_lorenz) #tudo que não tem SH 
 
-save.image("C:/Users/USER/Documents/PNAD/dados_serie_historica_042023.RData")
+save.image("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_012024.RData")
+
+#save.image("C:/Users/USER/Documents/PNAD/dados_serie_historica_012024.RData")
 ```
 
 ```{r include=FALSE}
@@ -1360,9 +1236,9 @@ final.outras$Trimestre <-as.character(final.outras$Trimestre)
 final.outras$Trimestre <- str_replace_all(final.outras$Trimestre, "2023.75", "2023 Q4")
 
 #Transformar em csv
-write.csv(quantis_de_renda23_04, "RelatórioPNAD_Dados_Renda_2304.csv")  #Gráfico de perecentis de renda
-write.csv(final.RG, file = "RelatorioPNAD_Dados_RG_2304.csv")
-write.csv(final.REG, file = "RelatorioPNAD_Dados_REG_2304.csv")
-write.csv(final.RG.REG, file = "RelatorioPNAD_Dados_RG_REG_2304.csv")
-write.csv(final.outras, file ="RelatorioPNAD_Dados_outras_sh_2304.csv")
+write.csv(quantis_de_renda23_04, "RelatórioPNAD_Dados_Renda_2401.csv")  #Gráfico de perecentis de renda
+write.csv(final.RG, file = "RelatorioPNAD_Dados_RG_2401.csv")
+write.csv(final.REG, file = "RelatorioPNAD_Dados_REG_2401.csv")
+write.csv(final.RG.REG, file = "RelatorioPNAD_Dados_RG_REG_2401.csv")
+write.csv(final.outras, file ="RelatorioPNAD_Dados_outras_sh_2401.csv")
 ```
