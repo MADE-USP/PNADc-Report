@@ -7,7 +7,7 @@
 <div style="text-align: justify;">
     Our latest publications can be found on MADE's website. You may be interested in citing our report:
 </div>
-> MADE (2024). [Relatório Trimestral PNAD - Quarto Trimestre de 2023](https://madeusp.com.br/publicacoes/artigos/relatorio-trimestral-da-pnad-quarto-trimestre-de-2023/).
+> MADE (2024). [Relatório Trimestral PNAD - Primeiro Trimestre de 2024](https://madeusp.com.br/publicacoes/artigos/relatorio-trimestral-da-pnad-primeiro-trimestre-de-2024/).
 
 ## Data
 <div style="text-align: justify;">
