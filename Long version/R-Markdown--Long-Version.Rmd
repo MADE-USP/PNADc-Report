@@ -774,7 +774,7 @@ qui_MN <- ordem_MN[5]
 
 ```
 
-A ocupação por setores no Brasil também varia consideravelmente de acordo com a raça e o gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r (max_HN)*100`%) estava alocada no setor de comércio. Seguem-se os setores de indústria e de construção, com `r (seg_HN)*100`% e `r (ter_HN)*100`% da alocação da força de trabalho de homens negros, respectivamente. Para homens brancos, o setor que mais emprega também é o comércio `r (max_HB)*100`%), além da indústria, com `r (seg_HB)*100`%, setor de informação, que emprega `r (ter_HB)*100`%, e agropecuária, com `r (qua_HB)*100`%.
+A ocupação por setores no Brasil também varia consideravelmente de acordo com a raça e o gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r (max_HN)*100`%) estava alocada no setor de comércio. Seguem-se os setores de indústria e de construção, com `r (seg_HN)*100`% e `r (ter_HN)*100`% da alocação da força de trabalho de homens negros, respectivamente. Para homens brancos, o setor que mais emprega também é o comércio `r (max_HB)*100`%), além da informação, com `r (seg_HB)*100`%, setor de indústria, que emprega `r (ter_HB)*100`%, e agropecuária, com `r (qua_HB)*100`%.
 
 Para o total de mulheres brancas empregadas, `r (max_MB)*100`% estão no setor de educação, `r (seg_MB)*100`% encontram-se no setor de comércio e `r (ter_MB*100)`% no setor de informação. Das mulheres negras, `r (max_MN)*100`% estão alocadas no setor de educação, seguido do comércio, `r (seg_MN)*100`%, e serviços domésticos, com `r ter_MN*100`%. Nota-se que o setor de informação emprega mais brancos que negros e os serviços domésticos são majoritariamente exercidos por mulheres negras.
 
