@@ -51,11 +51,13 @@ library(xts)
 #load(file_path)
 
 #Clara
-load("C:/Users/lauro/Desktop/conferirpnad/PNAD_dados_relatorio_01_2024.RData")
-load("C:/Users/lauro/Desktop/conferirpnad/dados_serie_historica_012024.RData")
+load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_01_2024.RData")
+load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_012024.RData")
 
-Tx_emprego.sh$Trimestre <- as.character(Tx_emprego.sh$Trimestre)
-Tx_emprego.sh[25, "Trimestre"] <- "2024 Q1"
+#Hiaman
+#load("C:/Users/lauro/Desktop/conferirpnad/PNAD_dados_relatorio_01_2024.RData")
+#load("C:/Users/lauro/Desktop/conferirpnad/dados_serie_historica_012024.RData")
+
 
 ```
 
@@ -75,7 +77,7 @@ q=1
 
 # Introdução
 
-Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link ao final do documento. Uma versão mais longa do relatório pode ser acessada [clicando aqui](https://drive.google.com/file/d/1DlokvpCUoUH0pga0PiafczzBhenKmwDH/view?usp=sharing).
+Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link ao final do documento. Uma versão mais longa do relatório pode ser acessada [clicando aqui](https://drive.google.com/file/d/1W2m1FdqM7CkLN8JDRnA6J-A3eFvZkNSE/view?usp=drive_link).
 
 # Mercado de Trabalho
 
