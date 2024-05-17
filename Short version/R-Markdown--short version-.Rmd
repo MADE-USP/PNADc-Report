@@ -10,18 +10,6 @@ output:
 subtitle: 1º Trimestre de 2024 
 ---
 
-```{r include=FALSE}
-# Definindo trimestre e ano de referência
-
-i=2024
-q=1
-
-#trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
-#mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
-
-```
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, error=FALSE, warning=FALSE, message=FALSE)
 
@@ -49,25 +37,41 @@ library(xts)
 
 # Setting work directory (Github)-----------------------------------------------
 
-file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
-  gsub("\\Short version", "", .)
+#file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
+#gsub("\\Short version", "", .)
 
-setwd(file_directory)
+#setwd(file_directory)
 
-getwd()
+#getwd()
 
 # Reading PNADc file------------------------------------------------------------
 
-folder_path <- "Input/"
+#folder_path <- "Input/"
+#file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
+#load(file_path)
 
-file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
+#Clara
+load("C:/Users/lauro/Desktop/conferirpnad/PNAD_dados_relatorio_01_2024.RData")
+load("C:/Users/lauro/Desktop/conferirpnad/dados_serie_historica_012024.RData")
 
-load(file_path)
-
-#load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_04_2023.RData")
-#load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_042023.RData")
+Tx_emprego.sh$Trimestre <- as.character(Tx_emprego.sh$Trimestre)
+Tx_emprego.sh[25, "Trimestre"] <- "2024 Q1"
 
 ```
+
+
+```{r include=FALSE}
+# Definindo trimestre e ano de referência
+
+i=2024
+q=1
+
+#trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
+#mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
+
+```
+
+
 
 # Introdução
 
@@ -114,6 +118,9 @@ Tx_emprego.sh<- Tx_emprego.sh %>%
 
 #Checando formato
 class(Tx_emprego.sh$Data)
+
+
+
 ```
 
 
@@ -405,7 +412,75 @@ Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_dese
 
 Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
 
-## Informalidade
+
+### Escolaridade
+```{r include=FALSE}
+colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
+
+#ESCOLARIDADE
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
+
+
+  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
+  ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
+  
+escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+#Região
+max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
+max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
+
+```
+
+No relatório da PNAD elaborado pelo Made mostramos, em todo primeiro trimestre do ano, dados sobre o nível educacional da força de trabalho. Dados de escolaridade representam o percentual de obtenção de um grau educacional dentro de um designado grupo da população economicamente ativa. Dentre as mulheres negras, `r (escol_sup_mn*100)`% possuíam ensino superior; `r (escol_medio_mn*100)`%, ensino médio; e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo; `r (escol_medio_mb*100)`%, ensino médio; e `r (escol_fund_mb*100)`%, ensino fundamental.
+
+
+Dentre os homens negros, `r (escol_sup_hn*100)`% possuíam ensino superior; `r (escol_medio_hn*100)`%, ensino médio; e `r (escol_fund_hn*100)`%, ensino fundamental. Dentre os homens brancos, `r (escol_sup_hb*100)`% tinham ensino superior; `r (escol_medio_hb*100)`%, ensino médio; e `r (escol_fund_hb*100)`%, apenas ensino fundamental.
+
+```{r echo=FALSE}
+
+ESCOLARIDADE_reshape <- reshape(ESCOLARIDADE.RG, idvar = "Categoria", direction = "long", varying = list(c("Pré-fundamental", "ensino_fundamental","ensino_medio","ensino_superior","Especializacao/pós-graduação","Mestrado/doutorado")))
+
+
+colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "Pré-fundamental"] = "Composição"
+colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "time"] = "Escolaridade"
+
+ESCOLARIDADE_reshape$Nivel <- ifelse(ESCOLARIDADE_reshape$Escolaridade ==1, "Pré-fundamental", 
+                                            ifelse(ESCOLARIDADE_reshape$Escolaridade==2, "Ensino Fundamental",
+                                                   ifelse(ESCOLARIDADE_reshape$Escolaridade==3, "Ensino Médio", 
+                                                          ifelse(ESCOLARIDADE_reshape$Escolaridade==4, "Ensino Superior", 
+                                                                 ifelse(
+                                                                   ESCOLARIDADE_reshape$Escolaridade ==5, "Especialização/pós-graduação", "Mestrado/Doutorado"
+                                                                 )
+                                                          ))))
+
+ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(Nivel,-Escolaridade)))+
+  geom_bar(stat="identity") +
+  scale_fill_manual(values=c("#FFAB4D","#eb52ff","#45ff66", "#3366ff","#feff41","#FF7276")) + #cores Made
+  theme_bw() + # colocando fundo Branco 
+  labs(title = "Figura 3: Nível de Escolaridade Máxima Atingida",
+       x = "Categoria",
+       y = "Percentual",
+       fill = "Nível de Escolaridade") 
+```
+
+
+## Trabalhadores Contribuintes para o INSS
 
 
 ```{r include=FALSE}
@@ -495,11 +570,13 @@ class(informalidadeMedia.sh$Data)
 ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) + 
   geom_line(size=2) + # defining line thickness
   geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
-  ggtitle("Figura 3: Taxa de Informalidade por Raça e Gênero") + # plot title
   scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
   labs(color = "Categoria", x = "Trimestre", y = "Taxa de Informalidade")+ # setting legend title
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Figura 4: Trabalhadores não Contribuintes por Raça e Gênero (%)",
+       x = "Data",
+       y = "Percentual")
 ```
 
 
@@ -550,11 +627,13 @@ class(informal.REG.sh$Data)
 ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) + 
   geom_line(size=2) + # defining line thickness
   geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
-  ggtitle("Figura 4: Taxa de Informalidade por Região") + # plot title
   scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
   labs(color = "Regiao", x = "Trimestre", y = "Taxa de Informalidade")+ # setting legend title
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Figura 5: Trabalhadores não Contribuintes por Região (%)",
+       x = "Data",
+       y = "Percentual")
 ```
 
 
@@ -725,13 +804,13 @@ qua_infanoRG <- ordem_infanoRG[4]
 
 ```
 
-Neste relatório, são definidos como trabalhadores informais aqueles que não contribuem para a previdência social^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.]. A taxa de informalidade média do Brasil ficou em `r informalidade*100`% e a região com maior informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de informalidade (`r qui_infREG*100`%). 
+Neste relatório, reportamos a parcela das pessoas empregadas que são contribuintes para o sistema de previdência social (INSS). Esta medida pode ser entendida como uma proxy de informalidade^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.], ainda que existam outras medidas possíveis -- como a parcela dos trabalhadores que possuem carteira assinada. A taxa de trabalhadores não contribuintes para o INSS média do Brasil ficou em `r informalidade*100`% e a região com maior taxa foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores não contribuintes (`r qui_infREG*100`%). 
 
-No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de informalidade variou em `r dif_informalidade_tri*100` pontos percentuais e o grupo com maior aumento de informalidade no mesmo período foi o de mulheres negras, com uma diferença de `r max_inftriRG*100` pontos percentuais.
+No recorte de raça e gênero, o grupo com maior proporção de trabalhadores não contribuintes foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de trabalhadores não contribuintes variou em `r dif_informalidade_tri*100` pontos percentuais e o grupo com maior aumento no mesmo período foi o de mulheres brancas, com uma diferença de `r max_inftriRG*100` pontos percentuais.
 
-Na comparação anual, a variação média do Brasil foi de `r difano_informalRG*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre homens brancos, uma diferença de `r max_infanoRG*100` pontos percentuais. 
+Na comparação anual, a variação média do Brasil foi de `r difano_informalRG*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre mulheres negras, uma diferença de `r qua_infanoRG*100` pontos percentuais. 
 
-Veja o comportamento das séries de informalidade nas figuras 3 e 4.
+Veja o comportamento das séries de trabalhadores contribuintes para o INSS nas figuras 4 e 5.
 
 
 
@@ -873,7 +952,7 @@ qui_MN <- ordem_MN[5]
 
 ```
 
-A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido de construção (`r seg_HN*100`%), de indústria (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de indústria (`r seg_HB*100`%), de informação (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
+A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido de indústria (`r seg_HN*100`%), de construção (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de informação (`r seg_HB*100`%), de indústria (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
 
 Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Das mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
 
@@ -924,7 +1003,7 @@ class(RendaHabit.RG.sh$Data)
 
 ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria)) + 
   geom_line(size=2) + # definindo grossura da linha
-  ggtitle("Figura 5: Rendimento Habitual por Raça e Gênero (Reais de 2024)") + #titulo do grafico
+  ggtitle("Figura 6: Rendimento Habitual por Raça e Gênero (Reais de 2024)") + #titulo do grafico
   scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
   theme_bw() + # colocando fundo Branco
   labs(color = "Categoria", x = "Trimestre", y = "Renda Habitual") + # setting legend title
@@ -979,7 +1058,7 @@ O rendimento habitual mensal do trabalho principal é a remuneração recebida p
 
 O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). 
 
-As séries estão plotadas na figura 5.
+As séries estão plotadas na figura 6.
 
 # Distribuição: Índice de Gini
 
@@ -1060,7 +1139,7 @@ class(giniBR.sh$Data)
 ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria)) + 
   geom_line(size=2) + # defining line thickness
   geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil (média)"), linetype = "dashed") + # adding average Gini line
-  ggtitle("Figura 6: Índice de Gini por Raça e Gênero") + # plot title
+  ggtitle("Figura 7: Índice de Gini por Raça e Gênero") + # plot title
   scale_colour_manual(name = "Categoria", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
   theme_bw() + # setting white background
   labs(color = "Categoria", x = "Trimestre", y = "Índice de Gini")+ # setting legend title
@@ -1173,7 +1252,7 @@ quantis_de_renda23_04 <- quantis_de_renda23_04 %>% mutate("Percentis" = row.name
 
 ggplot(quantis_de_renda23_04, aes(x=Percentis, y=apropriado))+ 
   geom_bar(stat = "identity", fill="#45ff66") + # definindo grossura da linha
-  labs(title = "Apropriação da Renda por Percentis",
+  labs(title = "Figura 8: Apropriação da Renda por Percentis",
        x = "Percentil",
        y = "Percentual Apropriado") +
   theme_bw() # colocando fundo Branco
@@ -1181,7 +1260,7 @@ ggplot(quantis_de_renda23_04, aes(x=Percentis, y=apropriado))+
 
 Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
 
-Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11,6% da renda nacional, no quarto trimestre de 2023. 
+Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11.77% da renda nacional, no `r q`º trimestre de `r i`. 
 
 # Tabelas completas
 
@@ -1195,9 +1274,9 @@ Clique abaixo para dados completos:
 
 [Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
 
-[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/1HNiCJ2wPMjPWRs8-5EQQT5IMxP5qPdrG/view?usp=sharing)
+[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/1HNiCJ2wPMjPWRs8-5EQQT5IMxP5qPdrG/view?usp=drive_link)
 
 
 # Dados e códigos
 
-Os arquivos de código e dados extraídos da PNADc (IBGE, 2024) utilizados para gerar esta publicação trimestral estão disponíveis [neste repositório no GitHub](https://made-usp.github.io/PNADc-Report/. 
+Os arquivos de código e dados extraídos da PNADc (IBGE, 2024) utilizados para gerar esta publicação trimestral estão disponíveis [neste repositório no GitHub](https://made-usp.github.io/PNADc-Report/). 
