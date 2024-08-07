@@ -12,12 +12,12 @@ library(ggplot2)
 #Comando para importar os dados da PNADC
 
 i=2024 #ano
-q= #trimestre
+q=1 #trimestre
 
 pnad <- get_pnadc(year = i,                        
                   quarter = q,
                   defyear = 2023,
-                  defperiod = 2,
+                  defperiod = 1,
                   deflator = T,
                   labels = FALSE, 
                   vars = c("V1028", #pesos com p?s-estratifica??o
@@ -48,21 +48,24 @@ pnad <- get_pnadc(year = i,
 
 
 #save(pnad,file='C:/Users/Marina Sanches/OneDrive/Made/pnadc_012023.RData')
-save(pnad,file="H:/Meu Drive/Documentos/Made/relatorio_pnad/pnadc_042023.RData")
+#save(pnad,file="H:/Meu Drive/Documentos/Made/relatorio_pnad/pnadc_042023.RData")
 #save(pnad,file='C:/Users/Tainari/Documents/1.1-Mestrado/1.2 - Doutorado/MADE/Relatorio_PNAD/pnadc_012023.RData')
-#save(pnad,file='C:/Users/USER/Documents/PNAD/pnadc_032023.RData')
+save(pnad,file='C:/Users/USER/Documents/PNAD/pnadc_032023.RData')
 
 ####### Baixar a base 
 #load('C:/Users/USER/Documents/PNAD/pnadc_032023.RData')
-#load('C:/Users/USER/Documents/PNAD/pnadc_032023.RData')
+load('C:/Users/USER/Documents/PNAD/pnadc_032023.RData')
 #load('C:/Users/Marina Sanches/OneDrive/Made/pnadc_012023.RData')
 #load("H:/Meu Drive/Documentos/Made/relatorio_pnad/pnadc_012023.RData")
 #load('C:/Users/Tainari/Documents/1.1-Mestrado/1.2 - Doutorado/MADE/Relatorio_PNAD/pnadc_012023.RData')
 
 
 ######## Baixar série histórica
-load('H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_032023_FINAL_ze_08_02.RData')
+#load('H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_032023_FINAL_ze_08_02.RData')
 
+
+i=2024 #ano
+q=1 #trimestre
 
 ################################################################################
 
@@ -75,21 +78,21 @@ pnad$variables$V2010[pnad$variables$V2010 %in% c("5", "9")] <- NA
 pnad$variables$V2010[pnad$variables$V2010 %in% c("3")] <- NA
 
 #Calculo do rendimento mensal efetivo por trabalhador (trabalho principal), deflacionado:
-pnad$variables$EfetivaDef22 <- pnad$variables$Efetivo * pnad$variables$VD4017
+#pnad$variables$EfetivaDef22 <- pnad$variables$Efetivo * pnad$variables$VD4017
 
-#Calculo do rendimento mensal efetivo por trabalhador (em todos os trabalhos), deflacionado:
-pnad$variables$EfetivaDef22todos <- pnad$variables$Efetivo * pnad$variables$VD4020
-
+##Calculo do rendimento mensal efetivo por trabalhador (em todos os trabalhos), deflacionado:
+#pnad$variables$EfetivaDef22todos <- pnad$variables$Efetivo * pnad$variables$VD4020
+#
 #Calculo do rendimento mensal habitual por trabalhador, deflacionado:
 pnad$variables$HabitualDef22 <- pnad$variables$Habitual * pnad$variables$VD4016
 
 #Variavel de linha de pobreza
 pnad$variables$Linha_pobreza[pnad$variables$HabitualDef22 %in% c("01","02","03","04")] <- "1"
-pnad$variables$Linha_pobreza <- case_when(HabitualDef22 < 100 ~ 1,
-                                          HabitualDef22 >= 100 ~ 0)
+pnad$variables$Linha_pobreza <- case_when(pnad$variables$HabitualDef22 < 100 ~ 1,
+                                          pnad$variables$HabitualDef22 >= 100 ~ 0)
 
-Linha_extrema_pobreza <- case_when(HabitualDef22 < 50 ~ 1,
-                                     HabitualDef22 >= 50 ~ 0)
+Linha_extrema_pobreza <- case_when(pnad$variables$HabitualDef22 < 50 ~ 1,
+                                   pnad$variables$HabitualDef22 >= 50 ~ 0)
 
 #Transformando Escolaridade de 15 para 6 (onde 1 = pre-fundamental, 2=ensino fundamental, 3=ensino medio, 4=ensino superior, 5=especializacao pos-graduacao, 6=mestrado/doutorado)
 #pnad$variables$V3009A[pnad$variables$V3009A %in% c("05","07","08")] <- "2"
@@ -103,7 +106,7 @@ Linha_extrema_pobreza <- case_when(HabitualDef22 < 50 ~ 1,
 #Transformando posição no mercado de trabalho (1=carteira assinada, 2=sem carteira, 3=conta-propria, 4=empregador, 5=militares e servico estatuario e 6=auxiliar familiar)
 #### DEFINIR MELHOR POSTERIORMENTE####
 pnad$variables$VD4009[pnad$variables$VD4009 %in% c("01","03","05")] <- "1" #trabalhadores com carteira assinada
-
+pnad$variables$VD4009[pnad$variables$VD4009 %in% c("02","04","06")] <- "0" #trabalhadores sem carteira assinada
 
 
 #Transformando para regiao 1=norte, 2=nordeste, 3=centro-oeste, 4=sudeste, 5=sul
@@ -404,28 +407,28 @@ informalidadeMedia.sh<- rbind(informalidadeMedia.sh,informalidadeMedia)
 
 # TAXA DE INFORMALIDADE POR GRUPO 
 
-informal.RG<- svyby(formula = ~ VD4009, # contribui para o INSS
+informal.RG<- svyby(formula = ~ VD4009, # trabalha sem carteira assinada
                     by = ~ interaction(V2010, V2007), #Raca, Genero
                     design = pnad, 
-                    svymean, # Fun??o para gerar estat?stica de interesse
+                    svymean, # Funcao para gerar estatistica de interesse
                     na.rm = T) # Remover valores faltantes 
 
-row.names(informal.RG) <- categorias
-informal.RG <- informal.RG %>%
-  select(-'se1', -'interaction(V2010, V2007)', -'se2')%>%
-  rename('carteira assinada'=VD40091, 'sem carteira assinada'=VD40122) 
+#row.names(informal.RG) <- categorias
+#informal.RG <- informal.RG %>%
+#  select(-'se1', -'interaction(V2010, V2007)', -'se2')%>%
+#  rename('carteira assinada'=VD40091, 'sem carteira assinada'=VD40122) 
+#
+#informal.RG$Ano <- i
+#informal.RG$Quarter <- q
+#informal.RG$Day <- 01
+#informal.RG$Month <- ifelse(informal.RG$Quarter==1,1,
+#                            ifelse(informal.RG$Quarter==2,4,
+#                                   ifelse(informal.RG$Quarter==3,7,10)))
+#informal.RG$Trimestre<-as.yearqtr(with(informal.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#informal.RG$Trimestre<- as.character(informal.RG$Trimestre)
 
-informal.RG$Ano <- i
-informal.RG$Quarter <- q
-informal.RG$Day <- 01
-informal.RG$Month <- ifelse(informal.RG$Quarter==1,1,
-                            ifelse(informal.RG$Quarter==2,4,
-                                   ifelse(informal.RG$Quarter==3,7,10)))
-informal.RG$Trimestre<-as.yearqtr(with(informal.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-informal.RG$Trimestre<- as.character(informal.RG$Trimestre)
-
-informal.RG <- informal.RG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
+#informal.RG <- informal.RG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
 
 informal.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
 
