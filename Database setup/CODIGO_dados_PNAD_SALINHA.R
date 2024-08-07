@@ -92,12 +92,13 @@ Linha_extrema_pobreza <- case_when(HabitualDef22 < 50 ~ 1,
                                      HabitualDef22 >= 50 ~ 0)
 
 #Transformando Escolaridade de 15 para 6 (onde 1 = pre-fundamental, 2=ensino fundamental, 3=ensino medio, 4=ensino superior, 5=especializacao pos-graduacao, 6=mestrado/doutorado)
-pnad$variables$V3009A[pnad$variables$V3009A %in% c("01","02","03","04")] <- "1"
-pnad$variables$V3009A[pnad$variables$V3009A %in% c("05","07","08")] <- "2"
-pnad$variables$V3009A[pnad$variables$V3009A %in% c("06","09","10","11")] <- "3"
-pnad$variables$V3009A[pnad$variables$V3009A %in% c("12")] <- "4"
-pnad$variables$V3009A[pnad$variables$V3009A %in% c("13")] <- "5"
-pnad$variables$V3009A[pnad$variables$V3009A %in% c("14","15")] <- "6"
+#pnad$variables$V3009A[pnad$variables$V3009A %in% c("05","07","08")] <- "2"
+#pnad$variables$V3009A[pnad$variables$V3009A %in% c("01","02","03","04")] <- "1"
+#pnad$variables$V3009A[pnad$variables$V3009A %in% c("06","09","10","11")] <- "3"
+#pnad$variables$V3009A[pnad$variables$V3009A %in% c("12")] <- "4"
+#pnad$variables$V3009A[pnad$variables$V3009A %in% c("13")] <- "5"
+#pnad$variables$V3009A[pnad$variables$V3009A %in% c("14","15")] <- "6"
+
 
 #Transformando posição no mercado de trabalho (1=carteira assinada, 2=sem carteira, 3=conta-propria, 4=empregador, 5=militares e servico estatuario e 6=auxiliar familiar)
 #### DEFINIR MELHOR POSTERIORMENTE####
@@ -139,243 +140,243 @@ regiaobrasil<-c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
 
 #PEA POR GRUPO (VD4001)
 
-PEA.RG <- svyby(formula = ~ VD4001, 
-                by = ~ interaction(V2010, V2007), #Raca, Genero
-                design = pnad, 
-                svymean, # Fun??o para gerar estat?stica de interesse
-                na.rm = T) # Remover valores faltantes 
-
-row.names(PEA.RG) <-categorias
-PEA.RG <- PEA.RG %>%
-  select(-'se1', -'interaction(V2010, V2007)', -'se2')%>%
-  rename('PEA' = VD40011, 'Fora da PEA' = VD40012)
-
-PEA.RG$Ano <- i
-PEA.RG$Quarter <- q
-PEA.RG$Day <- 01
-PEA.RG$Month <- ifelse(PEA.RG$Quarter==1,1,
-                       ifelse(PEA.RG$Quarter==2,4,
-                              ifelse(PEA.RG$Quarter==3,7,10)))
-PEA.RG$Trimestre<-as.yearqtr(with(PEA.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-PEA.RG$Trimestre<- as.character(PEA.RG$Trimestre)
-PEA.RG <- PEA.RG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-PEA.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
-PEA.RG.sh <- rbind(PEA.RG.sh,PEA.RG)
-PEA.RG <- PEA.RG %>%
-  select(-'Trimestre')
-
-
+#PEA.RG <- svyby(formula = ~ VD4001, 
+#                by = ~ interaction(V2010, V2007), #Raca, Genero
+#                design = pnad, 
+#                svymean, # Fun??o para gerar estat?stica de interesse
+#                na.rm = T) # Remover valores faltantes 
+#
+#row.names(PEA.RG) <-categorias
+#PEA.RG <- PEA.RG %>%
+#  select(-'se1', -'interaction(V2010, V2007)', -'se2')%>%
+#  rename('PEA' = VD40011, 'Fora da PEA' = VD40012)
+#
+#PEA.RG$Ano <- i
+#PEA.RG$Quarter <- q
+#PEA.RG$Day <- 01
+#PEA.RG$Month <- ifelse(PEA.RG$Quarter==1,1,
+#                       ifelse(PEA.RG$Quarter==2,4,
+#                              ifelse(PEA.RG$Quarter==3,7,10)))
+#PEA.RG$Trimestre<-as.yearqtr(with(PEA.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#PEA.RG$Trimestre<- as.character(PEA.RG$Trimestre)
+#PEA.RG <- PEA.RG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#PEA.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
+#PEA.RG.sh <- rbind(PEA.RG.sh,PEA.RG)
+#PEA.RG <- PEA.RG %>%
+#  select(-'Trimestre')
+#
+#
 #PEA POR GRUPO (VD4001) e por regiao 
 
-PEA.RG.REG <- svyby(formula = ~ VD4001, 
-                    by = ~ interaction(V2010, V2007, UF), #Raca, Genero
-                    design = pnad, 
-                    svymean, # Fun??o para gerar estat?stica de interesse
-                    na.rm = T) # Remover valores faltantes 
-
-row.names(PEA.RG.REG) <-categoriasregiao
-PEA.RG.REG <- PEA.RG.REG %>%
-  select(-'se1', -'interaction(V2010, V2007, UF)', -'se2')%>%
-  rename('PEA' = VD40011, 'Fora da PEA' = VD40012)
-
-PEA.RG.REG$Ano <- i
-PEA.RG.REG$Quarter <- q
-PEA.RG.REG$Day <- 01
-PEA.RG.REG$Month <- ifelse(PEA.RG.REG$Quarter==1,1,
-                           ifelse(PEA.RG.REG$Quarter==2,4,
-                                  ifelse(PEA.RG.REG$Quarter==3,7,10)))
-PEA.RG.REG$Trimestre<-as.yearqtr(with(PEA.RG.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-PEA.RG.REG$Trimestre<- as.character(PEA.RG.REG$Trimestre)
-PEA.RG.REG <- PEA.RG.REG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-PEA.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Centro-Oeste",
-                              "Mulher Branca Centro-Oeste", "Mulher Negra Centro-Oeste",
-                              "Homem Branco Nordeste","Homem Negro Nordeste",
-                              "Mulher Branca Nordeste", "Mulher Negra Nordeste",
-                              "Homem Branco Norte", "Homem Negro Norte",
-                              "Mulher Branca Norte", "Mulher Negra Norte",
-                              "Homem Branco Sudeste", "Homem Negro Sudeste",
-                              "Mulher Branca Sudeste", "Mulher Negra Sudeste",
-                              "Homem Branco Sul", "Homem Negro Sul",
-                              "Mulher Branca Sul", "Mulher Negra Sul")
-
-PEA.RG.REG.sh <- rbind(PEA.RG.REG.sh,PEA.RG.REG)
-
-PEA.RG.REG <- PEA.RG.REG %>%
-  select(-'Trimestre')
-
-#PEA POR regiao (VD4001)
-
-PEA.REG <- svyby(formula = ~ VD4001, 
-                 by = ~ interaction(UF), 
-                 design = pnad, 
-                 svymean, # Fun??o para gerar estat?stica de interesse
-                 na.rm = T) # Remover valores faltantes 
-row.names(PEA.REG) <-regiaobrasil
-PEA.REG <- PEA.REG %>%
-  select(-'se1', -'interaction(UF)', -'se2')%>%
-  rename('PEA' = VD40011, 'Fora da PEA' = VD40012)
-PEA.REG$Ano <- i
-PEA.REG$Quarter <- q
-PEA.REG$Day <- 01
-PEA.REG$Month <- ifelse(PEA.REG$Quarter==1,1,
-                        ifelse(PEA.REG$Quarter==2,4,
-                               ifelse(PEA.REG$Quarter==3,7,10)))
-PEA.REG$Trimestre<-as.yearqtr(with(PEA.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-PEA.REG$Trimestre<- as.character(PEA.REG$Trimestre)
-PEA.REG <- PEA.REG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-PEA.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
-PEA.REG.sh <- rbind(PEA.REG.sh,PEA.REG)
-PEA.REG <- PEA.REG %>%
-  select(-'Trimestre')
-
-## Emprego e Desemprego
-
-### Ocupação
+#PEA.RG.REG <- svyby(formula = ~ VD4001, 
+#                    by = ~ interaction(V2010, V2007, UF), #Raca, Genero
+#                    design = pnad, 
+#                    svymean, # Fun??o para gerar estat?stica de interesse
+#                    na.rm = T) # Remover valores faltantes 
+#
+#row.names(PEA.RG.REG) <-categoriasregiao
+#PEA.RG.REG <- PEA.RG.REG %>%
+#  select(-'se1', -'interaction(V2010, V2007, UF)', -'se2')%>%
+#  rename('PEA' = VD40011, 'Fora da PEA' = VD40012)
+#
+#PEA.RG.REG$Ano <- i
+#PEA.RG.REG$Quarter <- q
+#PEA.RG.REG$Day <- 01
+#PEA.RG.REG$Month <- ifelse(PEA.RG.REG$Quarter==1,1,
+#                           ifelse(PEA.RG.REG$Quarter==2,4,
+#                                  ifelse(PEA.RG.REG$Quarter==3,7,10)))
+#PEA.RG.REG$Trimestre<-as.yearqtr(with(PEA.RG.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#PEA.RG.REG$Trimestre<- as.character(PEA.RG.REG$Trimestre)
+#PEA.RG.REG <- PEA.RG.REG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#PEA.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Centro-Oeste",
+#                              "Mulher Branca Centro-Oeste", "Mulher Negra Centro-Oeste",
+#                              "Homem Branco Nordeste","Homem Negro Nordeste",
+#                              "Mulher Branca Nordeste", "Mulher Negra Nordeste",
+#                              "Homem Branco Norte", "Homem Negro Norte",
+#                              "Mulher Branca Norte", "Mulher Negra Norte",
+#                              "Homem Branco Sudeste", "Homem Negro Sudeste",
+#                              "Mulher Branca Sudeste", "Mulher Negra Sudeste",
+#                              "Homem Branco Sul", "Homem Negro Sul",
+#                              "Mulher Branca Sul", "Mulher Negra Sul")
+#
+#PEA.RG.REG.sh <- rbind(PEA.RG.REG.sh,PEA.RG.REG)
+#
+#PEA.RG.REG <- PEA.RG.REG %>%
+#  select(-'Trimestre')
+#
+##PEA POR regiao (VD4001)
+#
+##PEA.REG <- svyby(formula = ~ VD4001, 
+#                 by = ~ interaction(UF), 
+#                 design = pnad, 
+#                 svymean, # Fun??o para gerar estat?stica de interesse
+#                 na.rm = T) # Remover valores faltantes 
+#row.names(PEA.REG) <-regiaobrasil
+#PEA.REG <- PEA.REG %>%
+#  select(-'se1', -'interaction(UF)', -'se2')%>%
+#  rename('PEA' = VD40011, 'Fora da PEA' = VD40012)
+#PEA.REG$Ano <- i
+#PEA.REG$Quarter <- q
+#PEA.REG$Day <- 01
+#PEA.REG$Month <- ifelse(PEA.REG$Quarter==1,1,
+#                        ifelse(PEA.REG$Quarter==2,4,
+#                               ifelse(PEA.REG$Quarter==3,7,10)))
+#PEA.REG$Trimestre<-as.yearqtr(with(PEA.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#PEA.REG$Trimestre<- as.character(PEA.REG$Trimestre)
+#PEA.REG <- PEA.REG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#PEA.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
+#PEA.REG.sh <- rbind(PEA.REG.sh,PEA.REG)
+#PEA.REG <- PEA.REG %>%
+#  select(-'Trimestre')
+#
+### Emprego e Desemprego
+#
+#### Ocupação
 
 
 # Taxa de ocupação média  (VD4002)
 
-EmpregoMedia <- svymean(x=~VD4002, 
-                        design = pnad, 
-                        na.rm = T) # Remover valores faltantes 
-Tx_emprego <- as.data.frame(EmpregoMedia[1])
-colnames(Tx_emprego)[colnames(Tx_emprego) == "EmpregoMedia[1]"] ="Taxa de emprego"
+#EmpregoMedia <- svymean(x=~VD4002, 
+#                        design = pnad, 
+#                        na.rm = T) # Remover valores faltantes 
+#Tx_emprego <- as.data.frame(EmpregoMedia[1])
+#colnames(Tx_emprego)[colnames(Tx_emprego) == "EmpregoMedia[1]"] ="Taxa de emprego"
+#
+#Tx_emprego$Ano <- i
+#Tx_emprego$Quarter <- q
+#Tx_emprego$Day <- 01
+#Tx_emprego$Month <- ifelse(Tx_emprego$Quarter==1,1,
+#                           ifelse(Tx_emprego$Quarter==2,4,
+#                                  ifelse(Tx_emprego$Quarter==3,7,10)))
+#Tx_emprego$Trimestre<-as.yearqtr(with(Tx_emprego,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#Tx_emprego$Trimestre<- as.character(Tx_emprego$Trimestre)
+#
+#Tx_emprego <- Tx_emprego %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#Tx_emprego.sh<- rbind(Tx_emprego.sh,Tx_emprego)
+#
+#
+#Tx_desemprego <- as.data.frame(EmpregoMedia[2])
+#colnames(Tx_desemprego)[colnames(Tx_desemprego) == "EmpregoMedia[2]"] ="Taxa de desemprego"
+#Tx_desemprego$Ano <- i
+#Tx_desemprego$Quarter <- q
+#Tx_desemprego$Day <- 01
+#Tx_desemprego$Month <- ifelse(Tx_desemprego$Quarter==1,1,
+#                              ifelse(Tx_desemprego$Quarter==2,4,
+#                                     ifelse(Tx_desemprego$Quarter==3,7,10)))
+#Tx_desemprego$Trimestre<-as.yearqtr(with(Tx_desemprego,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#Tx_desemprego$Trimestre<- as.character(Tx_desemprego$Trimestre)
+#
+#Tx_desemprego <- Tx_desemprego %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#Tx_desemprego.sh<- rbind(Tx_desemprego.sh,Tx_desemprego)
+#
+## TAXA DE OCUPACAO POR GRUPO (VD4002)
+#
+#EMPREGO.RG <- svyby(formula = ~ VD4002, #Condicao em relacao a forca de trabalho
+#                    by = ~ interaction(V2010, V2007), #Raca, Genero,
+#                    design = pnad, 
+#                    svymean, # Fun??o para gerar estat?stica de interesse
+#                    na.rm = T) # Remover valores faltantes 
+#
+#row.names(EMPREGO.RG) <-categorias
+#EMPREGO.RG <- EMPREGO.RG %>%
+#  select(-'se1', -'interaction(V2010, V2007)', -'se2', -VD40022)%>%
+#  rename('Ocupado' = VD40021 )
+#EMPREGO.RG$Ano <- i
+#EMPREGO.RG$Quarter <- q
+#EMPREGO.RG$Day <- 01
+#EMPREGO.RG$Month <- ifelse(EMPREGO.RG$Quarter==1,1,
+#                           ifelse(EMPREGO.RG$Quarter==2,4,
+#                                  ifelse(EMPREGO.RG$Quarter==3,7,10)))
+#EMPREGO.RG$Trimestre<-as.yearqtr(with(EMPREGO.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#EMPREGO.RG$Trimestre<- as.character(EMPREGO.RG$Trimestre)
+#EMPREGO.RG <- EMPREGO.RG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#EMPREGO.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
+#EMPREGO.RG.sh <- rbind(EMPREGO.RG.sh,EMPREGO.RG)
+#EMPREGO.RG <- EMPREGO.RG %>%
+#  select(-'Trimestre')
+#
+#
+##TAXA DE OCUPACAO (VD4002)  por grupos e região 
 
-Tx_emprego$Ano <- i
-Tx_emprego$Quarter <- q
-Tx_emprego$Day <- 01
-Tx_emprego$Month <- ifelse(Tx_emprego$Quarter==1,1,
-                           ifelse(Tx_emprego$Quarter==2,4,
-                                  ifelse(Tx_emprego$Quarter==3,7,10)))
-Tx_emprego$Trimestre<-as.yearqtr(with(Tx_emprego,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-Tx_emprego$Trimestre<- as.character(Tx_emprego$Trimestre)
-
-Tx_emprego <- Tx_emprego %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-Tx_emprego.sh<- rbind(Tx_emprego.sh,Tx_emprego)
-
-
-Tx_desemprego <- as.data.frame(EmpregoMedia[2])
-colnames(Tx_desemprego)[colnames(Tx_desemprego) == "EmpregoMedia[2]"] ="Taxa de desemprego"
-Tx_desemprego$Ano <- i
-Tx_desemprego$Quarter <- q
-Tx_desemprego$Day <- 01
-Tx_desemprego$Month <- ifelse(Tx_desemprego$Quarter==1,1,
-                              ifelse(Tx_desemprego$Quarter==2,4,
-                                     ifelse(Tx_desemprego$Quarter==3,7,10)))
-Tx_desemprego$Trimestre<-as.yearqtr(with(Tx_desemprego,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-Tx_desemprego$Trimestre<- as.character(Tx_desemprego$Trimestre)
-
-Tx_desemprego <- Tx_desemprego %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-Tx_desemprego.sh<- rbind(Tx_desemprego.sh,Tx_desemprego)
-
-# TAXA DE OCUPACAO POR GRUPO (VD4002)
-
-EMPREGO.RG <- svyby(formula = ~ VD4002, #Condicao em relacao a forca de trabalho
-                    by = ~ interaction(V2010, V2007), #Raca, Genero,
-                    design = pnad, 
-                    svymean, # Fun??o para gerar estat?stica de interesse
-                    na.rm = T) # Remover valores faltantes 
-
-row.names(EMPREGO.RG) <-categorias
-EMPREGO.RG <- EMPREGO.RG %>%
-  select(-'se1', -'interaction(V2010, V2007)', -'se2', -VD40022)%>%
-  rename('Ocupado' = VD40021 )
-EMPREGO.RG$Ano <- i
-EMPREGO.RG$Quarter <- q
-EMPREGO.RG$Day <- 01
-EMPREGO.RG$Month <- ifelse(EMPREGO.RG$Quarter==1,1,
-                           ifelse(EMPREGO.RG$Quarter==2,4,
-                                  ifelse(EMPREGO.RG$Quarter==3,7,10)))
-EMPREGO.RG$Trimestre<-as.yearqtr(with(EMPREGO.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-EMPREGO.RG$Trimestre<- as.character(EMPREGO.RG$Trimestre)
-EMPREGO.RG <- EMPREGO.RG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-EMPREGO.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
-EMPREGO.RG.sh <- rbind(EMPREGO.RG.sh,EMPREGO.RG)
-EMPREGO.RG <- EMPREGO.RG %>%
-  select(-'Trimestre')
-
-
-#TAXA DE OCUPACAO (VD4002)  por grupos e região 
-
-EMPREGO.RG.REG <- svyby(formula = ~ VD4002, #Condicao em relacao a forca de trabalho
-                        by = ~ interaction(V2010, V2007, UF), #Raca, Genero,
-                        design = pnad, 
-                        svymean, # Fun??o para gerar estat?stica de interesse
-                        na.rm = T) # Remover valores faltantes 
-
-row.names(EMPREGO.RG.REG) <-categoriasregiao
-EMPREGO.RG.REG <- EMPREGO.RG.REG %>%
-  select(-'se1', -'interaction(V2010, V2007, UF)', -'se2', -VD40022)%>%
-  rename('Ocupado' = VD40021 )
-
-EMPREGO.RG.REG$Ano <- i
-EMPREGO.RG.REG$Quarter <- q
-EMPREGO.RG.REG$Day <- 01
-EMPREGO.RG.REG$Month <- ifelse(EMPREGO.RG.REG$Quarter==1,1,
-                               ifelse(EMPREGO.RG.REG$Quarter==2,4,
-                                      ifelse(EMPREGO.RG.REG$Quarter==3,7,10)))
-EMPREGO.RG.REG$Trimestre<-as.yearqtr(with(EMPREGO.RG.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-EMPREGO.RG.REG$Trimestre<- as.character(EMPREGO.RG.REG$Trimestre)
-
-EMPREGO.RG.REG <- EMPREGO.RG.REG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-EMPREGO.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Centro-Oeste",
-                                  "Mulher Branca Centro-Oeste", "Mulher Negra Centro-Oeste",
-                                  "Homem Branco Nordeste","Homem Negro Nordeste",
-                                  "Mulher Branca Nordeste", "Mulher Negra Nordeste",
-                                  "Homem Branco Norte", "Homem Negro Norte",
-                                  "Mulher Branca Norte", "Mulher Negra Norte",
-                                  "Homem Branco Sudeste", "Homem Negro Sudeste",
-                                  "Mulher Branca Sudeste", "Mulher Negra Sudeste",
-                                  "Homem Branco Sul", "Homem Negro Sul",
-                                  "Mulher Branca Sul", "Mulher Negra Sul")
-EMPREGO.RG.REG.sh <- rbind(EMPREGO.RG.REG.sh,EMPREGO.RG.REG)
-EMPREGO.RG.REG <- EMPREGO.RG.REG %>%
-  select(-'Trimestre')
-
-
-#TAXA DE OCUPACAO  (VD4002) apenas por região 
-
-EMPREGO.REG <- svyby(formula = ~ VD4002, #Condicao em relacao a forca de trabalho
-                     by = ~ interaction(UF), #Raca, Genero,
-                     design = pnad, 
-                     svymean, # Fun??o para gerar estat?stica de interesse
-                     na.rm = T) # Remover valores faltantes 
-
-row.names(EMPREGO.REG) <-regiaobrasil
-EMPREGO.REG <- EMPREGO.REG %>%
-  select(-'se1', -'interaction(UF)', -'se2', -VD40022)%>%
-  rename('Ocupado' = VD40021 )
-
-EMPREGO.REG$Ano <- i
-EMPREGO.REG$Quarter <- q
-EMPREGO.REG$Day <- 01
-EMPREGO.REG$Month <- ifelse(EMPREGO.REG$Quarter==1,1,
-                            ifelse(EMPREGO.REG$Quarter==2,4,
-                                   ifelse(EMPREGO.REG$Quarter==3,7,10)))
-EMPREGO.REG$Trimestre<-as.yearqtr(with(EMPREGO.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-EMPREGO.REG$Trimestre<- as.character(EMPREGO.REG$Trimestre)
-
-EMPREGO.REG <- EMPREGO.REG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-EMPREGO.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
-
-EMPREGO.REG.sh <- rbind(EMPREGO.REG.sh,EMPREGO.REG)
-
-EMPREGO.REG <- EMPREGO.REG %>%
-  select(-'Trimestre')
-
-### Carteira assinada
+#EMPREGO.RG.REG <- svyby(formula = ~ VD4002, #Condicao em relacao a forca de trabalho
+#                        by = ~ interaction(V2010, V2007, UF), #Raca, Genero,
+#                        design = pnad, 
+#                        svymean, # Fun??o para gerar estat?stica de interesse
+#                        na.rm = T) # Remover valores faltantes 
+#
+#row.names(EMPREGO.RG.REG) <-categoriasregiao
+#EMPREGO.RG.REG <- EMPREGO.RG.REG %>%
+#  select(-'se1', -'interaction(V2010, V2007, UF)', -'se2', -VD40022)%>%
+#  rename('Ocupado' = VD40021 )
+#
+#EMPREGO.RG.REG$Ano <- i
+#EMPREGO.RG.REG$Quarter <- q
+#EMPREGO.RG.REG$Day <- 01
+#EMPREGO.RG.REG$Month <- ifelse(EMPREGO.RG.REG$Quarter==1,1,
+#                               ifelse(EMPREGO.RG.REG$Quarter==2,4,
+#                                      ifelse(EMPREGO.RG.REG$Quarter==3,7,10)))
+#EMPREGO.RG.REG$Trimestre<-as.yearqtr(with(EMPREGO.RG.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#EMPREGO.RG.REG$Trimestre<- as.character(EMPREGO.RG.REG$Trimestre)
+#
+#EMPREGO.RG.REG <- EMPREGO.RG.REG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#EMPREGO.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Centro-Oeste",
+#                                  "Mulher Branca Centro-Oeste", "Mulher Negra Centro-Oeste",
+#                                  "Homem Branco Nordeste","Homem Negro Nordeste",
+#                                  "Mulher Branca Nordeste", "Mulher Negra Nordeste",
+#                                  "Homem Branco Norte", "Homem Negro Norte",
+#                                  "Mulher Branca Norte", "Mulher Negra Norte",
+#                                  "Homem Branco Sudeste", "Homem Negro Sudeste",
+#                                  "Mulher Branca Sudeste", "Mulher Negra Sudeste",
+#                                  "Homem Branco Sul", "Homem Negro Sul",
+#                                  "Mulher Branca Sul", "Mulher Negra Sul")
+#EMPREGO.RG.REG.sh <- rbind(EMPREGO.RG.REG.sh,EMPREGO.RG.REG)
+#EMPREGO.RG.REG <- EMPREGO.RG.REG %>%
+#  select(-'Trimestre')
+#
+#
+##TAXA DE OCUPACAO  (VD4002) apenas por região 
+#
+#EMPREGO.REG <- svyby(formula = ~ VD4002, #Condicao em relacao a forca de trabalho
+#                     by = ~ interaction(UF), #Raca, Genero,
+#                     design = pnad, 
+#                     svymean, # Fun??o para gerar estat?stica de interesse
+#                     na.rm = T) # Remover valores faltantes 
+#
+#row.names(EMPREGO.REG) <-regiaobrasil
+#EMPREGO.REG <- EMPREGO.REG %>%
+#  select(-'se1', -'interaction(UF)', -'se2', -VD40022)%>%
+#  rename('Ocupado' = VD40021 )
+#
+#EMPREGO.REG$Ano <- i
+#EMPREGO.REG$Quarter <- q
+#EMPREGO.REG$Day <- 01
+#EMPREGO.REG$Month <- ifelse(EMPREGO.REG$Quarter==1,1,
+#                            ifelse(EMPREGO.REG$Quarter==2,4,
+#                                   ifelse(EMPREGO.REG$Quarter==3,7,10)))
+#EMPREGO.REG$Trimestre<-as.yearqtr(with(EMPREGO.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#EMPREGO.REG$Trimestre<- as.character(EMPREGO.REG$Trimestre)
+#
+#EMPREGO.REG <- EMPREGO.REG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#EMPREGO.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
+#
+#EMPREGO.REG.sh <- rbind(EMPREGO.REG.sh,EMPREGO.REG)
+#
+#EMPREGO.REG <- EMPREGO.REG %>%
+#  select(-'Trimestre')
+#
+#### Carteira assinada
 
 # Taxa de informalidade media  (VD4009)
 
@@ -510,238 +511,238 @@ informal.REG <- informal.REG %>%
 ### Subocupação
 #SUBOCUPACAO POR HORAS TRABALHADAS POR GRUPO (VD4004A)
 
-SUBOCUPHORAS.RG <- svyby(formula = ~ VD4004A, #Condicao em relacao a forca de trabalho
-                         by = ~ interaction(V2010, V2007), #Raca, Genero
-                         design = pnad, 
-                         svymean, # Fun??o para gerar estat?stica de interesse
-                         na.rm = T) # Remover valores faltantes 
+#SUBOCUPHORAS.RG <- svyby(formula = ~ VD4004A, #Condicao em relacao a forca de trabalho
+#                         by = ~ interaction(V2010, V2007), #Raca, Genero
+#                         design = pnad, 
+#                         svymean, # Fun??o para gerar estat?stica de interesse
+#                         na.rm = T) # Remover valores faltantes 
+#
+#row.names(SUBOCUPHORAS.RG ) <-categorias
+#SUBOCUPHORAS.RG <- SUBOCUPHORAS.RG %>%
+#  select(-'se1', -'interaction(V2010, V2007)', -'se2', -VD4004A0)%>%
+#  rename('Subocupado' = VD4004A1) # fiquei na duvida se é isso mesmo 
+#
+#SUBOCUPHORAS.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
+#
+## SUBOCUPACAO POR HORAS TRABALHADAS  (VD4004A) somente por região
+#
+#SUBOCUPHORAS.REG <- svyby(formula = ~ VD4004A, #Condicao em relacao a forca de trabalho
+#                          by = ~ interaction(UF), #Raca, Genero
+#                          design = pnad, 
+#                          svymean, # Fun??o para gerar estat?stica de interesse
+#                          na.rm = T) # Remover valores faltantes 
+#
+#row.names(SUBOCUPHORAS.REG ) <-regiaobrasil
+#SUBOCUPHORAS.REG <- SUBOCUPHORAS.REG %>%
+#  select(-'se1', -'interaction(UF)', -'se2', -VD4004A0)%>%
+#  rename('Subocupado' = VD4004A1) # fiquei na duvida se é isso mesmo 
+#
+#SUBOCUPHORAS.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
+#
+#### Trabalho por Setor
+#
+##Trabalho principal por setor - por grupo
 
-row.names(SUBOCUPHORAS.RG ) <-categorias
-SUBOCUPHORAS.RG <- SUBOCUPHORAS.RG %>%
-  select(-'se1', -'interaction(V2010, V2007)', -'se2', -VD4004A0)%>%
-  rename('Subocupado' = VD4004A1) # fiquei na duvida se é isso mesmo 
-
-SUBOCUPHORAS.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
-
-# SUBOCUPACAO POR HORAS TRABALHADAS  (VD4004A) somente por região
-
-SUBOCUPHORAS.REG <- svyby(formula = ~ VD4004A, #Condicao em relacao a forca de trabalho
-                          by = ~ interaction(UF), #Raca, Genero
-                          design = pnad, 
-                          svymean, # Fun??o para gerar estat?stica de interesse
-                          na.rm = T) # Remover valores faltantes 
-
-row.names(SUBOCUPHORAS.REG ) <-regiaobrasil
-SUBOCUPHORAS.REG <- SUBOCUPHORAS.REG %>%
-  select(-'se1', -'interaction(UF)', -'se2', -VD4004A0)%>%
-  rename('Subocupado' = VD4004A1) # fiquei na duvida se é isso mesmo 
-
-SUBOCUPHORAS.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
-
-### Trabalho por Setor
-
-#Trabalho principal por setor - por grupo
-
-trabalhosetor.RG<- svyby(formula = ~ VD4010, 
-                         by = ~ interaction(V2010, V2007), #Raca, Genero
-                         design = pnad, 
-                         svymean, # Fun??o para gerar estat?stica de interesse
-                         na.rm = T) # Remover valores faltantes 
-row.names(trabalhosetor.RG) <- categorias                               
-
-trabalhosetor.RG <- trabalhosetor.RG %>%
-  select(-'interaction(V2010, V2007)', -'se1', -'se2', -'se3', -'se4', -'se5', -'se6', -'se7', -'se8', -'se9', -'se10', -'se11', -'se12')%>%
-  rename('agropecuária'=VD401001, 'indústria'=VD401002, 'construção'=VD401003, 'comércio'=VD401004, 'transporte'=VD401005, 'alimentação'=VD401006, 'informação'=VD401007, 'administraçãopública'=VD401008, 'educação'=VD401009, 'outrosserviços'=VD401010, 'serviçosdomésticos'=VD401011, 'maldefinido'=VD401012) 
-
-trabalhosetor.RG$Ano <- i
-trabalhosetor.RG$Quarter <- q
-trabalhosetor.RG$Day <- 01
-trabalhosetor.RG$Month <- ifelse(trabalhosetor.RG$Quarter==1,1,
-                                 ifelse(trabalhosetor.RG$Quarter==2,4,
-                                        ifelse(trabalhosetor.RG$Quarter==3,7,10)))
-trabalhosetor.RG$Trimestre<-as.yearqtr(with(trabalhosetor.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-trabalhosetor.RG$Trimestre<- as.character(trabalhosetor.RG$Trimestre)
-
-trabalhosetor.RG <- trabalhosetor.RG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-trabalhosetor.RG["Categoria"] <- c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
-
-trabalhosetor.RG <- trabalhosetor.RG %>%
-  select(Categoria,Trimestre,agropecuária,indústria,construção,comércio,transporte,alimentação,
-         informação,administraçãopública,educação,outrosserviços,serviçosdomésticos,maldefinido)
-
-trabalhosetor.RG <- trabalhosetor.RG %>%
-  rename('Agropecuária'='agropecuária', 'Indústria'='indústria', 'Construção'='construção', 'Comércio'='comércio', 'Transporte'='transporte', 'Alimentação'='alimentação', 'Informação'='informação', 'Administração Pública'='administraçãopública', 'Educação'='educação', 'Outros serviços'='outrosserviços', 'Serviços domésticos'='serviçosdomésticos', 'Mal definido'='maldefinido') 
-
-trabalhosetor.RG.sh <- rbind(trabalhosetor.RG.sh,trabalhosetor.RG)
-
-#Trabalho principal por setor - por grupo e por região
-
-trabalhosetor.RG.REG<- svyby(formula = ~ VD4010, 
-                             by = ~ interaction(V2010, V2007, UF), #Raca, Genero
-                             design = pnad, 
-                             svymean, # Fun??o para gerar estat?stica de interesse
-                             na.rm = T) # Remover valores faltantes 
-row.names(trabalhosetor.RG.REG) <- categoriasregiao                               
-
-trabalhosetor.RG.REG <- trabalhosetor.RG.REG %>%
-  select(-'interaction(V2010, V2007, UF)', -'se1', -'se2', -'se3', -'se4', -'se5', -'se6', -'se7', -'se8', -'se9', -'se10', -'se11', -'se12')%>%
-  rename('Agropecuária'=VD401001, 'Indústria'=VD401002, 'Construção'=VD401003, 'Comércio'=VD401004, 'Transporte'=VD401005, 'Alimentação'=VD401006, 'Informação'=VD401007, 'Administração Pública'=VD401008, 'Educação'=VD401009, 'Outros serviços'=VD401010, 'Serviços domésticos'=VD401011, 'Mal definido'=VD401012) 
-
-trabalhosetor.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Centro-Oeste",
-                                        "Mulher Branca Centro-Oeste", "Mulher Negra Centro-Oeste",
-                                        "Homem Branco Nordeste","Homem Negro Nordeste",
-                                        "Mulher Branca Nordeste", "Mulher Negra Nordeste",
-                                        "Homem Branco Norte", "Homem Negro Norte",
-                                        "Mulher Branca Norte", "Mulher Negra Norte",
-                                        "Homem Branco Sudeste", "Homem Negro Sudeste",
-                                        "Mulher Branca Sudeste", "Mulher Negra Sudeste",
-                                        "Homem Branco Sul", "Homem Negro Sul",
-                                        "Mulher Branca Sul", "Mulher Negra Sul")
-
-# Trabalho principal por setor - somente por região
-
-
-trabalhosetor.REG<- svyby(formula = ~ VD4010, 
-                          by = ~ interaction(UF), #Raca, Genero
-                          design = pnad, 
-                          svymean, # Fun??o para gerar estat?stica de interesse
-                          na.rm = T) # Remover valores faltantes 
-row.names(trabalhosetor.REG) <- regiaobrasil                               
-
-trabalhosetor.REG <- trabalhosetor.REG %>%
-  select(-'interaction(UF)', -'se1', -'se2', -'se3', -'se4', -'se5', -'se6', -'se7', -'se8', -'se9', -'se10', -'se11', -'se12')%>%
-  rename('agropecuária'=VD401001, 'indústria'=VD401002, 'construção'=VD401003, 'comércio'=VD401004, 'transporte'=VD401005, 'alimentação'=VD401006, 'informação'=VD401007, 'administraçãopública'=VD401008, 'educação'=VD401009, 'outrosserviços'=VD401010, 'serviçosdomésticos'=VD401011, 'maldefinido'=VD401012) 
-
-
-trabalhosetor.REG$Ano <- i
-trabalhosetor.REG$Quarter <- q
-trabalhosetor.REG$Day <- 01
-trabalhosetor.REG$Month <- ifelse(trabalhosetor.REG$Quarter==1,1,
-                                  ifelse(trabalhosetor.REG$Quarter==2,4,
-                                         ifelse(trabalhosetor.REG$Quarter==3,7,10)))
-trabalhosetor.REG$Trimestre<-as.yearqtr(with(trabalhosetor.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-trabalhosetor.REG$Trimestre<- as.character(trabalhosetor.REG$Trimestre)
-
-trabalhosetor.REG <- trabalhosetor.REG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-trabalhosetor.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
-
-trabalhosetor.REG <- trabalhosetor.REG %>%
-  select(Regiao,Trimestre,agropecuária,indústria,construção,comércio,transporte,alimentação,
-         informação,administraçãopública,educação,outrosserviços,serviçosdomésticos,maldefinido)
-
-trabalhosetor.REG <- trabalhosetor.REG %>%
-  rename('Agropecuária'='agropecuária', 'Indústria'='indústria', 'Construção'='construção', 'Comércio'='comércio', 'Transporte'='transporte', 'Alimentação'='alimentação', 'Informação'='informação', 'Administração Pública'='administraçãopública', 'Educação'='educação', 'Outros serviços'='outrosserviços', 'Serviços domésticos'='serviçosdomésticos', 'Mal definido'='maldefinido') 
-
-trabalhosetor.REG.sh <- rbind(trabalhosetor.REG.sh,trabalhosetor.REG)
-
-## Escolaridade da Força de Trabalho
-
-# subset pessoas ocupadas
-pnad.ocup <- subset(pnad, pnad$variables$VD4001 %in% c("1"))
-
-# ESCOLARIDADE POR GRUPO (V3009A)
-
-ESCOLARIDADE.RG <- svyby(formula = ~ V3009A, 
-                         by = ~ interaction(V2010, V2007), #Raca, Genero
-                         design = pnad.ocup, 
-                         svymean,   
-                         na.rm = T) # Remover valores faltantes 
-
-row.names(ESCOLARIDADE.RG) <- categorias
-ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>%
-  select(-'interaction(V2010, V2007)',-'se1',-'se2',-'se3',-'se4',-'se5',-'se6')%>%
-  rename('Pré-fundamental'=V3009A1,'Ensino fundamental'=V3009A2,'Ensino médio'=V3009A3, 'Ensino superior'= V3009A4,'Especializacao/pós-graduação'= V3009A5, 'Mestrado/doutorado'= V3009A6)
-
-#ESCOLARIDADE POR GRUPO (V3009A) e por região
-
-ESCOLARIDADE.RG.REG <- svyby(formula = ~ V3009A, # Renda
-                             by = ~ interaction(V2010, V2007, UF), #Raca, Genero
-                             design = pnad.ocup, 
-                             svymean, # Fun??o para gerar estat?stica de interesse
-                             na.rm = T) # Remover valores faltantes 
-
-row.names(ESCOLARIDADE.RG.REG) <- categoriasregiao
-ESCOLARIDADE.RG.REG <- ESCOLARIDADE.RG.REG %>%
-  select(-'interaction(V2010, V2007, UF)',-'se1',-'se2',-'se3',-'se4',-'se5',-'se6')%>%
-  rename('Pré-fundamental'=V3009A1,'Ensino fundamental'=V3009A2,'Ensino médio'=V3009A3, 'Ensino superior'= V3009A4,'Especializacao/pós-graduação'= V3009A5, 'Mestrado/doutorado'= V3009A6)
-
-# ESCOLARIDADE (V3009A) somente por região
-
-ESCOLARIDADE.REG <- svyby(formula = ~ V3009A, # Renda
-                          by = ~ interaction(UF), #Raca, Genero
-                          design = pnad.ocup, 
-                          svymean, # Fun??o para gerar estat?stica de interesse
-                          na.rm = T) # Remover valores faltantes 
-
-row.names(ESCOLARIDADE.REG) <- regiaobrasil
-ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>%
-  select(-'interaction(UF)',-'se1',-'se2',-'se3',-'se4',-'se5',-'se6')%>%
-  rename('Pré-fundamental'=V3009A1,'Ensino fundamental'=V3009A2,'Ensino médio'=V3009A3, 'Ensino superior'= V3009A4,'Especializacao/pós-graduação'= V3009A5, 'Mestrado/doutorado'= V3009A6)
-
-# Rendimento
-
-## Rendimento Médio Efetivo e Habitual
-
-# RENDA EFETIVA média (VD4016)
-
-RendaEfetivaMedia <- svymean(x=~EfetivaDef22, 
-                             design = pnad, 
-                             na.rm = T) # Remover valores faltantes 
-
-RendaEfetivaMedia <- as.data.frame(RendaEfetivaMedia[1])
-colnames(RendaEfetivaMedia)[colnames(RendaEfetivaMedia) == "RendaEfetivaMedia[1]"] ="RendaEfetivaMedia"
-
-RendaEfetivaMedia$Ano <- i
-RendaEfetivaMedia$Quarter <- q
-RendaEfetivaMedia$Day <- 01
-RendaEfetivaMedia$Month <- ifelse(RendaEfetivaMedia$Quarter==1,1,
-                                  ifelse(RendaEfetivaMedia$Quarter==2,4,
-                                         ifelse(RendaEfetivaMedia$Quarter==3,7,10)))
-RendaEfetivaMedia$Trimestre<-as.yearqtr(with(RendaEfetivaMedia,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-RendaEfetivaMedia$Trimestre<- as.character(RendaEfetivaMedia$Trimestre)
-
-RendaEfetivaMedia <- RendaEfetivaMedia %>%
-  select('Trimestre','RendaEfetivaMedia',-'Ano', -'Quarter', -'Day',-'Month')
-
-RendaEfetivaMedia.sh<- rbind(RendaEfetivaMedia.sh,RendaEfetivaMedia)
-
-# RENDA EFETIVA POR GRUPO (VD4016)
-
-RendaEfet.RG <- svyby(formula = ~ EfetivaDef22, # Renda
-                      by = ~ interaction(V2010, V2007), #Raca, Genero
-                      design = pnad, 
-                      svymean, # Fun??o para gerar estat?stica de interesse
-                      na.rm = T) # Remover valores faltantes 
-
-row.names(RendaEfet.RG) <-categorias
-RendaEfet.RG <- RendaEfet.RG %>%
-  select(-'interaction(V2010, V2007)', -'se')%>%
-  rename('Renda_Efetiva_RG' = EfetivaDef22)
-
-RendaEfet.RG$Ano <- i
-RendaEfet.RG$Quarter <- q
-RendaEfet.RG$Day <- 01
-RendaEfet.RG$Month <- ifelse(RendaEfet.RG$Quarter==1,1,
-                             ifelse(RendaEfet.RG$Quarter==2,4,
-                                    ifelse(RendaEfet.RG$Quarter==3,7,10)))
-RendaEfet.RG$Trimestre<-as.yearqtr(with(RendaEfet.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-RendaEfet.RG$Trimestre<- as.character(RendaEfet.RG$Trimestre)
-
-RendaEfet.RG <- RendaEfet.RG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-RendaEfet.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
-
-RendaEfet.RG <- RendaEfet.RG %>%
-  select('Categoria','Trimestre', 'Renda_Efetiva_RG')
-
-RendaEfet.RG.sh <- rbind(RendaEfet.RG.sh,RendaEfet.RG)
-
-# RENDA habitual média  (VD4016)
+#trabalhosetor.RG<- svyby(formula = ~ VD4010, 
+#                         by = ~ interaction(V2010, V2007), #Raca, Genero
+#                         design = pnad, 
+#                         svymean, # Fun??o para gerar estat?stica de interesse
+#                         na.rm = T) # Remover valores faltantes 
+#row.names(trabalhosetor.RG) <- categorias                               
+#
+#trabalhosetor.RG <- trabalhosetor.RG %>%
+#  select(-'interaction(V2010, V2007)', -'se1', -'se2', -'se3', -'se4', -'se5', -'se6', -'se7', -'se8', -'se9', -'se10', -'se11', -'se12')%>%
+#  rename('agropecuária'=VD401001, 'indústria'=VD401002, 'construção'=VD401003, 'comércio'=VD401004, 'transporte'=VD401005, 'alimentação'=VD401006, 'informação'=VD401007, 'administraçãopública'=VD401008, 'educação'=VD401009, 'outrosserviços'=VD401010, 'serviçosdomésticos'=VD401011, 'maldefinido'=VD401012) 
+#
+#trabalhosetor.RG$Ano <- i
+#trabalhosetor.RG$Quarter <- q
+#trabalhosetor.RG$Day <- 01
+#trabalhosetor.RG$Month <- ifelse(trabalhosetor.RG$Quarter==1,1,
+#                                 ifelse(trabalhosetor.RG$Quarter==2,4,
+#                                        ifelse(trabalhosetor.RG$Quarter==3,7,10)))
+#trabalhosetor.RG$Trimestre<-as.yearqtr(with(trabalhosetor.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#trabalhosetor.RG$Trimestre<- as.character(trabalhosetor.RG$Trimestre)
+#
+#trabalhosetor.RG <- trabalhosetor.RG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#trabalhosetor.RG["Categoria"] <- c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
+#
+#trabalhosetor.RG <- trabalhosetor.RG %>%
+#  select(Categoria,Trimestre,agropecuária,indústria,construção,comércio,transporte,alimentação,
+#         informação,administraçãopública,educação,outrosserviços,serviçosdomésticos,maldefinido)
+#
+#trabalhosetor.RG <- trabalhosetor.RG %>%
+#  rename('Agropecuária'='agropecuária', 'Indústria'='indústria', 'Construção'='construção', 'Comércio'='comércio', 'Transporte'='transporte', 'Alimentação'='alimentação', 'Informação'='informação', 'Administração Pública'='administraçãopública', 'Educação'='educação', 'Outros serviços'='outrosserviços', 'Serviços domésticos'='serviçosdomésticos', 'Mal definido'='maldefinido') 
+#
+#trabalhosetor.RG.sh <- rbind(trabalhosetor.RG.sh,trabalhosetor.RG)
+#
+##Trabalho principal por setor - por grupo e por região
+#
+#trabalhosetor.RG.REG<- svyby(formula = ~ VD4010, 
+#                             by = ~ interaction(V2010, V2007, UF), #Raca, Genero
+#                             design = pnad, 
+#                             svymean, # Fun??o para gerar estat?stica de interesse
+#                             na.rm = T) # Remover valores faltantes 
+#row.names(trabalhosetor.RG.REG) <- categoriasregiao                               
+#
+#trabalhosetor.RG.REG <- trabalhosetor.RG.REG %>%
+#  select(-'interaction(V2010, V2007, UF)', -'se1', -'se2', -'se3', -'se4', -'se5', -'se6', -'se7', -'se8', -'se9', -'se10', -'se11', -'se12')%>%
+#  rename('Agropecuária'=VD401001, 'Indústria'=VD401002, 'Construção'=VD401003, 'Comércio'=VD401004, 'Transporte'=VD401005, 'Alimentação'=VD401006, 'Informação'=VD401007, 'Administração Pública'=VD401008, 'Educação'=VD401009, 'Outros serviços'=VD401010, 'Serviços domésticos'=VD401011, 'Mal definido'=VD401012) 
+#
+#trabalhosetor.RG.REG$Categoria_regiao=c("Homem Branco Centro-Oeste", "Homem Negro Centro-Oeste",
+#                                        "Mulher Branca Centro-Oeste", "Mulher Negra Centro-Oeste",
+#                                        "Homem Branco Nordeste","Homem Negro Nordeste",
+#                                        "Mulher Branca Nordeste", "Mulher Negra Nordeste",
+#                                        "Homem Branco Norte", "Homem Negro Norte",
+#                                        "Mulher Branca Norte", "Mulher Negra Norte",
+#                                        "Homem Branco Sudeste", "Homem Negro Sudeste",
+#                                        "Mulher Branca Sudeste", "Mulher Negra Sudeste",
+#                                        "Homem Branco Sul", "Homem Negro Sul",
+#                                        "Mulher Branca Sul", "Mulher Negra Sul")
+#
+## Trabalho principal por setor - somente por região
+#
+#
+#trabalhosetor.REG<- svyby(formula = ~ VD4010, 
+#                          by = ~ interaction(UF), #Raca, Genero
+#                          design = pnad, 
+#                          svymean, # Fun??o para gerar estat?stica de interesse
+#                          na.rm = T) # Remover valores faltantes 
+#row.names(trabalhosetor.REG) <- regiaobrasil                               
+#
+#trabalhosetor.REG <- trabalhosetor.REG %>%
+#  select(-'interaction(UF)', -'se1', -'se2', -'se3', -'se4', -'se5', -'se6', -'se7', -'se8', -'se9', -'se10', -'se11', -'se12')%>%
+#  rename('agropecuária'=VD401001, 'indústria'=VD401002, 'construção'=VD401003, 'comércio'=VD401004, 'transporte'=VD401005, 'alimentação'=VD401006, 'informação'=VD401007, 'administraçãopública'=VD401008, 'educação'=VD401009, 'outrosserviços'=VD401010, 'serviçosdomésticos'=VD401011, 'maldefinido'=VD401012) 
+#
+#
+#trabalhosetor.REG$Ano <- i
+#trabalhosetor.REG$Quarter <- q
+#trabalhosetor.REG$Day <- 01
+#trabalhosetor.REG$Month <- ifelse(trabalhosetor.REG$Quarter==1,1,
+#                                  ifelse(trabalhosetor.REG$Quarter==2,4,
+#                                         ifelse(trabalhosetor.REG$Quarter==3,7,10)))
+#trabalhosetor.REG$Trimestre<-as.yearqtr(with(trabalhosetor.REG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#trabalhosetor.REG$Trimestre<- as.character(trabalhosetor.REG$Trimestre)
+#
+#trabalhosetor.REG <- trabalhosetor.REG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#trabalhosetor.REG$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
+#
+#trabalhosetor.REG <- trabalhosetor.REG %>%
+#  select(Regiao,Trimestre,agropecuária,indústria,construção,comércio,transporte,alimentação,
+#         informação,administraçãopública,educação,outrosserviços,serviçosdomésticos,maldefinido)
+#
+#trabalhosetor.REG <- trabalhosetor.REG %>%
+#  rename('Agropecuária'='agropecuária', 'Indústria'='indústria', 'Construção'='construção', 'Comércio'='comércio', 'Transporte'='transporte', 'Alimentação'='alimentação', 'Informação'='informação', 'Administração Pública'='administraçãopública', 'Educação'='educação', 'Outros serviços'='outrosserviços', 'Serviços domésticos'='serviçosdomésticos', 'Mal definido'='maldefinido') 
+#
+#trabalhosetor.REG.sh <- rbind(trabalhosetor.REG.sh,trabalhosetor.REG)
+#
+### Escolaridade da Força de Trabalho
+#
+## subset pessoas ocupadas
+#pnad.ocup <- subset(pnad, pnad$variables$VD4001 %in% c("1"))
+#
+## ESCOLARIDADE POR GRUPO (V3009A)
+#
+#ESCOLARIDADE.RG <- svyby(formula = ~ V3009A, 
+#                         by = ~ interaction(V2010, V2007), #Raca, Genero
+#                         design = pnad.ocup, 
+#                         svymean,   
+#                         na.rm = T) # Remover valores faltantes 
+#
+#row.names(ESCOLARIDADE.RG) <- categorias
+#ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>%
+#  select(-'interaction(V2010, V2007)',-'se1',-'se2',-'se3',-'se4',-'se5',-'se6')%>%
+#  rename('Pré-fundamental'=V3009A1,'Ensino fundamental'=V3009A2,'Ensino médio'=V3009A3, 'Ensino superior'= V3009A4,'Especializacao/pós-graduação'= V3009A5, 'Mestrado/doutorado'= V3009A6)
+#
+##ESCOLARIDADE POR GRUPO (V3009A) e por região
+#
+#ESCOLARIDADE.RG.REG <- svyby(formula = ~ V3009A, # Renda
+#                             by = ~ interaction(V2010, V2007, UF), #Raca, Genero
+#                             design = pnad.ocup, 
+#                             svymean, # Fun??o para gerar estat?stica de interesse
+#                             na.rm = T) # Remover valores faltantes 
+#
+#row.names(ESCOLARIDADE.RG.REG) <- categoriasregiao
+#ESCOLARIDADE.RG.REG <- ESCOLARIDADE.RG.REG %>%
+#  select(-'interaction(V2010, V2007, UF)',-'se1',-'se2',-'se3',-'se4',-'se5',-'se6')%>%
+#  rename('Pré-fundamental'=V3009A1,'Ensino fundamental'=V3009A2,'Ensino médio'=V3009A3, 'Ensino superior'= V3009A4,'Especializacao/pós-graduação'= V3009A5, 'Mestrado/doutorado'= V3009A6)
+#
+## ESCOLARIDADE (V3009A) somente por região
+#
+#ESCOLARIDADE.REG <- svyby(formula = ~ V3009A, # Renda
+#                          by = ~ interaction(UF), #Raca, Genero
+#                          design = pnad.ocup, 
+#                          svymean, # Fun??o para gerar estat?stica de interesse
+#                          na.rm = T) # Remover valores faltantes 
+#
+#row.names(ESCOLARIDADE.REG) <- regiaobrasil
+#ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>%
+#  select(-'interaction(UF)',-'se1',-'se2',-'se3',-'se4',-'se5',-'se6')%>%
+#  rename('Pré-fundamental'=V3009A1,'Ensino fundamental'=V3009A2,'Ensino médio'=V3009A3, 'Ensino superior'= V3009A4,'Especializacao/pós-graduação'= V3009A5, 'Mestrado/doutorado'= V3009A6)
+#
+## Rendimento
+#
+### Rendimento Médio Efetivo e Habitual
+#
+## RENDA EFETIVA média (VD4016)
+#
+#RendaEfetivaMedia <- svymean(x=~EfetivaDef22, 
+#                             design = pnad, 
+#                             na.rm = T) # Remover valores faltantes 
+#
+#RendaEfetivaMedia <- as.data.frame(RendaEfetivaMedia[1])
+#colnames(RendaEfetivaMedia)[colnames(RendaEfetivaMedia) == "RendaEfetivaMedia[1]"] ="RendaEfetivaMedia"
+#
+#RendaEfetivaMedia$Ano <- i
+#RendaEfetivaMedia$Quarter <- q
+#RendaEfetivaMedia$Day <- 01
+#RendaEfetivaMedia$Month <- ifelse(RendaEfetivaMedia$Quarter==1,1,
+#                                  ifelse(RendaEfetivaMedia$Quarter==2,4,
+#                                         ifelse(RendaEfetivaMedia$Quarter==3,7,10)))
+#RendaEfetivaMedia$Trimestre<-as.yearqtr(with(RendaEfetivaMedia,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#RendaEfetivaMedia$Trimestre<- as.character(RendaEfetivaMedia$Trimestre)
+#
+#RendaEfetivaMedia <- RendaEfetivaMedia %>%
+#  select('Trimestre','RendaEfetivaMedia',-'Ano', -'Quarter', -'Day',-'Month')
+#
+#RendaEfetivaMedia.sh<- rbind(RendaEfetivaMedia.sh,RendaEfetivaMedia)
+#
+## RENDA EFETIVA POR GRUPO (VD4016)
+#
+#RendaEfet.RG <- svyby(formula = ~ EfetivaDef22, # Renda
+#                      by = ~ interaction(V2010, V2007), #Raca, Genero
+#                      design = pnad, 
+#                      svymean, # Fun??o para gerar estat?stica de interesse
+#                      na.rm = T) # Remover valores faltantes 
+#
+#row.names(RendaEfet.RG) <-categorias
+#RendaEfet.RG <- RendaEfet.RG %>%
+#  select(-'interaction(V2010, V2007)', -'se')%>%
+#  rename('Renda_Efetiva_RG' = EfetivaDef22)
+#
+#RendaEfet.RG$Ano <- i
+#RendaEfet.RG$Quarter <- q
+#RendaEfet.RG$Day <- 01
+#RendaEfet.RG$Month <- ifelse(RendaEfet.RG$Quarter==1,1,
+#                             ifelse(RendaEfet.RG$Quarter==2,4,
+#                                    ifelse(RendaEfet.RG$Quarter==3,7,10)))
+#RendaEfet.RG$Trimestre<-as.yearqtr(with(RendaEfet.RG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#RendaEfet.RG$Trimestre<- as.character(RendaEfet.RG$Trimestre)
+#
+#RendaEfet.RG <- RendaEfet.RG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#RendaEfet.RG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
+#
+#RendaEfet.RG <- RendaEfet.RG %>%
+#  select('Categoria','Trimestre', 'Renda_Efetiva_RG')
+#
+#RendaEfet.RG.sh <- rbind(RendaEfet.RG.sh,RendaEfet.RG)
+#
+## RENDA habitual média  (VD4016)
 
 
 RendaHabitMedia <- svymean(x=~HabitualDef22, 
@@ -804,202 +805,202 @@ Pessoas_na_pobreza <- svymean(x=~Linha_pobreza,
 
 ## Índice de Gini
 
-# Indice de GINI - por regiao
-
-pnad <- pnad %>%
-  convey::convey_prep()
-giniUF <- svyby(formula=~VD4020, by=~UF, design=pnad, FUN=svygini, na.rm=TRUE)
-
-giniUF <- giniUF %>%
-  select(-se.VD4020, -UF) %>%
-  rename("gini" = VD4020)
-
-giniUF$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
-
-giniUF$Ano <- i
-giniUF$Quarter <- q
-giniUF$Day <- 01
-giniUF$Month <- ifelse(giniUF$Quarter==1,1,
-                       ifelse(giniUF$Quarter==2,4,
-                              ifelse(giniUF$Quarter==3,7,10)))
-giniUF$Trimestre<-as.yearqtr(with(giniUF,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-giniUF$Trimestre<- as.character(giniUF$Trimestre)
-
-giniUF <- giniUF %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-giniUF.sh <- rbind(giniUF.sh,giniUF)
-
-giniUF <- giniUF %>%
-  select(-'Trimestre')
-
-#Indice de GINI -BR
-
+## Indice de GINI - por regiao
+#
 #pnad <- pnad %>%
-#convey::convey_prep()
-giniBR <- svygini(formula=~VD4020, design=pnad, na.rm=TRUE)
-giniBR <- data.frame(giniBR)
+#  convey::convey_prep()
+#giniUF <- svyby(formula=~VD4020, by=~UF, design=pnad, FUN=svygini, na.rm=TRUE)
+#
+#giniUF <- giniUF %>%
+#  select(-se.VD4020, -UF) %>%
+#  rename("gini" = VD4020)
+#
+#giniUF$Regiao=c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul")
+#
+#giniUF$Ano <- i
+#giniUF$Quarter <- q
+#giniUF$Day <- 01
+#giniUF$Month <- ifelse(giniUF$Quarter==1,1,
+#                       ifelse(giniUF$Quarter==2,4,
+#                              ifelse(giniUF$Quarter==3,7,10)))
+#giniUF$Trimestre<-as.yearqtr(with(giniUF,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#giniUF$Trimestre<- as.character(giniUF$Trimestre)
+#
+#giniUF <- giniUF %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#giniUF.sh <- rbind(giniUF.sh,giniUF)
+#
+#giniUF <- giniUF %>%
+#  select(-'Trimestre')
+#
+##Indice de GINI -BR
+#
+##pnad <- pnad %>%
+##convey::convey_prep()
+#giniBR <- svygini(formula=~VD4020, design=pnad, na.rm=TRUE)
+#giniBR <- data.frame(giniBR)
+#
 
-
-giniBR$Ano <- i
-giniBR$Quarter <- q
-giniBR$Day <- 01
-giniBR$Month <- ifelse(giniBR$Quarter==1,1,
-                       ifelse(giniBR$Quarter==2,4,
-                              ifelse(giniBR$Quarter==3,7,10)))
-giniBR$Trimestre<-as.yearqtr(with(giniBR,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-giniBR$Trimestre<- as.character(giniBR$Trimestre)
-
-giniBR <- giniBR %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month',-'SE')
-
-colnames(giniBR.sh)[colnames(giniBR.sh) == "Gini Brasil"] ="gini"
-
-giniBR.sh <- rbind(giniBR.sh,giniBR)
-
-giniBR <- giniBR %>%
-  select(-'Trimestre')
-
-## Indice de GINI - por raça e gênero
-
-#pnad <- pnad %>%
-#convey::convey_prep()
-giniRG <- svyby(formula=~VD4020, by=~ interaction(V2010, V2007), design=pnad, FUN=svygini, na.rm=TRUE)
-row.names(giniRG) <- categorias 
-giniRG <- giniRG %>%
-  select(-'interaction(V2010, V2007)', -'se.VD4020')%>%
-  rename('gini' = VD4020)
-
-giniRG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
-
-
-giniRG$Ano <- i
-giniRG$Quarter <- q
-giniRG$Day <- 01
-giniRG$Month <- ifelse(giniRG$Quarter==1,1,
-                       ifelse(giniRG$Quarter==2,4,
-                              ifelse(giniRG$Quarter==3,7,10)))
-giniRG$Trimestre<-as.yearqtr(with(giniRG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
-giniRG$Trimestre<- as.character(giniRG$Trimestre)
-
-giniRG <- giniRG %>%
-  select(-'Ano', -'Quarter', -'Day',-'Month')
-
-colnames(giniRG.sh)[colnames(giniRG.sh) == "Gini Brasil"] ="gini"
-
-giniRG.sh <- rbind(giniRG.sh,giniRG)
-
-giniRG <- giniRG %>%
-  select(-'Trimestre')
-
-## Percentis da Renda
-
-# apropriação da renda
+#giniBR$Ano <- i
+#giniBR$Quarter <- q
+#giniBR$Day <- 01
+#giniBR$Month <- ifelse(giniBR$Quarter==1,1,
+#                       ifelse(giniBR$Quarter==2,4,
+#                              ifelse(giniBR$Quarter==3,7,10)))
+#giniBR$Trimestre<-as.yearqtr(with(giniBR,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#giniBR$Trimestre<- as.character(giniBR$Trimestre)
+#
+#giniBR <- giniBR %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month',-'SE')
+#
+#colnames(giniBR.sh)[colnames(giniBR.sh) == "Gini Brasil"] ="gini"
+#
+#giniBR.sh <- rbind(giniBR.sh,giniBR)
+#
+#giniBR <- giniBR %>%
+#  select(-'Trimestre')
+#
+### Indice de GINI - por raça e gênero
+#
+##pnad <- pnad %>%
+##convey::convey_prep()
+#giniRG <- svyby(formula=~VD4020, by=~ interaction(V2010, V2007), design=pnad, FUN=svygini, na.rm=TRUE)
+#row.names(giniRG) <- categorias 
+#giniRG <- giniRG %>%
+#  select(-'interaction(V2010, V2007)', -'se.VD4020')%>%
+#  rename('gini' = VD4020)
+#
+#giniRG$Categoria=c("Homem Branco", "Homem Negro", "Mulher Branca", "Mulher Negra")
+#
+#
+#giniRG$Ano <- i
+#giniRG$Quarter <- q
+#giniRG$Day <- 01
+#giniRG$Month <- ifelse(giniRG$Quarter==1,1,
+#                       ifelse(giniRG$Quarter==2,4,
+#                              ifelse(giniRG$Quarter==3,7,10)))
+#giniRG$Trimestre<-as.yearqtr(with(giniRG,paste(Ano,Month,Day,sep="-")),"%Y-%m-%d")
+#giniRG$Trimestre<- as.character(giniRG$Trimestre)
+#
+#giniRG <- giniRG %>%
+#  select(-'Ano', -'Quarter', -'Day',-'Month')
+#
+#colnames(giniRG.sh)[colnames(giniRG.sh) == "Gini Brasil"] ="gini"
+#
+#giniRG.sh <- rbind(giniRG.sh,giniRG)
+#
+#giniRG <- giniRG %>%
+#  select(-'Trimestre')
+#
+### Percentis da Renda
+#
+## apropriação da renda
 # obtendo cada um dos decis de renda e o último percentil (ou seja, o valor equivalente ao 1% mais rico da população)
 
-pnad$variables$EfetivaDef23todos <- pnad$variables$Efetivo * pnad$variables$VD4020
-quanti2303 <- svyquantile(x = ~ EfetivaDef23todos,
-                          design = pnad,
-                          quantiles = c(seq(from = .1, to = .9, by = .1), .99),
-                          na.rm = T)
-
-quanti2303
-
-#obtendo renda total
-
-rentot2303 <- svytotal(x = ~ EfetivaDef23todos,
-                       design = pnad,
-                       na.rm = T)
-
-rentot2303
-
-sum(pnad$variables$EfetivaDef23todos, na.rm = T) - rentot2303[1]
-
-#apropriação da renda
-
-
-quantis <- c(0, quanti2303$EfetivaDef23todos[,1], max(pnad$variables$EfetivaDef23todos, na.rm = T))
-
-names(quantis) <- c("0", rownames(quanti2303$EfetivaDef23todos), "Max")
-
-for (quant in 2:length(quantis)) {
-  
-  rotulo <- paste(names(quantis)[c(quant - 1, quant)], collapse = " - ")
-  
-  pnad$variables$Quant[pnad$variables$EfetivaDef23todos >= quantis[quant - 1] &
-                         pnad$variables$EfetivaDef23todos <= quantis[quant]] <- rotulo
-  
-}
-
-pnad.Quant0 <- subset(pnad, Quant == "0 - 0.1")
-
-unique(pnad.Quant0$prob[pnad.Quant0$variables$EfetivaDef23todos >= 17000])
-
-cat <- setdiff(unique(pnad$variables$Quant), NA) #Obter os decis
-cat
-ordem_final <- c("0 - 0.1","0.1 - 0.2","0.2 - 0.3","0.3 - 0.4", 
-                 "0.4 - 0.5", "0.5 - 0.6",  "0.6 - 0.7" , "0.7 - 0.8",
-                 "0.8 - 0.9", "0.9 - 0.99", "0.99 - Max") #estabelecer vetor de ordem dos quantis
-ordem_real <- c()
-
-for (value in ordem_final){
-  for (i in 1:length(cat)){
-    if(cat[[i]]==value){
-      ordem_real <- append(ordem_real, i)
-    }
-  }
-}
-cat <- cat[ordem_real] #Ordenar os decis automaticamente
-
-totquant2303 <- c()
-
-for (quant in cat) {
-  
-  total <- svytotal(x = ~ EfetivaDef23todos,
-                    design = subset(pnad, Quant == quant),
-                    na.rm = T)
-  
-  totquant2303 <- c(totquant2303, total)
-  
-}
-
-
-names(totquant2303) <- c(paste(seq(0, .9, .1)), "0.99")
-
-quantis_de_renda23_04 <- as.data.frame(totquant2303/rentot2303 * 100)
-quantis_de_renda23_04 <- quantis_de_renda23_04 %>% 
-  rename('Percentual da Renda Apropriada' = `totquant2303/rentot2303 * 100`)
-
-percentis <- totquant2303/rentot2303 * 100
-
-percentis <- as.data.frame(percentis)
-
-colnames(percentis)[colnames(percentis) == "percentis"] ="% da renda apropriado"
-
-
-## Curva de Lorenz
-# Carrega o pacote ggplot2
-library(ggplot2)
-
-# Dados
-x <- seq(0, 1, 0.1)
-y <- c(cumsum(totquant2303[-11]/rentot2303), 1)
-
-# Cria o gráfico com ggplot2
-grafico <- ggplot(data.frame(x, y), aes(x, y)) +
-  geom_line(color = "#45ff66", size=1.5) +
-  labs(x = "Quantil", y = "% da Renda", title = "Curva de Lorenz") 
-
-# Adiciona a linha de 45 graus
-grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7)
-curva_de_lorenz <- grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7)
-ggsave("curva_de_lorenz_2023_03.png", plot = curva_de_lorenz)
-
-
-
-### Salvando dados
-
-## todos os dados
+#pnad$variables$EfetivaDef23todos <- pnad$variables$Efetivo * pnad$variables$VD4020
+#quanti2303 <- svyquantile(x = ~ EfetivaDef23todos,
+#                          design = pnad,
+#                          quantiles = c(seq(from = .1, to = .9, by = .1), .99),
+#                          na.rm = T)
+#
+#quanti2303
+#
+##obtendo renda total
+#
+#rentot2303 <- svytotal(x = ~ EfetivaDef23todos,
+#                       design = pnad,
+#                       na.rm = T)
+#
+#rentot2303
+#
+#sum(pnad$variables$EfetivaDef23todos, na.rm = T) - rentot2303[1]
+#
+##apropriação da renda
+#
+#
+#quantis <- c(0, quanti2303$EfetivaDef23todos[,1], max(pnad$variables$EfetivaDef23todos, na.rm = T))
+#
+#names(quantis) <- c("0", rownames(quanti2303$EfetivaDef23todos), "Max")
+#
+#for (quant in 2:length(quantis)) {
+#  
+#  rotulo <- paste(names(quantis)[c(quant - 1, quant)], collapse = " - ")
+#  
+#  pnad$variables$Quant[pnad$variables$EfetivaDef23todos >= quantis[quant - 1] &
+#                         pnad$variables$EfetivaDef23todos <= quantis[quant]] <- rotulo
+#  
+#}
+#
+#pnad.Quant0 <- subset(pnad, Quant == "0 - 0.1")
+#
+#unique(pnad.Quant0$prob[pnad.Quant0$variables$EfetivaDef23todos >= 17000])
+#
+#cat <- setdiff(unique(pnad$variables$Quant), NA) #Obter os decis
+#cat
+#ordem_final <- c("0 - 0.1","0.1 - 0.2","0.2 - 0.3","0.3 - 0.4", 
+#                 "0.4 - 0.5", "0.5 - 0.6",  "0.6 - 0.7" , "0.7 - 0.8",
+#                 "0.8 - 0.9", "0.9 - 0.99", "0.99 - Max") #estabelecer vetor de ordem dos quantis
+#ordem_real <- c()
+#
+#for (value in ordem_final){
+#  for (i in 1:length(cat)){
+#    if(cat[[i]]==value){
+#      ordem_real <- append(ordem_real, i)
+#    }
+#  }
+#}
+#cat <- cat[ordem_real] #Ordenar os decis automaticamente
+#
+#totquant2303 <- c()
+#
+#for (quant in cat) {
+#  
+#  total <- svytotal(x = ~ EfetivaDef23todos,
+#                    design = subset(pnad, Quant == quant),
+#                    na.rm = T)
+#  
+#  totquant2303 <- c(totquant2303, total)
+#  
+#}
+#
+#
+#names(totquant2303) <- c(paste(seq(0, .9, .1)), "0.99")
+#
+#quantis_de_renda23_04 <- as.data.frame(totquant2303/rentot2303 * 100)
+#quantis_de_renda23_04 <- quantis_de_renda23_04 %>% 
+#  rename('Percentual da Renda Apropriada' = `totquant2303/rentot2303 * 100`)
+#
+#percentis <- totquant2303/rentot2303 * 100
+#
+#percentis <- as.data.frame(percentis)
+#
+#colnames(percentis)[colnames(percentis) == "percentis"] ="% da renda apropriado"
+#
+#
+### Curva de Lorenz
+## Carrega o pacote ggplot2
+#library(ggplot2)
+#
+## Dados
+#x <- seq(0, 1, 0.1)
+#y <- c(cumsum(totquant2303[-11]/rentot2303), 1)
+#
+## Cria o gráfico com ggplot2
+#grafico <- ggplot(data.frame(x, y), aes(x, y)) +
+#  geom_line(color = "#45ff66", size=1.5) +
+#  labs(x = "Quantil", y = "% da Renda", title = "Curva de Lorenz") 
+#
+## Adiciona a linha de 45 graus
+#grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7)
+#curva_de_lorenz <- grafico + geom_abline(intercept = 0, slope = 1, color = "#eb52ff",size=0.7)
+#ggsave("curva_de_lorenz_2023_03.png", plot = curva_de_lorenz)
+#
+#
+#
+#### Salvando dados
+#
+### todos os dados
 rm(pnad,pnad.Quant0,pnad.ocup)
 #load("C:/Users/USER/Documents/PNAD/PNAD_dados_relatorio_04_2023.RData")
 #save.image("C:/Users/USER/Documents/PNAD/PNAD_dados_relatorio_04_2023.RData")
