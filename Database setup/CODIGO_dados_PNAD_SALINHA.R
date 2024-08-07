@@ -24,19 +24,19 @@ pnad <- get_pnadc(year = i,
                            "V2007", # Sexo
                            "V2009", #Idade
                            "V2010", # Raca
-                           "V4012", #=1 contribuinte INSS =2 não contribuinte
-                           "VD4001", # Condi??o em rela??o ? for?a de trabalho
-                           "VD4002", # Condi??o de ocupa??o
-                           "VD4004A", # Subocupa??o por insufici?ncia de horas habitualmente trabalhadas
+                          # "V4012", #=1 contribuinte INSS =2 não contribuinte
+                         #  "VD4001", # Condi??o em rela??o ? for?a de trabalho
+                          # "VD4002", # Condi??o de ocupa??o
+                        #   "VD4004A", # Subocupa??o por insufici?ncia de horas habitualmente trabalhadas
                            "VD4009", # Posi??o na ocupa??o e categoria do emprego do trabalho principal da  semana de refer?ncia para pessoas de 14 anos ou mais de idade
                            "VD4016", # Rendimento mensal habitual do trabalho principal
-                           "VD4017", # Rendimento mensal efetivo do trabalho principal
-                           "VD4030", # Motivo pelo qual n?o procurou/gostaria/estava dispon?vel para trabalho
-                           "V3009A", # Qual foi o curso mais elevado que frequentou anteriormente?
-                           "VD3001", #N?vel de instru??o mais elevado alcan?ado 
-                           "V3012", #Concluiu primeiros anos
-                           "VD4020", #Rendimento mensal efetivo de todos os trabalhos para pessoas de 14 anos ou mais de idade
-                           "VD4012",
+                         #  "VD4017", # Rendimento mensal efetivo do trabalho principal
+                         #  "VD4030", # Motivo pelo qual n?o procurou/gostaria/estava dispon?vel para trabalho
+                         #  "V3009A", # Qual foi o curso mais elevado que frequentou anteriormente?
+                         #  "VD3001", #N?vel de instru??o mais elevado alcan?ado 
+                          # "V3012", #Concluiu primeiros anos
+                         #  "VD4020", #Rendimento mensal efetivo de todos os trabalhos para pessoas de 14 anos ou mais de idade
+                         #  "VD4012",
                            #V4012", # se =1 contribuinte INSS = 2 nao contribuinte
                            "VD4010")) #setor do trabalho principal
 
