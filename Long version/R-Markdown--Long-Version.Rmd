@@ -877,7 +877,7 @@ ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria))+
 
 O índice de Gini varia de zero a um, sendo que quanto mais próximo de um, maior a desigualdade. Por exemplo, em uma situação hipotética em que o índice de Gini é igual a zero, todos os indivíduos de uma determinada sociedade possuem a mesma renda (igualdade). Já a outra situação hipotética extrema, com um índice igual a um, indica que somente uma pessoa detém toda a renda dessa economia^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos.].
 
-O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR$gini`. Esse índice aumentou comparativamente ao trimestre anterior e ao `r q`º trimestre de `r i-1`^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza,Osorio, Paiva, et al. 2019.]. O índice também aumentou para todas as desagregações que reportamos abaixo.
+O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR$gini`. Esse índice aumentou comparativamente ao trimestre anterior e ao `r q`º trimestre de `r i-1`^[Por tratar-se de pesquisa amostral, a PNADc tem limitações na captura de rendas dos mais ricos, sobretudo rendimentos de capital. Ademais, a literatura documenta a existência de subnotificação de rendas provenientes de transferências governamentais, já que a PNAD não se pretende representativa apenas de quem recebe transferências de renda, conforme Souza, Osorio, & Soares 2011; e Souza, Osorio, Paiva, et al. 2019.]. O índice também aumentou para todas as desagregações que reportamos abaixo.
 
 ```{r include=FALSE}
 colnames(RendaHabit.RG.sh)[colnames(RendaHabit.RG.sh) == "Data"] = "Trimestre"
@@ -1008,6 +1008,19 @@ curva_de_lorenz <- grafico + geom_abline(intercept = 0, slope = 1, color = "#eb5
 
 
 ```
+
+# Linha da Pobreza
+```{r echo=FALSE}
+
+```
+
+Atualmente, a referência de definição de pobreza utilizada pelo IBGE é aquela desenvolvida pelo Banco Mundial e atualizada em 2022, conforme apêndice. Nela, considera-se abaixo da Linha da Pobreza os indivíduos que dispuserem de menos de US`$` 6,85/dia e, abaixo da Linha de Extrema Pobreza, os que dispuserem de menos de US`$` 2,15/dia, ambos em termos de Poder de Paridade de Compra (PPC) a preços internacionais de 2017. ^[Ver Síntese de indicadores sociais : uma análise das condições de vida da população brasileira: 2023 / IBGE, Coordenação de População e Indicadores Sociais. - Rio de Janeiro: IBGE, 2023. 152 p.: il. - (Estudos e pesquisas. Informação demográfica e socioeconômica, ISSN 1516-3296 ; n. 53).]
+
+Essa métrica é utilizada para balizar critérios de inclusão em programas sociais, como o Benefício de Prestação Continuada - BPCm que tem como critério a renda de até ¼ do salário mínimo per capita, ou a inscrição de famílias no Cadastro Único para Programas Sociais do Governo Federal - CadÚnicom com critério de até ½ salário mínimo per capita.
+
+Pelos critérios do Programa Auxílio Brasil, a pobreza se caracteriza pelo
+rendimento familiar per capita de até R`$` 105 em a extrema pobreza, de até R`$` 210. Nesta análisem consideramos estes valores como definidores das Linhas de Pobreza.
+
 
 # Tabelas completas
 
