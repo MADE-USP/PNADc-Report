@@ -51,8 +51,8 @@ library(xts)
 #load(file_path)
 
 #Clara
-load("H:/Meu Drive/Documentos/Made/relatorio_pnad/PNAD_dados_relatorio_01_2024.RData")
-load("H:/Meu Drive/Documentos/Made/relatorio_pnad/dados_serie_historica_012024.RData")
+load("C:/Users/lauro/Desktop/PNADc/v3/PNAD_dados_relatorio_01_2024.RData")
+load("C:/Users/lauro/Desktop/PNADc/v3/dados_serie_historica_012024.RData")
 
 #Hiaman
 #load("C:/Users/lauro/Desktop/conferirpnad/PNAD_dados_relatorio_01_2024.RData")
