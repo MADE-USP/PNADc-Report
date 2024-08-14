@@ -1,7 +1,7 @@
 ---
 title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito e Clara Brenck e os pesquisadores José Bergamin e Hiaman Santos.]" 
 author: "Made USP"
-date: "17/05/2024"
+date: "15/08/2024"
 lang: pt-br
 output:
   pdf_document: default
@@ -503,7 +503,7 @@ colnames(date)[colnames(date) <- c("Ano", "Trimestre")]
 
 # Retornamos a data atualizada para o dataframe anterior
 agreInformal.RG <- agreInformal.RG %>% 
-  select(Categoria, FormalidadeMedia.RG, InformalidadeMedia.RG)
+  select(Categoria, Formal, Informal)
 agreInformal.RG <- cbind(agreInformal.RG,date) 
 
 # Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
@@ -522,8 +522,8 @@ agreInformal.RG$Ano <- as.numeric(agreInformal.RG$Ano)
 agreInformal.RG$Data <-as.yearqtr(with(agreInformal.RG,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 # Voltamos para colunas originais
-agreInformal.RG<- agreInformal.RG %>%
-   select(Categoria, FormalidadeMedia.RG, InformalidadeMedia.RG, Data)
+agreInformal.RG <- agreInformal.RG %>%
+   select(Categoria, Formal, Informal, Data)
 
 #Checando formato
 class(agreInformal.RG$Data)
@@ -535,7 +535,8 @@ class(agreInformal.RG$Data)
 
 #Renomeando colunas
 
-#colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de #informalidade"] = "Taxa_media_informalidade"
+colnames(informalidadeMedia)[colnames(informalidadeMedia) == "Taxa média de informalidade"] = "Taxa_media_informalidade"
+
 #
 ## Dividimos a coluna de data em uma de ano, e uma de trimestre:
 #date <- do.call(rbind, strsplit(informalidadeMedia.sh$Trimestre, " ")) 
@@ -598,6 +599,8 @@ colnames(agreInformal.REG)[colnames(agreInformal.REG) == "Formalidade.REG"] = "F
 date <- do.call(rbind, strsplit(agreInformal.REG$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
+agreInformal.REG$Regiao <- regiaobrasil
+
 # Retornamos a data atualizada para o dataframe anterior
 agreInformal.REG <- agreInformal.REG %>% 
   select(Regiao, Formal, Informal)
@@ -655,15 +658,15 @@ class(agreInformal.REG$Data)
 #dif_informalidade_tri <- informalidade - informalidade_tri_anterior
 
 #Região
-inf_NO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Norte" & agreInformal.REG$Trimestre == "2024 Q1"]
+inf_NO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Norte" & agreInformal.REG$Data == "2024 Q1"]
 
-inf_NE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Nordeste" & agreInformal.REG$Trimestre == "2024 Q1"]
+inf_NE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Nordeste" & agreInformal.REG$Data == "2024 Q1"]
 
-inf_CO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Centro-Oeste" & agreInformal.REG$Trimestre == "2024 Q1"]
+inf_CO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Centro-Oeste" & agreInformal.REG$Data == "2024 Q1"]
 
-inf_SE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sudeste" & agreInformal.REG$Trimestre == "2024 Q1"]
+inf_SE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sudeste" & agreInformal.REG$Data == "2024 Q1"]
 
-inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInformal.REG$Trimestre == "2024 Q1"]
+inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInformal.REG$Data == "2024 Q1"]
 
 
 ## Tri anterior
@@ -697,19 +700,17 @@ inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInfor
 
 ### Mínimos e máximos
 
-agreInformal.REG$Regiao <- regiaobrasil
-
 # Máximo de 2024 Q1
 max_Inf_REG_2023_04 <- agreInformal.REG %>%
-  filter(Trimestre == "2024 Q1") %>% #filtro pelo trimestre que quero 
-  filter(Informalidade.REG == max(Informalidade.REG)) %>% # e peço a linha correspondente ao valor máximo
+  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
   
   select(Regiao) #peço a categoria associada
 
 # Mínimo de 2024 Q1      
 min_INF_REG_2023_04 <- agreInformal.REG %>%
-  filter(Trimestre == "2024 Q1") %>% #filtro pelo trimestre que quero 
-  filter(Informalidade.REG == min(Informalidade.REG)) %>%  # e peço a linha correspondente ao valor mínimo
+  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Regiao) #peço a categoria associada
 
 
@@ -818,14 +819,7 @@ qua_infRG <- ordem_infRG[4]
 
 ```
 
-Neste relatório, reportamos a parcela das pessoas empregadas que são contribuintes para o sistema de previdência social (INSS). Esta medida pode ser entendida como uma proxy de informalidade^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998 e Dalberto, C. e Cirino, J. Informalidade e segmentação no mercado de trabalho brasileiro: evidências quantílicas sob alocação endógena. Nova Economia. v.28 n.2 p.417-460, 2018.], ainda que existam outras medidas possíveis -- como a parcela dos trabalhadores que possuem carteira assinada. A taxa de trabalhadores não contribuintes para o INSS média do Brasil ficou em `r informalidade*100`% e a região com maior taxa foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores não contribuintes (`r qui_infREG*100`%). 
-
-No recorte de raça e gênero, o grupo com maior proporção de trabalhadores não contribuintes foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%. Em comparação com o trimestre anterior, a taxa geral de trabalhadores não contribuintes variou em `r dif_informalidade_tri*100` pontos percentuais e o grupo com maior aumento no mesmo período foi o de mulheres brancas, com uma diferença de `r max_inftriRG*100` pontos percentuais.
-
-Na comparação anual, a variação média do Brasil foi de `r difano_informalRG*100` pontos percentuais e a maior variação por raça e gênero foi registrada dentre mulheres negras, uma diferença de `r qua_infanoRG*100` pontos percentuais. 
-
-Veja o comportamento das séries de trabalhadores contribuintes para o INSS nas figuras 4 e 5.
-
+Neste relatório, reportamos estatísticas sobre a informalidade no mercado de trabalho brasileiro. Definimos como informais os trabalhadores sem carteira de trabalho^[Critério utilizado, por exemplo, por Barros, R.P. e Varandas, S. A carteira de trabalho e as condições de trabalho e remuneração dos chefes de família no Brasil. IPEA. 1987.]  e, dentre aqueles que se autodeclaram como autônomos, empregadores ou familiares auxiliares do lar, os trabalhadores que não contribuem para o sistema de previdência social (INSS)^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998]. No `r q`º trimestre de `r i`, a taxa de informalidade média calculada para o Brasil foi de `r informalidadeMedia$Taxa_media_informalidade *100` %. Do ponto de vista regional, a região com maior taxa de informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores informais (`r qui_infREG*100`%). No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%.
 
 
 ## Emprego por Setor
