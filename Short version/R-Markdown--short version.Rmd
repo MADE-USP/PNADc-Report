@@ -7,7 +7,7 @@ output:
   pdf_document: default
   html_document: default
   word_document: default
-subtitle: 1º Trimestre de 2024 
+subtitle: 2º Trimestre de 2024 
 ---
 
 ```{r setup, include=FALSE}
@@ -66,7 +66,7 @@ load("C:/Users/lauro/Desktop/PNADc/v3/dados_serie_historica_012024.RData")
 # Definindo trimestre e ano de referência
 
 i=2024
-q=1
+q=2
 
 #trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
 #mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
@@ -243,7 +243,7 @@ ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) +
 
 # Variáveis
 
-# Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2023 Q4"]
+# Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2024 Q1"]
 
 
 # Renomeando colunas
@@ -251,9 +251,9 @@ colnames(Tx_emprego.sh)[colnames(Tx_emprego.sh) == "Taxa de emprego"] ="Taxa_emp
 colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
 
 # Criando objetos (atualizar trimestre de referência)
-desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2024 Q1"]
-desemprego_tri_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q4"]
-desemprego_ano_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q1"]
+desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2024 Q2"]
+desemprego_tri_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2024 Q1"]
+desemprego_ano_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q2"]
 
 # Diferenças entre taxas de desemprego
                                                                    
@@ -262,18 +262,18 @@ dif_desem_ano <- ((desemprego)-(desemprego_ano_anterior))
 
 ## Desemprego por raça e gênero (Atualizar trimestre de referência)
 
-desemprego_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2024 Q1"])
-desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2024 Q1"])
-desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2024 Q1"])
-desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2024 Q1"])
+desemprego_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2024 Q2"])
+desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2024 Q2"])
+desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2024 Q2"])
+desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2024 Q2"])
 
 
 ##Trimestre anterior (atualizar trimestre de referência)
 
-desemprego_hb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q4"])
-desemprego_hn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q4"])
-desemprego_mb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q4"])
-desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q4"])
+desemprego_hb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2024 Q1"])
+desemprego_hn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2024 Q1"])
+desemprego_mb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2024 Q1"])
+desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2024 Q1"])
 
 #desemtriMB <- (desemprego_MB - desem_triMB)
 #desemtriMN <- (desemprego_MN - desem_triMN)
@@ -281,10 +281,10 @@ desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria
 #desemtriHN <- (desemprego_HN - desem_triHN)
 
 ##Ano anterior (Atualizar data)
-desemprego_hb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q1"])
-desemprego_hn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q1"])
-desemprego_mb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q1"])
-desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q1"])
+desemprego_hb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q2"])
+desemprego_hn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q2"])
+desemprego_mb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q2"])
+desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q2"])
 
 #desemanoMB <- (desemprego_MB - desemano_MB)
 #desemanoMN <- (desemprego_MN - desemano_MN)
@@ -294,15 +294,15 @@ desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categ
 
 ### Mínimos e máximos
 
-# Máximo de 2024 Q1
+# Máximo de 2024 Q2
 max_RG_2023_04 <- EMPREGO.RG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
   select(Categoria) #peço a categoria associada
 
-# Mínimo de 2024 Q1      
+# Mínimo de 2024 Q2      
 min_RG_2023_04 <- EMPREGO.RG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Categoria) #peço a categoria associada
 
@@ -333,19 +333,19 @@ qua_desemRG <- ordem_desemRG[4]
 
 ##Região (atualizar trimestre)
 
-desemprego_norte <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2024 Q1"]))
-desemprego_nordeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
-desemprego_centrooeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
-desemprego_sudeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
-desemprego_sul <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_norte <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_nordeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_centrooeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_sudeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_sul <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2024 Q2"]))
 
 
 ### Trimestre anterior (Atualizar data)
-desemprego_norte_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2023 Q4"]))
-desemprego_nordeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2023 Q4"]))
-desemprego_centrooeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2023 Q4"]))
-desemprego_sudeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2023 Q4"]))
-desemprego_sul_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2023 Q4"]))
+desemprego_norte_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_nordeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_centrooeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_sudeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_sul_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2024 Q1"]))
 
 #desemtriNO <- desemprego_NO - desemtri_NO
 #desemtriNE <- desemprego_NE - desemtri_NE
@@ -354,11 +354,11 @@ desemprego_sul_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regia
 #desemtriSU <- desemprego_SU - desemtri_SU
 
 ## Ano anterior, mesmo tri (atualizar datas)
-desemprego_norte_tri_ano_anterio <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2023 Q1"])
-desemprego_nordeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2023 Q1"])
-desemprego_centrooeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2023 Q1"])
-desemprego_sud_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2023 Q1"])
-desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2023 Q1"])
+desemprego_norte_tri_ano_anterio <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_nordeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_centrooeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_sud_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2023 Q2"])
 
 #desemanoNO <- desemprego_NO - desemano_NO
 #desemanoNE <- desemprego_NE - desemano_NE
@@ -369,15 +369,15 @@ desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Re
 
 ### Mínimos e máximos
 
-# Máximo de 2024 Q1
+# Máximo de 2024 Q2
 max_REG_2023_04 <- EMPREGO.REG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
   select(Regiao) #peço a categoria associada
 
-# Mínimo de 2024 Q1      
+# Mínimo de 2024 Q2      
 min_REG_2023_04 <- EMPREGO.REG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Regiao) #peço a categoria associada
 
@@ -651,30 +651,30 @@ class(agreInformal.REG$Data)
 
 # Pela nova metodologia, não há como fazer comparação
 
-#informalidade <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia#.sh$Data == "2024 Q1"]
+#informalidade <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia#.sh$Data == "2024 Q2"]
 #
 #informalidade_tri_anterior <- #informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 #Q4"]
 #
 #dif_informalidade_tri <- informalidade - informalidade_tri_anterior
 
 #Região
-inf_NO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Norte" & agreInformal.REG$Data == "2024 Q1"]
+inf_NO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Norte" & agreInformal.REG$Data == "2024 Q2"]
 
-inf_NE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Nordeste" & agreInformal.REG$Data == "2024 Q1"]
+inf_NE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Nordeste" & agreInformal.REG$Data == "2024 Q2"]
 
-inf_CO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Centro-Oeste" & agreInformal.REG$Data == "2024 Q1"]
+inf_CO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Centro-Oeste" & agreInformal.REG$Data == "2024 Q2"]
 
-inf_SE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sudeste" & agreInformal.REG$Data == "2024 Q1"]
+inf_SE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sudeste" & agreInformal.REG$Data == "2024 Q2"]
 
-inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInformal.REG$Data == "2024 Q1"]
+inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInformal.REG$Data == "2024 Q2"]
 
 
 ## Tri anterior
-#informal_tri_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2023 Q4"]
-#informal_tri_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2023 Q4"]
-#informal_tri_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2023 Q4"]
-#informal_tri_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2023 Q4"]
-#informal_tri_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2024 Q1"]
 
 #inf_triNO <- ((inf_NO) - (informal_triNO))
 #inf_triNE <- inf_NE - informal_triNE
@@ -684,11 +684,11 @@ inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInfor
 
 ## Ano anterior (Atualizar ano e tri)
 
-#informal_ano_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2023 Q1"]
-#informal_ano_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2023 Q1"]
-#informal_ano_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2023 Q1"]
-#informal_ano_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2023 Q1"]
-#informal_ano_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2023 Q2"]
 
 #inf_anoNO <- inf_NO - informal_anoNO
 #inf_anoNE <- inf_NE - informal_anoNE
@@ -700,16 +700,16 @@ inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInfor
 
 ### Mínimos e máximos
 
-# Máximo de 2024 Q1
+# Máximo de 2024 Q2
 max_Inf_REG_2023_04 <- agreInformal.REG %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
   
   select(Regiao) #peço a categoria associada
 
-# Mínimo de 2024 Q1      
+# Mínimo de 2024 Q2      
 min_INF_REG_2023_04 <- agreInformal.REG %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Regiao) #peço a categoria associada
 
@@ -744,17 +744,17 @@ qui_infREG <- ordem_infREG[5]
 
 # Raça e gênero
 
-informal_HB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Branco" & agreInformal.RG$Data == "2024 Q1"]
-informal_HN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Negro" & agreInformal.RG$Data == "2024 Q1"]
-informal_MB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Branca" & agreInformal.RG$Data == "2024 Q1"]
-informal_MN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Negra" & agreInformal.RG$Data == "2024 Q1"]
+informal_HB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Branco" & agreInformal.RG$Data == "2024 Q2"]
+informal_HN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Negro" & agreInformal.RG$Data == "2024 Q2"]
+informal_MB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Branca" & agreInformal.RG$Data == "2024 Q2"]
+informal_MN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Negra" & agreInformal.RG$Data == "2024 Q2"]
 
 
 ##Tri anterior
-#informal_tri_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2023 Q4"]
-#informal_tri_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2023 Q4"]
-#informal_tri_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2023 Q4"]
-#informal_tri_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2024 Q1"]
 
 #diftri_informalidadeHB <- informal_HB - informal_tri_anterior_HB
 #diftri_informalidadeHN <- informal_HN - informal_tri_anterior_HN
@@ -766,10 +766,10 @@ informal_MN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Neg
 #informalidade_ano_anterior <- #informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 #Q1"]
 #difano_informalRG <- informalidade - informalidade_ano_anterior
 #
-#informal_ano_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2023 Q1"]
-#informal_ano_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2023 Q1"]
-#informal_ano_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2023 Q1"]
-#informal_ano_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2023 Q2"]
 #
 #dif_infanoHB <- informal_HB - informal_ano_anterior_HB
 #dif_infanoHN <- informal_HN - informal_ano_anterior_HN
@@ -779,15 +779,15 @@ informal_MN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Neg
 
 ### Mínimos e máximos
 
-# Máximo de 2024 Q1
+# Máximo de 2024 Q2
 max_Inf_RG_2023_04 <- agreInformal.RG %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
   select(Categoria) #peço a categoria associada
 
-# Mínimo de 2024 Q1      
+# Mínimo de 2024 Q2      
 min_INF_RG_2023_04 <- agreInformal.RG %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Categoria) #peço a categoria associada
 
@@ -870,17 +870,17 @@ trabalhosetor.RG.sh<- trabalhosetor.RG.sh %>%
 class(trabalhosetor.RG.sh$Data)
 
 #Homem Branco
-HB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q1"]
+HB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
 
 setores_HB <- c(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
 ordem_HB <- sort(setores_HB, decreasing = TRUE)
@@ -892,17 +892,17 @@ qui_HB <- ordem_HB[5]
 
 
 #Homem negro
-HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-HN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q1"]
+HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
 
 setores_HN <- c(HN_agro, HN_ind, HN_const, HN_comercio, HN_tran, HN_alimen, HN_info, HN_publico, HN_educa, HN_oserv, HN_domes)
 ordem_HN <- sort(setores_HN, decreasing = TRUE)
@@ -914,17 +914,17 @@ qua_HN <- ordem_HN[4]
 qui_HN <- ordem_HN[5]
 
 #Mulher Branca
-MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q1"]
+MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
 
 
 setores_MB <- c(MB_agro, MB_ind, MB_const, MB_comercio, MB_tran, MB_alimen, MB_info, MB_publico, MB_educa, MB_oserv, MB_domes)
@@ -937,17 +937,17 @@ qui_MB <- ordem_MB[5]
 
 
 #Mulher Negra
-MN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
-MN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q1"]
+MN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
 
 
 setores_MN <- c(MN_agro, MN_ind, MN_const, MN_comercio, MN_tran, MN_alimen, MN_info, MN_publico, MN_educa, MN_oserv, MN_domes)
@@ -1024,19 +1024,19 @@ ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria)) +
 ```{r include=FALSE}
 #Renda média
 
-renda_med <- RendaHabitMedia.sh$RendaHabitMedia[RendaHabitMedia.sh$Trimestre == "2024 Q1"]
+renda_med <- RendaHabitMedia.sh$RendaHabitMedia[RendaHabitMedia.sh$Trimestre == "2024 Q2"]
 
 # Raça e gênero
-rendahabitHB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2024 Q1"]
-rendahabitHN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2024 Q1"]
-rendahabitMB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2024 Q1"]
-rendahabitMN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2024 Q1"]
+rendahabitHB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2024 Q2"]
+rendahabitHN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2024 Q2"]
+rendahabitMB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2024 Q2"]
+rendahabitMN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2024 Q2"]
 
 ##Ano anterior
-rendahabitano_HB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2023 Q1"]
-rendahabitano_HN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2023 Q1"]
-rendahabitano_MB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2023 Q1"]
-rendahabitano_MN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2023 Q1"]
+rendahabitano_HB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2023 Q2"]
+rendahabitano_HN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2023 Q2"]
+rendahabitano_MB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2023 Q2"]
+rendahabitano_MN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2023 Q2"]
 
 rendahabitanoHB <- (rendahabitHB - rendahabitano_HB)
 rendahabitanoHN <- (rendahabitHN - rendahabitano_HN)
@@ -1204,36 +1204,36 @@ ggplot(giniUF.sh, aes(x=Data, y=gini, color=Regiao)) +
 
 ```{r include=FALSE}
 
-giniBR <- giniBR.sh$gini[giniBR.sh$Data == "2024 Q1"]
-giniBR_ano_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q1"]
-giniBR_tri_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q4"]
+giniBR <- giniBR.sh$gini[giniBR.sh$Data == "2024 Q2"]
+giniBR_ano_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q2"]
+giniBR_tri_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2024 Q1"]
 
 ### Mínimos e máximos (Regiao)
 
-# Máximo de 2024 Q1
+# Máximo de 2024 Q2
 max_GINI_REG_2023_04 <- giniUF.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(gini == max(gini)) %>% # e peço a linha correspondente ao valor máximo
   select(Regiao) #peço a categoria associada
 
-# Mínimo de 2024 Q1      
+# Mínimo de 2024 Q2      
 min_GINI_REG_2023_04 <- giniUF.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(gini == min(gini)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Regiao) #peço a categoria associada
 
 
 ### Mínimos e máximos (Raça e gênero)
 
-# Máximo de 2024 Q1
+# Máximo de 2024 Q2
 max_GINI_RG_2023_04 <- giniRG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(gini == max(gini)) %>% # e peço a linha correspondente ao valor máximo
   select(Categoria) #peço a categoria associada
 
-# Mínimo de 2024 Q1      
+# Mínimo de 2024 Q2      
 min_GINI_RG_2023_04 <- giniRG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
   filter(gini == min(gini)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Categoria) #peço a categoria associada
 
