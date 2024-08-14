@@ -1704,7 +1704,7 @@ save.image("C:/Users/lauro/Desktop/PNADc/v3/PNAD_dados_relatorio_01_2024.RData")
 # Removing all objects but historic series
 
 rm (EMPREGO.REG, EMPREGO.RG, EMPREGO.RG.REG, giniBR, giniRG, giniUF, informal.REG, 
-    informal.RG, informal.RG.REG, informalidadeMedia, PEA.REG, PEA.RG, PEA.RG.REG,
+    informal.RG, informal.RG.REG, PEA.REG, PEA.RG, PEA.RG.REG,
     RendaEfet.RG, RendaEfetivaMedia, RendaHabit.RG, trabalhosetor.REG, trabalhosetor.RG, 
     trabalhosetor.RG.REG, Tx_desemprego, Tx_emprego,  i, q, SUBOCUPHORAS.REG, 
     SUBOCUPHORAS.RG, percentis, curva_de_lorenz) #tudo que não tem SH 
