@@ -482,7 +482,7 @@ ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(
 ```
 
 
-## Trabalhadores Contribuintes para o INSS
+## Informalidade
 
 
 ```{r include=FALSE}
@@ -491,39 +491,42 @@ ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(
 
 #Renomeando colunas
 
-colnames(informal.RG.sh)[colnames(informal.RG.sh) == "não contribuinte INSS"] = "Informal"
-colnames(informal.RG.sh)[colnames(informal.RG.sh) == "contribuinte INSS"] = "Formal"
+colnames(agreInformal.RG)[colnames(agreInformal.RG) == "InformalidadeMedia.RG"] = "Informal"
+
+colnames(agreInformal.RG)[colnames(agreInformal.RG) == "FormalidadeMedia.RG"] = "Formal"
+
+agreInformal.RG$Categoria <- categorias
 
 # Dividimos a coluna de data em uma de ano, e uma de trimestre:
-date <- do.call(rbind, strsplit(informal.RG.sh$Trimestre, " ")) 
+date <- do.call(rbind, strsplit(agreInformal.RG$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
 # Retornamos a data atualizada para o dataframe anterior
-informal.RG.sh <- informal.RG.sh %>% 
-  select(Categoria, Formal, Informal)
-informal.RG.sh <- cbind(informal.RG.sh,date) 
+agreInformal.RG <- agreInformal.RG %>% 
+  select(Categoria, FormalidadeMedia.RG, InformalidadeMedia.RG)
+agreInformal.RG <- cbind(agreInformal.RG,date) 
 
 # Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
 # Definimos padrão para a criação dos trimestres, a partir do mês
 
-informal.RG.sh$Dia <- 01  
+agreInformal.RG$Dia <- 01  
 
-informal.RG.sh$Mes <- ifelse(informal.RG.sh$Trimestre=="Q1",1,
-                     ifelse(informal.RG.sh$Trimestre=="Q2",4,
-                     ifelse(informal.RG.sh$Trimestre=="Q3",7,10))) 
+agreInformal.RG$Mes <- ifelse(agreInformal.RG$Trimestre=="Q1",1,
+                     ifelse(agreInformal.RG$Trimestre=="Q2",4,
+                     ifelse(agreInformal.RG$Trimestre=="Q3",7,10))) 
 
 
-informal.RG.sh$Ano <- as.numeric(informal.RG.sh$Ano)
+agreInformal.RG$Ano <- as.numeric(agreInformal.RG$Ano)
 
 # Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
-informal.RG.sh$Data <-as.yearqtr(with(informal.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+agreInformal.RG$Data <-as.yearqtr(with(agreInformal.RG,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 # Voltamos para colunas originais
-informal.RG.sh<- informal.RG.sh %>%
-   select(Categoria, Formal, Informal, Data)
+agreInformal.RG<- agreInformal.RG %>%
+   select(Categoria, FormalidadeMedia.RG, InformalidadeMedia.RG, Data)
 
 #Checando formato
-class(informal.RG.sh$Data)
+class(agreInformal.RG$Data)
 ```
 
 ```{r include=FALSE}
@@ -532,53 +535,53 @@ class(informal.RG.sh$Data)
 
 #Renomeando colunas
 
-colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de informalidade"] = "Taxa_media_informalidade"
+#colnames(informalidadeMedia.sh)[colnames(informalidadeMedia.sh) == "Taxa média de #informalidade"] = "Taxa_media_informalidade"
+#
+## Dividimos a coluna de data em uma de ano, e uma de trimestre:
+#date <- do.call(rbind, strsplit(informalidadeMedia.sh$Trimestre, " ")) 
+#colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+#
+## Retornamos a data atualizada para o dataframe anterior
+#informalidadeMedia.sh <- informalidadeMedia.sh %>% 
+#  select(Taxa_media_informalidade)
+#informalidadeMedia.sh <- cbind(informalidadeMedia.sh,date) 
+#
+## Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e #mes
+## Definimos padrão para a criação dos trimestres, a partir do mês
+#
+#informalidadeMedia.sh$Dia <- 01  
 
-# Dividimos a coluna de data em uma de ano, e uma de trimestre:
-date <- do.call(rbind, strsplit(informalidadeMedia.sh$Trimestre, " ")) 
-colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
-
-# Retornamos a data atualizada para o dataframe anterior
-informalidadeMedia.sh <- informalidadeMedia.sh %>% 
-  select(Taxa_media_informalidade)
-informalidadeMedia.sh <- cbind(informalidadeMedia.sh,date) 
-
-# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
-# Definimos padrão para a criação dos trimestres, a partir do mês
-
-informalidadeMedia.sh$Dia <- 01  
-
-informalidadeMedia.sh$Mes <- ifelse(informalidadeMedia.sh$Trimestre=="Q1",1,
-                     ifelse(informalidadeMedia.sh$Trimestre=="Q2",4,
-                     ifelse(informalidadeMedia.sh$Trimestre=="Q3",7,10))) 
-
-
-informalidadeMedia.sh$Ano <- as.numeric(informalidadeMedia.sh$Ano)
-
-# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
-informalidadeMedia.sh$Data <-as.yearqtr(with(informalidadeMedia.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
-
-# Voltamos para colunas originais
-informalidadeMedia.sh<- informalidadeMedia.sh %>%
-   select(Taxa_media_informalidade, Data)
-
-#Checando formato
-class(informalidadeMedia.sh$Data)
+#informalidadeMedia.sh$Mes <- ifelse(informalidadeMedia.sh$Trimestre=="Q1",1,
+#                     ifelse(informalidadeMedia.sh$Trimestre=="Q2",4,
+#                     ifelse(informalidadeMedia.sh$Trimestre=="Q3",7,10))) 
+#
+#
+#informalidadeMedia.sh$Ano <- as.numeric(informalidadeMedia.sh$Ano)
+#
+## Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, #mes e dia:
+#informalidadeMedia.sh$Data #<-as.yearqtr(with(informalidadeMedia.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+#
+## Voltamos para colunas originais
+#informalidadeMedia.sh<- informalidadeMedia.sh %>%
+#   select(Taxa_media_informalidade, Data)
+#
+##Checando formato
+#class(informalidadeMedia.sh$Data)
 ```
 
 
 ```{r echo=FALSE}
 
-ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) + 
-  geom_line(size=2) + # defining line thickness
-  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
-  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
-  theme_bw() + # setting white background
-  labs(color = "Categoria", x = "Trimestre", y = "Taxa de Informalidade")+ # setting legend title
-  theme(plot.title = element_text(hjust = 0.5)) +
-  labs(title = "Figura 4: Trabalhadores não Contribuintes por Raça e Gênero (%)",
-       x = "Data",
-       y = "Percentual")
+#ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) + 
+#  geom_line(size=2) + # defining line thickness
+#  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = #Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding #average informality line
+#  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", #"#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+#  theme_bw() + # setting white background
+#  labs(color = "Categoria", x = "Trimestre", y = "Taxa de Informalidade")+ # #setting legend title
+#  theme(plot.title = element_text(hjust = 0.5)) +
+#  labs(title = "Figura 4: Trabalhadores não Contribuintes por Raça e Gênero (%)",
+#       x = "Data",
+#       y = "Percentual")
 ```
 
 
@@ -588,54 +591,54 @@ ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) +
 
 #Renomeando colunas
 
-colnames(informal.REG.sh)[colnames(informal.REG.sh) == "não contribuinte INSS"] = "Informal"
-colnames(informal.REG.sh)[colnames(informal.REG.sh) == "contribuinte INSS"] = "Formal"
+colnames(agreInformal.REG)[colnames(agreInformal.REG) == "Informalidade.REG"] = "Informal"
+colnames(agreInformal.REG)[colnames(agreInformal.REG) == "Formalidade.REG"] = "Formal"
 
 # Dividimos a coluna de data em uma de ano, e uma de trimestre:
-date <- do.call(rbind, strsplit(informal.REG.sh$Trimestre, " ")) 
+date <- do.call(rbind, strsplit(agreInformal.REG$Trimestre, " ")) 
 colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
 
 # Retornamos a data atualizada para o dataframe anterior
-informal.REG.sh <- informal.REG.sh %>% 
+agreInformal.REG <- agreInformal.REG %>% 
   select(Regiao, Formal, Informal)
-informal.REG.sh <- cbind(informal.REG.sh,date) 
+agreInformal.REG <- cbind(agreInformal.REG,date) 
 
 # Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
 # Definimos padrão para a criação dos trimestres, a partir do mês
 
-informal.REG.sh$Dia <- 01  
+agreInformal.REG$Dia <- 01  
 
-informal.REG.sh$Mes <- ifelse(informal.REG.sh$Trimestre=="Q1",1,
-                     ifelse(informal.REG.sh$Trimestre=="Q2",4,
-                     ifelse(informal.REG.sh$Trimestre=="Q3",7,10))) 
+agreInformal.REG$Mes <- ifelse(agreInformal.REG$Trimestre=="Q1",1,
+                     ifelse(agreInformal.REG$Trimestre=="Q2",4,
+                     ifelse(agreInformal.REG$Trimestre=="Q3",7,10))) 
 
 
-informal.REG.sh$Ano <- as.numeric(informal.REG.sh$Ano)
+agreInformal.REG$Ano <- as.numeric(agreInformal.REG$Ano)
 
 # Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
-informal.REG.sh$Data <-as.yearqtr(with(informal.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+agreInformal.REG$Data <-as.yearqtr(with(agreInformal.REG,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
 
 # Voltamos para colunas originais
-informal.REG.sh<- informal.REG.sh %>%
+agreInformal.REG<- agreInformal.REG %>%
    select(Regiao, Formal, Informal, Data)
 
 #Checando formato
-class(informal.REG.sh$Data)
+class(agreInformal.REG$Data)
 ```
 
 
 ```{r echo=FALSE}
 
-ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) + 
-  geom_line(size=2) + # defining line thickness
-  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding average informality line
-  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
-  theme_bw() + # setting white background
-  labs(color = "Regiao", x = "Trimestre", y = "Taxa de Informalidade")+ # setting legend title
-  theme(plot.title = element_text(hjust = 0.5)) +
-  labs(title = "Figura 5: Trabalhadores não Contribuintes por Região (%)",
-       x = "Data",
-       y = "Percentual")
+#ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) + 
+#  geom_line(size=2) + # defining line thickness
+#  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = #Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding #average informality line
+#  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", #"#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+#  theme_bw() + # setting white background
+#  labs(color = "Regiao", x = "Trimestre", y = "Taxa de Informalidade")+ # setting #legend title
+#  theme(plot.title = element_text(hjust = 0.5)) +
+#  labs(title = "Figura 5: Trabalhadores não Contribuintes por Região (%)",
+#       x = "Data",
+#       y = "Percentual")
 ```
 
 
@@ -643,26 +646,32 @@ ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) +
 ```{r include=FALSE}
 # Informalidade média (Atualizar tri e ano)
 
-informalidade <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2024 Q1"]
+# Pela nova metodologia, não há como fazer comparação
 
-informalidade_tri_anterior <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 Q4"]
-
-dif_informalidade_tri <- informalidade - informalidade_tri_anterior
+#informalidade <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia#.sh$Data == "2024 Q1"]
+#
+#informalidade_tri_anterior <- #informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 #Q4"]
+#
+#dif_informalidade_tri <- informalidade - informalidade_tri_anterior
 
 #Região
-inf_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Data == "2024 Q1"]
-inf_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Data == "2024 Q1"]
-inf_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Data == "2024 Q1"]
-inf_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Data == "2024 Q1"]
-inf_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Data == "2024 Q1"]
+inf_NO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Norte" & agreInformal.REG$Trimestre == "2024 Q1"]
+
+inf_NE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Nordeste" & agreInformal.REG$Trimestre == "2024 Q1"]
+
+inf_CO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Centro-Oeste" & agreInformal.REG$Trimestre == "2024 Q1"]
+
+inf_SE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sudeste" & agreInformal.REG$Trimestre == "2024 Q1"]
+
+inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInformal.REG$Trimestre == "2024 Q1"]
 
 
 ## Tri anterior
-informal_tri_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Data == "2023 Q4"]
-informal_tri_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Data == "2023 Q4"]
-informal_tri_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Data == "2023 Q4"]
-informal_tri_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Data == "2023 Q4"]
-informal_tri_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2023 Q4"]
 
 #inf_triNO <- ((inf_NO) - (informal_triNO))
 #inf_triNE <- inf_NE - informal_triNE
@@ -672,11 +681,11 @@ informal_tri_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "
 
 ## Ano anterior (Atualizar ano e tri)
 
-informal_ano_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Norte" & informal.REG.sh$Data == "2023 Q1"]
-informal_ano_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Nordeste" & informal.REG.sh$Data == "2023 Q1"]
-informal_ano_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Centro-Oeste" & informal.REG.sh$Data == "2023 Q1"]
-informal_ano_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sudeste" & informal.REG.sh$Data == "2023 Q1"]
-informal_ano_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "Sul" & informal.REG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2023 Q1"]
 
 #inf_anoNO <- inf_NO - informal_anoNO
 #inf_anoNE <- inf_NE - informal_anoNE
@@ -688,16 +697,19 @@ informal_ano_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == "
 
 ### Mínimos e máximos
 
+agreInformal.REG$Regiao <- regiaobrasil
+
 # Máximo de 2024 Q1
-max_Inf_REG_2023_04 <- informal.REG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
-  filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
+max_Inf_REG_2023_04 <- agreInformal.REG %>%
+  filter(Trimestre == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Informalidade.REG == max(Informalidade.REG)) %>% # e peço a linha correspondente ao valor máximo
+  
   select(Regiao) #peço a categoria associada
 
 # Mínimo de 2024 Q1      
-min_INF_REG_2023_04 <- informal.REG.sh %>%
-  filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
-  filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
+min_INF_REG_2023_04 <- agreInformal.REG %>%
+  filter(Trimestre == "2024 Q1") %>% #filtro pelo trimestre que quero 
+  filter(Informalidade.REG == min(Informalidade.REG)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Regiao) #peço a categoria associada
 
 
@@ -731,49 +743,49 @@ qui_infREG <- ordem_infREG[5]
 
 # Raça e gênero
 
-informal_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Data == "2024 Q1"]
-informal_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Data == "2024 Q1"]
-informal_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Data == "2024 Q1"]
-informal_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Data == "2024 Q1"]
+informal_HB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Branco" & agreInformal.RG$Data == "2024 Q1"]
+informal_HN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Negro" & agreInformal.RG$Data == "2024 Q1"]
+informal_MB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Branca" & agreInformal.RG$Data == "2024 Q1"]
+informal_MN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Negra" & agreInformal.RG$Data == "2024 Q1"]
 
 
 ##Tri anterior
-informal_tri_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Data == "2023 Q4"]
-informal_tri_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Data == "2023 Q4"]
-informal_tri_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Data == "2023 Q4"]
-informal_tri_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2023 Q4"]
+#informal_tri_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2023 Q4"]
 
-diftri_informalidadeHB <- informal_HB - informal_tri_anterior_HB
-diftri_informalidadeHN <- informal_HN - informal_tri_anterior_HN
-diftri_informalidadeMB <- informal_HB - informal_tri_anterior_MB
-diftri_informalidadeMN <- informal_HN - informal_tri_anterior_MN
+#diftri_informalidadeHB <- informal_HB - informal_tri_anterior_HB
+#diftri_informalidadeHN <- informal_HN - informal_tri_anterior_HN
+#diftri_informalidadeMB <- informal_HB - informal_tri_anterior_MB
+#diftri_informalidadeMN <- informal_HN - informal_tri_anterior_MN
 
 
 ## Ano anterior
-informalidade_ano_anterior <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 Q1"]
-difano_informalRG <- informalidade - informalidade_ano_anterior
-
-informal_ano_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Branco" & informal.RG.sh$Data == "2023 Q1"]
-informal_ano_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Homem Negro" & informal.RG.sh$Data == "2023 Q1"]
-informal_ano_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Branca" & informal.RG.sh$Data == "2023 Q1"]
-informal_ano_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == "Mulher Negra" & informal.RG.sh$Data == "2023 Q1"]
-
-dif_infanoHB <- informal_HB - informal_ano_anterior_HB
-dif_infanoHN <- informal_HN - informal_ano_anterior_HN
-dif_infanoMB <- informal_MB - informal_ano_anterior_MB
-dif_infanoMN <- informal_MB - informal_ano_anterior_MN
-
+#informalidade_ano_anterior <- #informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 #Q1"]
+#difano_informalRG <- informalidade - informalidade_ano_anterior
+#
+#informal_ano_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2023 Q1"]
+#informal_ano_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2023 Q1"]
+#
+#dif_infanoHB <- informal_HB - informal_ano_anterior_HB
+#dif_infanoHN <- informal_HN - informal_ano_anterior_HN
+#dif_infanoMB <- informal_MB - informal_ano_anterior_MB
+#dif_infanoMN <- informal_MB - informal_ano_anterior_MN
+#
 
 ### Mínimos e máximos
 
 # Máximo de 2024 Q1
-max_Inf_RG_2023_04 <- informal.RG.sh %>%
+max_Inf_RG_2023_04 <- agreInformal.RG %>%
   filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
   filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
   select(Categoria) #peço a categoria associada
 
 # Mínimo de 2024 Q1      
-min_INF_RG_2023_04 <- informal.RG.sh %>%
+min_INF_RG_2023_04 <- agreInformal.RG %>%
   filter(Data == "2024 Q1") %>% #filtro pelo trimestre que quero 
   filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
   select(Categoria) #peço a categoria associada
@@ -789,19 +801,19 @@ seg_infRG <- ordem_infRG[2]
 ter_infRG <- ordem_infRG[3]
 qua_infRG <- ordem_infRG[4]
 
-diftri_informalidadeRG <- c(diftri_informalidadeHB, diftri_informalidadeHN, diftri_informalidadeMB, diftri_informalidadeMN)
-ordem_diftri <- sort(diftri_informalidadeRG, decreasing = TRUE)
-max_inftriRG <- ordem_diftri[1]
-seg_inftriRG <- ordem_diftri[2]
-ter_inftriRG <- ordem_diftri[3]
-qua_inftriRG <- ordem_diftri[4]
+#diftri_informalidadeRG <- c(diftri_informalidadeHB, diftri_informalidadeHN, #diftri_informalidadeMB, diftri_informalidadeMN)
+#ordem_diftri <- sort(diftri_informalidadeRG, decreasing = TRUE)
+#max_inftriRG <- ordem_diftri[1]
+#seg_inftriRG <- ordem_diftri[2]
+#ter_inftriRG <- ordem_diftri[3]
+#qua_inftriRG <- ordem_diftri[4]
 
-infano_RG <- c(dif_infanoHB, dif_infanoHN, dif_infanoMB, dif_infanoMN)
-ordem_infanoRG <- sort(infano_RG, decreasing = TRUE)
-max_infanoRG <- ordem_infanoRG[1]
-seg_infanoRG <- ordem_infanoRG[2]
-ter_infanoRG <- ordem_infanoRG[3]
-qua_infanoRG <- ordem_infanoRG[4]
+#infano_RG <- c(dif_infanoHB, dif_infanoHN, dif_infanoMB, dif_infanoMN)
+#ordem_infanoRG <- sort(infano_RG, decreasing = TRUE)
+#max_infanoRG <- ordem_infanoRG[1]
+#seg_infanoRG <- ordem_infanoRG[2]
+#ter_infanoRG <- ordem_infanoRG[3]
+#qua_infanoRG <- ordem_infanoRG[4]
 
 
 ```
