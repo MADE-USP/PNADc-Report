@@ -410,49 +410,53 @@ qui_desemREG <- ordem_desemREG[5]
 ```
 
 
-Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o `r q`º trimestre de `r i` em `r desemprego*100`%. A região `r min_REG_2023_04$Regiao` registrou maior desemprego no trimestre de referência (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor desemprego no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, "`r min_RG_2023_04$Categoria`" foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria "`r max_RG_2023_04$Categoria`", de `r qua_desemRG*100`%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q-1`º trimestre de `r i`. Assim, a taxa nacional de desemprego encerrou o `r q`º trimestre de `r i` em `r desemprego*100`%. A região `r min_REG_2023_04$Regiao` registrou maior desemprego no trimestre de referência (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor desemprego no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, "`r min_RG_2023_04$Categoria`" foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria "`r max_RG_2023_04$Categoria`", de `r qua_desemRG*100`%. 
 
 Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
 
 
 ### Escolaridade
 ```{r include=FALSE}
-colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
+#colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
+#
+##ESCOLARIDADE
+#colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] #="ensino_fundamental"
+#colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] #="ensino_medio"
+#colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] #="ensino_superior"
+#
+#
+#  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = #row.names(ESCOLARIDADE.RG))
+#  ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = #row.names(ESCOLARIDADE.REG))
+#  
+#escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria #=="Homem Branco"]
+#escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == #"Homem Negro"]
+#escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == #"Mulher Branca"]
+#escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == #"Mulher Negra"]
+#
+#escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem #Branco"]
+#escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem #Negro"]
+#escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == #"Mulher Branca"]
+#escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == #"Mulher Negra"]
+#
+#escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem #Branco"]
+#escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == #"Homem Negro"]
+#escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == #"Mulher Branca"]
+#escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == #"Mulher Negra"]
+#
+##Região
+#max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
+#max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
 
-#ESCOLARIDADE
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
+# Texto escolaridade:
 
-
-  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
-  ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
-  
-escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-#Região
-max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
-max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
+#No relatório da PNAD elaborado pelo Made mostramos, em todo primeiro trimestre do #ano, dados sobre o nível educacional da força de trabalho. Dados de escolaridade #representam o percentual de obtenção de um grau educacional dentro de um designado #grupo da população economicamente ativa. Dentre as mulheres negras, `r #(escol_sup_mn*100)`% possuíam ensino superior; `r (escol_medio_mn*100)`%, ensino #médio; e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres #brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo; `r #(escol_medio_mb*100)`%, ensino médio; e `r (escol_fund_mb*100)`%, ensino #fundamental.
+#
+#
+#Dentre os homens negros, `r (escol_sup_hn*100)`% possuíam ensino superior; `r #(escol_medio_hn*100)`%, ensino médio; e `r (escol_fund_hn*100)`%, ensino #fundamental. Dentre os homens brancos, `r (escol_sup_hb*100)`% tinham ensino #superior; `r (escol_medio_hb*100)`%, ensino médio; e `r (escol_fund_hb*100)`%, #apenas ensino fundamental.
 
 ```
 
-No relatório da PNAD elaborado pelo Made mostramos, em todo primeiro trimestre do ano, dados sobre o nível educacional da força de trabalho. Dados de escolaridade representam o percentual de obtenção de um grau educacional dentro de um designado grupo da população economicamente ativa. Dentre as mulheres negras, `r (escol_sup_mn*100)`% possuíam ensino superior; `r (escol_medio_mn*100)`%, ensino médio; e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo; `r (escol_medio_mb*100)`%, ensino médio; e `r (escol_fund_mb*100)`%, ensino fundamental.
 
-
-Dentre os homens negros, `r (escol_sup_hn*100)`% possuíam ensino superior; `r (escol_medio_hn*100)`%, ensino médio; e `r (escol_fund_hn*100)`%, ensino fundamental. Dentre os homens brancos, `r (escol_sup_hb*100)`% tinham ensino superior; `r (escol_medio_hb*100)`%, ensino médio; e `r (escol_fund_hb*100)`%, apenas ensino fundamental.
 
 ```{r echo=FALSE}
 
@@ -819,7 +823,7 @@ qua_infRG <- ordem_infRG[4]
 
 ```
 
-Neste relatório, reportamos estatísticas sobre a informalidade no mercado de trabalho brasileiro. Definimos como informais os trabalhadores sem carteira de trabalho^[Critério utilizado, por exemplo, por Barros, R.P. e Varandas, S. A carteira de trabalho e as condições de trabalho e remuneração dos chefes de família no Brasil. IPEA. 1987.]  e, dentre aqueles que se autodeclaram como autônomos, empregadores ou familiares auxiliares do lar, os trabalhadores que não contribuem para o sistema de previdência social (INSS)^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998]. No `r q`º trimestre de `r i`, a taxa de informalidade média calculada para o Brasil foi de `r informalidadeMedia$Taxa_media_informalidade *100` %. Do ponto de vista regional, a região com maior taxa de informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores informais (`r qui_infREG*100`%). No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%.
+Neste relatório, reportamos estatísticas sobre a informalidade no mercado de trabalho brasileiro. Definimos como informais os trabalhadores sem carteira de trabalho^[Critério utilizado, por exemplo, por Barros, R.P. e Varandas, S. A carteira de trabalho e as condições de trabalho e remuneração dos chefes de família no Brasil. IPEA. 1987.]  e, dentre aqueles que se autodeclaram como autônomos, empregadores ou familiares auxiliares do lar, os trabalhadores que não contribuem para o sistema de previdência social (INSS)^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998]. No `r q`º trimestre de `r i`, a taxa de informalidade média calculada para o Brasil foi de `r informalidadeMedia$Taxa_media_informalidade *100` %. Do ponto de vista regional, a região com maior taxa de informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores informais (`r qui_infREG*100`%). No recorte de raça e gênero, observa-se maior informalidade na população negra. O grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%, seguido da categoria "Mulher Negra" (`r informal_MN*100`%). As taxas de informalidade calculadas para as categorias "Homem Branco" e "Mulher Branca" foram de `r informal_HB*100`% e `r informal_MB`, respectivamente.
 
 
 ## Emprego por Setor
