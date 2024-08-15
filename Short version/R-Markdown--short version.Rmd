@@ -1,7 +1,7 @@
 ---
 title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito e Clara Brenck e os pesquisadores José Bergamin e Hiaman Santos.]" 
 author: "Made USP"
-date: "15/08/2024"
+date: "16/08/2024"
 lang: pt-br
 output:
   pdf_document: default
@@ -51,8 +51,8 @@ library(xts)
 #load(file_path)
 
 #Clara
-load("C:/Users/lauro/Desktop/PNADc/v3/PNAD_dados_relatorio_01_2024.RData")
-load("C:/Users/lauro/Desktop/PNADc/v3/dados_serie_historica_012024.RData")
+load("C:/Users/lauro/Desktop/PNADc/Q2 2024/PNAD_dados_relatorio_02_2024.RData")
+load("C:/Users/lauro/Desktop/PNADc/Q2 2024/dados_serie_historica_022024.RData")
 
 #Hiaman
 #load("C:/Users/lauro/Desktop/conferirpnad/PNAD_dados_relatorio_01_2024.RData")
