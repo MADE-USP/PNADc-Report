@@ -970,7 +970,7 @@ qui_MN <- ordem_MN[5]
 
 A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido da construção (`r seg_HN*100`%), da indústria (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de informação (`r seg_HB*100`%), de indústria (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
 
-Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Das mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
+Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Dentre as mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
 
 Nota-se que os serviços de informação, educação e serviços domésticos são majoritariamente exercidos por mulheres. 
 
@@ -1071,7 +1071,7 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
 
-O rendimento habitual médio do trabalhador brasileiro foi de R\$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de homens brancos, com R\$`r max_renhab_ano` reais, enquanto mulheres negras tiveram o menor aumento (R\$ `r qua_renhab_ano`). 
+O rendimento habitual médio do trabalhador brasileiro foi de R\$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de homens brancos, com R\$ `r max_renhab_ano` reais, enquanto mulheres negras tiveram o menor aumento (R\$ `r qua_renhab_ano`). 
 
 As séries estão plotadas na figura 6.
 
@@ -1251,7 +1251,7 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 
 O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`.
 
-Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao`, acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, o índice de Gini é maior para a categoria "`r max_GINI_RG_2023_04$Categoria`" (0.53) e menor na categoria "`r min_GINI_RG_2023_04$Categoria`" (0.45).
+Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao` (0.52), acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, no recorte de raça e gênero, o índice de Gini é maior para a categoria "`r max_GINI_RG_2023_04$Categoria`" (0.53) e menor para a categoria "`r min_GINI_RG_2023_04$Categoria`" (0.45).
 
 
 # Percentis de renda
@@ -1273,7 +1273,7 @@ ggplot(quantis_de_renda23_04, aes(x=Percentis, y=apropriado))+
   theme_bw() # colocando fundo Branco
 ```
 
-Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
+Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
 
 Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11.93% da renda nacional, no `r q`º trimestre de `r i`. 
 
