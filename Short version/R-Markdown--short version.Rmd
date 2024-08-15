@@ -414,8 +414,6 @@ Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_dese
 
 Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
 
-
-### Escolaridade
 ```{r include=FALSE}
 #colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
 #
@@ -449,6 +447,8 @@ Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
 
 # Texto escolaridade:
 
+### Escolaridade
+
 #No relatório da PNAD elaborado pelo Made mostramos, em todo primeiro trimestre do #ano, dados sobre o nível educacional da força de trabalho. Dados de escolaridade #representam o percentual de obtenção de um grau educacional dentro de um designado #grupo da população economicamente ativa. Dentre as mulheres negras, `r #(escol_sup_mn*100)`% possuíam ensino superior; `r (escol_medio_mn*100)`%, ensino #médio; e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres #brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo; `r #(escol_medio_mb*100)`%, ensino médio; e `r (escol_fund_mb*100)`%, ensino #fundamental.
 #
 #
@@ -460,29 +460,29 @@ Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
 
 ```{r echo=FALSE}
 
-ESCOLARIDADE_reshape <- reshape(ESCOLARIDADE.RG, idvar = "Categoria", direction = "long", varying = list(c("Pré-fundamental", "ensino_fundamental","ensino_medio","ensino_superior","Especializacao/pós-graduação","Mestrado/doutorado")))
-
-
-colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "Pré-fundamental"] = "Composição"
-colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "time"] = "Escolaridade"
-
-ESCOLARIDADE_reshape$Nivel <- ifelse(ESCOLARIDADE_reshape$Escolaridade ==1, "Pré-fundamental", 
-                                            ifelse(ESCOLARIDADE_reshape$Escolaridade==2, "Ensino Fundamental",
-                                                   ifelse(ESCOLARIDADE_reshape$Escolaridade==3, "Ensino Médio", 
-                                                          ifelse(ESCOLARIDADE_reshape$Escolaridade==4, "Ensino Superior", 
-                                                                 ifelse(
-                                                                   ESCOLARIDADE_reshape$Escolaridade ==5, "Especialização/pós-graduação", "Mestrado/Doutorado"
-                                                                 )
-                                                          ))))
-
-ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(Nivel,-Escolaridade)))+
-  geom_bar(stat="identity") +
-  scale_fill_manual(values=c("#FFAB4D","#eb52ff","#45ff66", "#3366ff","#feff41","#FF7276")) + #cores Made
-  theme_bw() + # colocando fundo Branco 
-  labs(title = "Figura 3: Nível de Escolaridade Máxima Atingida",
-       x = "Categoria",
-       y = "Percentual",
-       fill = "Nível de Escolaridade") 
+#ESCOLARIDADE_reshape <- reshape(ESCOLARIDADE.RG, idvar = "Categoria", direction = #"long", varying = list(c("Pré-fundamental", #"ensino_fundamental","ensino_medio","ensino_superior","Especializacao/pós-graduaçã#o","Mestrado/doutorado")))
+#
+#
+#colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == #"Pré-fundamental"] = "Composição"
+#colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "time"] = #"Escolaridade"
+#
+#ESCOLARIDADE_reshape$Nivel <- ifelse(ESCOLARIDADE_reshape$Escolaridade ==1, #"Pré-fundamental", 
+#                                            #ifelse(ESCOLARIDADE_reshape$Escolaridade==2, "Ensino Fundamental",
+#                                                   #ifelse(ESCOLARIDADE_reshape$Escolaridade==3, "Ensino Médio", 
+#                                                          #ifelse(ESCOLARIDADE_reshape$Escolaridade==4, "Ensino Superior", 
+#                                                                 ifelse(
+#                                                                   #ESCOLARIDADE_reshape$Escolaridade ==5, "Especialização/pós-graduação", #"Mestrado/Doutorado"
+#                                                                 )
+#                                                          ))))
+#
+#ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, #fill=reorder(Nivel,-Escolaridade)))+
+#  geom_bar(stat="identity") +
+#  scale_fill_manual(values=c("#FFAB4D","#eb52ff","#45ff66", #"#3366ff","#feff41","#FF7276")) + #cores Made
+#  theme_bw() + # colocando fundo Branco 
+#  labs(title = "Figura 3: Nível de Escolaridade Máxima Atingida",
+#       x = "Categoria",
+#       y = "Percentual",
+#       fill = "Nível de Escolaridade") 
 ```
 
 
@@ -964,7 +964,7 @@ qui_MN <- ordem_MN[5]
 
 ```
 
-A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido de indústria (`r seg_HN*100`%), de construção (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de informação (`r seg_HB*100`%), de indústria (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
+A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido da construção (`r seg_HN*100`%), da indústria (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de informação (`r seg_HB*100`%), de indústria (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
 
 Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Das mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
 
@@ -972,7 +972,6 @@ Nota-se que os serviços de informação, educação e serviços domésticos sã
 
 
 # Rendimento habitual
-
 
 
 ```{r include=FALSE}
