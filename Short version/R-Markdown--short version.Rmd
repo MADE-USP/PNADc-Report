@@ -1277,15 +1277,15 @@ Para calcular uma medida de distribuição de renda, obtemos a renda apropriada 
 
 Clique abaixo para dados completos:
 
-[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
+[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/153Ed_kcnTrq2mNos2OcizBBoXfkNmZpp/view?usp=sharing)
 
-[Tabela 2: Dados por Região](https://drive.google.com/file/d/1bCn8967ccAvB3idm5PiwU31HIFqY680K/view?usp=sharing)
+[Tabela 2: Dados por Região](https://drive.google.com/file/d/1O4RvsnCIQwzGxsyhbc05FJpVXxhnliM-/view?usp=drive_link)
 
-[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/10pwdVV6pGg4FgjZuXLQR6h7l1Zkplgmq/view?usp=sharing)
+[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/1t1QbdGAVv7GKxXMgeSKe3-LLFQvxKk7l/view?usp=drive_link)
 
-[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
+[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1xN5wQ7iItwOsL_OC0LAPlakxOJObV89N/view?usp=drive_link)
 
-[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/1HNiCJ2wPMjPWRs8-5EQQT5IMxP5qPdrG/view?usp=drive_link)
+[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/160dd1TdEP4oKdQihbpcNq0PRS0thXXs0/view?usp=drive_link)
 
 
 # Dados e códigos
