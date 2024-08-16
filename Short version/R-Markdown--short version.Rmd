@@ -1,0 +1,1290 @@
+---
+title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito e Clara Brenck e os pesquisadores José Bergamin e Hiaman Santos.]" 
+author: "Made USP"
+date: "15/08/2024"
+lang: pt-br
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+subtitle: 2º Trimestre de 2024 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=FALSE, warning=FALSE, message=FALSE)
+
+options(digits=2)
+```
+
+
+```{r include=FALSE}
+# SEMPRE CARREGAR ESTE CHUNK ANTES DE ABRIR O CÓDIGO COM OS DADOS
+
+#library(PNADcIBGE)
+library(survey)
+library(convey)
+library(tidyverse)
+library(dplyr)
+library(knitr)
+library(openxlsx)
+library(kableExtra)
+library(zoo)
+library(gplots)
+#install.packages("xts")
+library(xts)
+
+#devtools::install_github("kupietz/kableExtra")
+
+# Setting work directory (Github)-----------------------------------------------
+
+#file_directory <- dirname(rstudioapi::getSourceEditorContext()$path)%>%
+#gsub("\\Short version", "", .)
+
+#setwd(file_directory)
+
+#getwd()
+
+# Reading PNADc file------------------------------------------------------------
+
+#folder_path <- "Input/"
+#file_path <- paste0(file_directory, folder_path, "PNADc_", q, "_",i, ".RData")
+#load(file_path)
+
+#Clara
+load("C:/Users/lauro/Desktop/PNADc/v3/PNAD_dados_relatorio_01_2024.RData")
+load("C:/Users/lauro/Desktop/PNADc/v3/dados_serie_historica_012024.RData")
+
+#Hiaman
+#load("C:/Users/lauro/Desktop/conferirpnad/PNAD_dados_relatorio_01_2024.RData")
+#load("C:/Users/lauro/Desktop/conferirpnad/dados_serie_historica_012024.RData")
+
+
+```
+
+
+```{r include=FALSE}
+# Definindo trimestre e ano de referência
+
+i=2024
+q=2
+
+#trimestre_imediatamente_anterior <- as.yearqtr(as.Date("2023-07-01"),"%Y-%m-%d")
+#mesmo_trimestre_ano_anterior <- as.yearqtr(as.Date("2022-09-01"),"%Y-%m-%d")
+
+```
+
+
+
+# Introdução
+
+Reportam-se, a seguir, estatísticas resumidas do relatório da Pesquisa Nacional por Amostra de Domicílios Contínua (PNAD Contínua) referente ao `r q`º trimestre de `r i`. O acesso às estatísticas e tabelas completas pode ser feito por meio do link ao final do documento. Uma versão mais longa do relatório pode ser acessada [clicando aqui](https://drive.google.com/file/d/1W2m1FdqM7CkLN8JDRnA6J-A3eFvZkNSE/view?usp=drive_link).
+
+# Mercado de Trabalho
+
+## Desemprego
+
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+colnames(Tx_emprego.sh)[colnames(Tx_emprego.sh) == "Taxa de emprego"] = "Taxa_emprego"
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(Tx_emprego.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+Tx_emprego.sh <- Tx_emprego.sh %>% 
+  select(Taxa_emprego)
+Tx_emprego.sh <- cbind(Tx_emprego.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+Tx_emprego.sh$Dia <- 01  
+
+Tx_emprego.sh$Mes <- ifelse(Tx_emprego.sh$Trimestre=="Q1",1,
+                     ifelse(Tx_emprego.sh$Trimestre=="Q2",4,
+                     ifelse(Tx_emprego.sh$Trimestre=="Q3",7,10))) 
+
+
+Tx_emprego.sh$Ano <- as.numeric(Tx_emprego.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+Tx_emprego.sh$Data <-as.yearqtr(with(Tx_emprego.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+Tx_emprego.sh<- Tx_emprego.sh %>%
+   select(Taxa_emprego, Data)
+
+#Checando formato
+class(Tx_emprego.sh$Data)
+
+
+
+```
+
+
+
+```{r include=FALSE}
+
+# Corrigindo as datas
+
+# Para lidar com datas no R, é preciso um formato bem especifico
+# vamos entao editar o formato atual, que esta em "character" para um formato data
+# Para isso, o R precisa da data num formato AA-MM-DD (ainda que o dia nao importe pra dados trimestrais)
+# Vamos fazer um passo a passo disso aqui
+
+# Primeiro, vamos dividir a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(EMPREGO.RG.sh$Trimestre, " ")) # dividindo a data pelo "espaco": ano e trimestre
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] # colocando nomes corretos nas colunas
+EMPREGO.RG.sh <- EMPREGO.RG.sh %>% 
+  select(Ocupado, Categoria)
+EMPREGO.RG.sh <- cbind(EMPREGO.RG.sh,date) # juntando com o data frame anterior
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+EMPREGO.RG.sh$Dia <- 01  # considere o dia igual para todos (o dia não vai importar)
+
+
+# Para criar o mes, temos que criar um padrao para que, a partir do mes, se identifique o trimestre
+# Fazemos entao pelo primeiro mes: mes 1 p/ o 1o trimestre; mes 4 p/ o 2o trimestre, etc
+# (aqui tambem tanto faz qual mes voce escolhe, so tem que estar dentro do trimestre certo)
+# criamos um loop para ajustar o mes a partir do trimestre:
+
+EMPREGO.RG.sh$Mes <- ifelse(EMPREGO.RG.sh$Trimestre=="Q1",1,
+                     ifelse(EMPREGO.RG.sh$Trimestre=="Q2",4,
+                     ifelse(EMPREGO.RG.sh$Trimestre=="Q3",7,10))) 
+# no comando "ifelse", nao precisamos o "10" vai aparecer caso nenhum das condicoes forem aceitas
+# ou seja, caso nao seja Q1, Q2 ou Q3 - isto e, estamos no Q4
+
+#Agora podemos dizer pro R a data, ja que temos todos os elementos que precisamos
+# Primeiro, vamos transformar o ano em numerico
+EMPREGO.RG.sh$Ano <- as.numeric(EMPREGO.RG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+EMPREGO.RG.sh$Data <-as.yearqtr(with(EMPREGO.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+
+# Por fim, vamos voltar a ter apenas a Taxa de Ocupação, Categoria e a Data:
+EMPREGO.RG.sh<- EMPREGO.RG.sh %>%
+   select(Ocupado, Categoria, Data)
+
+
+```
+
+
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(EMPREGO.REG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+EMPREGO.REG.sh <- EMPREGO.REG.sh %>% 
+  select(Ocupado, Regiao)
+EMPREGO.REG.sh <- cbind(EMPREGO.REG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+EMPREGO.REG.sh$Dia <- 01  
+
+EMPREGO.REG.sh$Mes <- ifelse(EMPREGO.REG.sh$Trimestre=="Q1",1,
+                     ifelse(EMPREGO.REG.sh$Trimestre=="Q2",4,
+                     ifelse(EMPREGO.REG.sh$Trimestre=="Q3",7,10))) 
+
+
+EMPREGO.REG.sh$Ano <- as.numeric(EMPREGO.REG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+EMPREGO.REG.sh$Data <-as.yearqtr(with(EMPREGO.REG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+EMPREGO.REG.sh<- EMPREGO.REG.sh %>%
+   select(Ocupado, Regiao, Data)
+
+#Checando formato
+class(EMPREGO.REG.sh$Data)
+```
+
+
+```{r echo=FALSE}
+
+ggplot(EMPREGO.RG.sh, aes(x=Data, y=Ocupado, color=Categoria)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
+  ggtitle("Figura 1: Taxa de Ocupação por Raça e Gênero") + # plot title
+  scale_colour_manual(name = "Categoria", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Categoria", x = "Trimestre", y = "Taxa de ocupacão") + # setting legend title
+   theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+
+
+```{r echo=FALSE}
+
+ggplot(EMPREGO.REG.sh, aes(x=Data, y=Ocupado, color=Regiao)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = Tx_emprego.sh, aes(x = Data, y = Taxa_emprego, color = "Brasil"), linetype = "dashed") + # adding average employment rate
+  ggtitle("Figura 2: Taxa de Ocupação por Região") + # plot title
+  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Regiao", x = "Trimestre", y = "Taxa de ocupação")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+``` {r include=FALSE}
+
+# Variáveis
+
+# Ex: PEA_homem_branco_trimestre_anterior <- PEA.RG.sh$PEA[PEA.RG.sh$Categoria == "Homem Branco" & PEA.RG.sh$Trimestre == "2024 Q1"]
+
+
+# Renomeando colunas
+colnames(Tx_emprego.sh)[colnames(Tx_emprego.sh) == "Taxa de emprego"] ="Taxa_emprego"
+colnames(Tx_desemprego.sh)[colnames(Tx_desemprego.sh) == "Taxa de desemprego"] = "Taxa_desemprego"
+
+# Criando objetos (atualizar trimestre de referência)
+desemprego <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2024 Q2"]
+desemprego_tri_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2024 Q1"]
+desemprego_ano_anterior <- Tx_desemprego.sh$Taxa_desemprego[Tx_desemprego.sh$Trimestre == "2023 Q2"]
+
+# Diferenças entre taxas de desemprego
+                                                                   
+dif_desem_tri <- ((desemprego)-(desemprego_tri_anterior))
+dif_desem_ano <- ((desemprego)-(desemprego_ano_anterior))
+
+## Desemprego por raça e gênero (Atualizar trimestre de referência)
+
+desemprego_HB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2024 Q2"])
+desemprego_HN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2024 Q2"])
+desemprego_MB <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2024 Q2"])
+desemprego_MN <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2024 Q2"])
+
+
+##Trimestre anterior (atualizar trimestre de referência)
+
+desemprego_hb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2024 Q1"])
+desemprego_hn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2024 Q1"])
+desemprego_mb_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2024 Q1"])
+desemprego_mn_tri_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2024 Q1"])
+
+#desemtriMB <- (desemprego_MB - desem_triMB)
+#desemtriMN <- (desemprego_MN - desem_triMN)
+#desemtriHB <- (desemprego_HB - desem_triHB)
+#desemtriHN <- (desemprego_HN - desem_triHN)
+
+##Ano anterior (Atualizar data)
+desemprego_hb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Branco" & EMPREGO.RG.sh$Data == "2023 Q2"])
+desemprego_hn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Homem Negro" & EMPREGO.RG.sh$Data == "2023 Q2"])
+desemprego_mb_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Branca" & EMPREGO.RG.sh$Data == "2023 Q2"])
+desemprego_mn_tri_ano_anterior <- 1 - (EMPREGO.RG.sh$Ocupado[EMPREGO.RG.sh$Categoria == "Mulher Negra" & EMPREGO.RG.sh$Data == "2023 Q2"])
+
+#desemanoMB <- (desemprego_MB - desemano_MB)
+#desemanoMN <- (desemprego_MN - desemano_MN)
+#desemanoHB <- (desemprego_HB - desemano_HB)
+#desemanoHN <- (desemprego_HN - desemano_HN)
+
+
+### Mínimos e máximos
+
+# Máximo de 2024 Q2
+max_RG_2023_04 <- EMPREGO.RG.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
+  select(Categoria) #peço a categoria associada
+
+# Mínimo de 2024 Q2      
+min_RG_2023_04 <- EMPREGO.RG.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Categoria) #peço a categoria associada
+
+
+#Ordem
+
+desemprego_RG <- c(desemprego_HB, desemprego_HN, desemprego_MB, desemprego_MN)
+ordem_desemRG <- sort(desemprego_RG, decreasing = TRUE)
+max_desemRG <- ordem_desemRG[1]
+seg_desemRG <- ordem_desemRG[2]
+ter_desemRG <- ordem_desemRG[3]
+qua_desemRG <- ordem_desemRG[4]
+
+#desemtri_RG <- c(desemtriMB, desemtriMN, desemtriHB, desemtriHN)
+#ordem_desemtri_RG <- sort (desemtri_RG, decreasing = TRUE)
+#max_desemtriRG <- ordem_desemtri_RG[1]
+#seg_desemtriRG <- ordem_desemtri_RG[2]
+#ter_desemtriRG <- ordem_desemtri_RG[3]
+#qua_desemtriRG <- ordem_desemtri_RG[4]
+#
+#desemano_RG <- c(desemanoMB, desemanoMN, desemanoHB, desemanoHN)
+#ordem_desemano_RG <- sort (desemano_RG, decreasing = TRUE)
+#max_desemanoRG <- ordem_desemano_RG[1]
+#seg_desemanoRG <- ordem_desemano_RG[2]
+#ter_desemanoRG <- ordem_desemano_RG[3]
+#qua_desemanoRG <- ordem_desemano_RG[4]
+
+
+##Região (atualizar trimestre)
+
+desemprego_norte <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_nordeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_centrooeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_sudeste <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+desemprego_sul <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2024 Q2"]))
+
+
+### Trimestre anterior (Atualizar data)
+desemprego_norte_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_nordeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_centrooeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_sudeste_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+desemprego_sul_tri_anterior <- (1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2024 Q1"]))
+
+#desemtriNO <- desemprego_NO - desemtri_NO
+#desemtriNE <- desemprego_NE - desemtri_NE
+#desemtriCO <- desemprego_CO - desemtri_CO
+#desemtriSE <- desemprego_SE - desemtri_SE
+#desemtriSU <- desemprego_SU - desemtri_SU
+
+## Ano anterior, mesmo tri (atualizar datas)
+desemprego_norte_tri_ano_anterio <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Norte" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_nordeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Nordeste" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_centrooeste_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Centro-Oeste" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_sud_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sudeste" & EMPREGO.REG.sh$Data == "2023 Q2"])
+desemprego_sul_tri_ano_anterior <- 1 - (EMPREGO.REG.sh$Ocupado[EMPREGO.REG.sh$Regiao == "Sul" & EMPREGO.REG.sh$Data == "2023 Q2"])
+
+#desemanoNO <- desemprego_NO - desemano_NO
+#desemanoNE <- desemprego_NE - desemano_NE
+#desemanoCO <- desemprego_CO - desemano_CO
+#desemanoSE <- desemprego_SE - desemano_SE
+#desemanoSU <- desemprego_SU - desemano_SU
+
+
+### Mínimos e máximos
+
+# Máximo de 2024 Q2
+max_REG_2023_04 <- EMPREGO.REG.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == max(Ocupado)) %>% # e peço a linha correspondente ao valor máximo
+  select(Regiao) #peço a categoria associada
+
+# Mínimo de 2024 Q2      
+min_REG_2023_04 <- EMPREGO.REG.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Ocupado == min(Ocupado)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Regiao) #peço a categoria associada
+
+
+##Ordem
+
+desemprego_REG <- c(desemprego_norte, desemprego_nordeste, desemprego_centrooeste, desemprego_sudeste, desemprego_sul)
+ordem_desemREG <- sort (desemprego_REG, decreasing = TRUE)
+max_desemREG <- ordem_desemREG[1]
+seg_desemREG <- ordem_desemREG[2]
+ter_desemREG <- ordem_desemREG[3]
+qua_desemREG <- ordem_desemREG[4]
+qui_desemREG <- ordem_desemREG[5]
+
+#desem_triREG <- c(desemtriNO, desemtriNE, desemtriCO, desemtriSE, desemtriSU)
+#ordem_desem_triREG <- sort(desem_triREG, decreasing = TRUE)
+#max_desemtriREG <- ordem_desem_triREG[1]
+#seg_desemtriREG <- ordem_desem_triREG[2]
+#ter_desemtriREG <- ordem_desem_triREG[3]
+#qua_desemtriREG <- ordem_desem_triREG[4]
+#qui_desemtriREG <- ordem_desem_triREG[5]
+
+#desem_anoREG <- c(desemanoNO, desemanoNE, desemanoCO, desemanoSE, desemanoSU)
+#ordem_desem_anoREG <- sort(desem_anoREG, decreasing = TRUE)
+#max_desemanoREG <- ordem_desem_anoREG[1]
+#seg_desemanoREG <- ordem_desem_anoREG[2]
+#ter_desemanoREG <- ordem_desem_anoREG[3]
+#qua_desemanoREG <- ordem_desem_anoREG[4]
+#qui_desemanoREG <- ordem_desem_anoREG[5]
+```
+
+
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o `r q`º trimestre de `r i` em `r desemprego*100`%. A região `r min_REG_2023_04$Regiao` registrou maior desemprego no trimestre de referência (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor desemprego no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, "`r min_RG_2023_04$Categoria`" foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria "`r max_RG_2023_04$Categoria`", de `r qua_desemRG*100`%. 
+
+Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
+
+
+### Escolaridade
+```{r include=FALSE}
+colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
+
+#ESCOLARIDADE
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
+colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
+
+
+  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
+  ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
+  
+escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
+escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
+escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
+escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
+
+#Região
+max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
+max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
+
+```
+
+No relatório da PNAD elaborado pelo Made mostramos, em todo primeiro trimestre do ano, dados sobre o nível educacional da força de trabalho. Dados de escolaridade representam o percentual de obtenção de um grau educacional dentro de um designado grupo da população economicamente ativa. Dentre as mulheres negras, `r (escol_sup_mn*100)`% possuíam ensino superior; `r (escol_medio_mn*100)`%, ensino médio; e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo; `r (escol_medio_mb*100)`%, ensino médio; e `r (escol_fund_mb*100)`%, ensino fundamental.
+
+
+Dentre os homens negros, `r (escol_sup_hn*100)`% possuíam ensino superior; `r (escol_medio_hn*100)`%, ensino médio; e `r (escol_fund_hn*100)`%, ensino fundamental. Dentre os homens brancos, `r (escol_sup_hb*100)`% tinham ensino superior; `r (escol_medio_hb*100)`%, ensino médio; e `r (escol_fund_hb*100)`%, apenas ensino fundamental.
+
+```{r echo=FALSE}
+
+ESCOLARIDADE_reshape <- reshape(ESCOLARIDADE.RG, idvar = "Categoria", direction = "long", varying = list(c("Pré-fundamental", "ensino_fundamental","ensino_medio","ensino_superior","Especializacao/pós-graduação","Mestrado/doutorado")))
+
+
+colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "Pré-fundamental"] = "Composição"
+colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "time"] = "Escolaridade"
+
+ESCOLARIDADE_reshape$Nivel <- ifelse(ESCOLARIDADE_reshape$Escolaridade ==1, "Pré-fundamental", 
+                                            ifelse(ESCOLARIDADE_reshape$Escolaridade==2, "Ensino Fundamental",
+                                                   ifelse(ESCOLARIDADE_reshape$Escolaridade==3, "Ensino Médio", 
+                                                          ifelse(ESCOLARIDADE_reshape$Escolaridade==4, "Ensino Superior", 
+                                                                 ifelse(
+                                                                   ESCOLARIDADE_reshape$Escolaridade ==5, "Especialização/pós-graduação", "Mestrado/Doutorado"
+                                                                 )
+                                                          ))))
+
+ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(Nivel,-Escolaridade)))+
+  geom_bar(stat="identity") +
+  scale_fill_manual(values=c("#FFAB4D","#eb52ff","#45ff66", "#3366ff","#feff41","#FF7276")) + #cores Made
+  theme_bw() + # colocando fundo Branco 
+  labs(title = "Figura 3: Nível de Escolaridade Máxima Atingida",
+       x = "Categoria",
+       y = "Percentual",
+       fill = "Nível de Escolaridade") 
+```
+
+
+## Informalidade
+
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+#Renomeando colunas
+
+colnames(agreInformal.RG)[colnames(agreInformal.RG) == "InformalidadeMedia.RG"] = "Informal"
+
+colnames(agreInformal.RG)[colnames(agreInformal.RG) == "FormalidadeMedia.RG"] = "Formal"
+
+agreInformal.RG$Categoria <- categorias
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(agreInformal.RG$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+agreInformal.RG <- agreInformal.RG %>% 
+  select(Categoria, Formal, Informal)
+agreInformal.RG <- cbind(agreInformal.RG,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+agreInformal.RG$Dia <- 01  
+
+agreInformal.RG$Mes <- ifelse(agreInformal.RG$Trimestre=="Q1",1,
+                     ifelse(agreInformal.RG$Trimestre=="Q2",4,
+                     ifelse(agreInformal.RG$Trimestre=="Q3",7,10))) 
+
+
+agreInformal.RG$Ano <- as.numeric(agreInformal.RG$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+agreInformal.RG$Data <-as.yearqtr(with(agreInformal.RG,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+agreInformal.RG <- agreInformal.RG %>%
+   select(Categoria, Formal, Informal, Data)
+
+#Checando formato
+class(agreInformal.RG$Data)
+```
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+#Renomeando colunas
+
+colnames(informalidadeMedia)[colnames(informalidadeMedia) == "Taxa média de informalidade"] = "Taxa_media_informalidade"
+
+#
+## Dividimos a coluna de data em uma de ano, e uma de trimestre:
+#date <- do.call(rbind, strsplit(informalidadeMedia.sh$Trimestre, " ")) 
+#colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+#
+## Retornamos a data atualizada para o dataframe anterior
+#informalidadeMedia.sh <- informalidadeMedia.sh %>% 
+#  select(Taxa_media_informalidade)
+#informalidadeMedia.sh <- cbind(informalidadeMedia.sh,date) 
+#
+## Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e #mes
+## Definimos padrão para a criação dos trimestres, a partir do mês
+#
+#informalidadeMedia.sh$Dia <- 01  
+
+#informalidadeMedia.sh$Mes <- ifelse(informalidadeMedia.sh$Trimestre=="Q1",1,
+#                     ifelse(informalidadeMedia.sh$Trimestre=="Q2",4,
+#                     ifelse(informalidadeMedia.sh$Trimestre=="Q3",7,10))) 
+#
+#
+#informalidadeMedia.sh$Ano <- as.numeric(informalidadeMedia.sh$Ano)
+#
+## Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, #mes e dia:
+#informalidadeMedia.sh$Data #<-as.yearqtr(with(informalidadeMedia.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+#
+## Voltamos para colunas originais
+#informalidadeMedia.sh<- informalidadeMedia.sh %>%
+#   select(Taxa_media_informalidade, Data)
+#
+##Checando formato
+#class(informalidadeMedia.sh$Data)
+```
+
+
+```{r echo=FALSE}
+
+#ggplot(informal.RG.sh, aes(x=Data, y=Informal, color=Categoria)) + 
+#  geom_line(size=2) + # defining line thickness
+#  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = #Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding #average informality line
+#  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", #"#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+#  theme_bw() + # setting white background
+#  labs(color = "Categoria", x = "Trimestre", y = "Taxa de Informalidade")+ # #setting legend title
+#  theme(plot.title = element_text(hjust = 0.5)) +
+#  labs(title = "Figura 4: Trabalhadores não Contribuintes por Raça e Gênero (%)",
+#       x = "Data",
+#       y = "Percentual")
+```
+
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+#Renomeando colunas
+
+colnames(agreInformal.REG)[colnames(agreInformal.REG) == "Informalidade.REG"] = "Informal"
+colnames(agreInformal.REG)[colnames(agreInformal.REG) == "Formalidade.REG"] = "Formal"
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(agreInformal.REG$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+agreInformal.REG$Regiao <- regiaobrasil
+
+# Retornamos a data atualizada para o dataframe anterior
+agreInformal.REG <- agreInformal.REG %>% 
+  select(Regiao, Formal, Informal)
+agreInformal.REG <- cbind(agreInformal.REG,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+agreInformal.REG$Dia <- 01  
+
+agreInformal.REG$Mes <- ifelse(agreInformal.REG$Trimestre=="Q1",1,
+                     ifelse(agreInformal.REG$Trimestre=="Q2",4,
+                     ifelse(agreInformal.REG$Trimestre=="Q3",7,10))) 
+
+
+agreInformal.REG$Ano <- as.numeric(agreInformal.REG$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+agreInformal.REG$Data <-as.yearqtr(with(agreInformal.REG,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+agreInformal.REG<- agreInformal.REG %>%
+   select(Regiao, Formal, Informal, Data)
+
+#Checando formato
+class(agreInformal.REG$Data)
+```
+
+
+```{r echo=FALSE}
+
+#ggplot(informal.REG.sh, aes(x=Data, y=Informal, color=Regiao)) + 
+#  geom_line(size=2) + # defining line thickness
+#  geom_line(data = informalidadeMedia.sh, aes(x = Data, y = #Taxa_media_informalidade, color = "Brasil"), linetype = "dashed") + # adding #average informality line
+#  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", #"#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+#  theme_bw() + # setting white background
+#  labs(color = "Regiao", x = "Trimestre", y = "Taxa de Informalidade")+ # setting #legend title
+#  theme(plot.title = element_text(hjust = 0.5)) +
+#  labs(title = "Figura 5: Trabalhadores não Contribuintes por Região (%)",
+#       x = "Data",
+#       y = "Percentual")
+```
+
+
+
+```{r include=FALSE}
+# Informalidade média (Atualizar tri e ano)
+
+# Pela nova metodologia, não há como fazer comparação
+
+#informalidade <- informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia#.sh$Data == "2024 Q2"]
+#
+#informalidade_tri_anterior <- #informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 #Q4"]
+#
+#dif_informalidade_tri <- informalidade - informalidade_tri_anterior
+
+#Região
+inf_NO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Norte" & agreInformal.REG$Data == "2024 Q2"]
+
+inf_NE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Nordeste" & agreInformal.REG$Data == "2024 Q2"]
+
+inf_CO <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Centro-Oeste" & agreInformal.REG$Data == "2024 Q2"]
+
+inf_SE <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sudeste" & agreInformal.REG$Data == "2024 Q2"]
+
+inf_SU <- agreInformal.REG$Informal[agreInformal.REG$Regiao == "Sul" & agreInformal.REG$Data == "2024 Q2"]
+
+
+## Tri anterior
+#informal_tri_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2024 Q1"]
+
+#inf_triNO <- ((inf_NO) - (informal_triNO))
+#inf_triNE <- inf_NE - informal_triNE
+#inf_triCO <- inf_CO - informal_triCO
+#inf_triSE <- inf_SE - informal_triSE
+#inf_triSU <- inf_SU - informal_triSU
+
+## Ano anterior (Atualizar ano e tri)
+
+#informal_ano_anterior_NO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Norte" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_NE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Nordeste" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_CO <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Centro-Oeste" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_SE <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sudeste" & informal.REG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_SU <- informal.REG.sh$Informal[informal.REG.sh$Regiao == #"Sul" & informal.REG.sh$Data == "2023 Q2"]
+
+#inf_anoNO <- inf_NO - informal_anoNO
+#inf_anoNE <- inf_NE - informal_anoNE
+#inf_anoCO <- inf_CO - informal_anoCO
+#inf_anoSE <- inf_SE - informal_anoSE
+#inf_anoSU <- inf_SU - informal_anoSU
+
+
+
+### Mínimos e máximos
+
+# Máximo de 2024 Q2
+max_Inf_REG_2023_04 <- agreInformal.REG %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
+  
+  select(Regiao) #peço a categoria associada
+
+# Mínimo de 2024 Q2      
+min_INF_REG_2023_04 <- agreInformal.REG %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Regiao) #peço a categoria associada
+
+
+#Ordem
+
+informalREG <- c(inf_NO, inf_NE, inf_CO, inf_SE, inf_SU)
+ordem_infREG <- sort(informalREG, decreasing = TRUE)
+max_infREG <- ordem_infREG[1]
+seg_infREG <- ordem_infREG[2]
+ter_infREG <- ordem_infREG[3]
+qua_infREG <- ordem_infREG[4]
+qui_infREG <- ordem_infREG[5]
+
+#inftri_REG <- c(inf_triNO, inf_triNE, inf_triCO, inf_triSE, inf_triSU)
+#ordem_inftriREG <- sort(inftri_REG, decreasing = TRUE)
+#max_inftriREG <- ordem_inftriREG[1]
+#seg_inftriREG <- ordem_inftriREG[2]
+#ter_inftriREG <- ordem_inftriREG[3]
+#qua_inftriREG <- ordem_inftriREG[4]
+#qui_inftriREG <- ordem_inftriREG[5]
+
+ 
+#infano_REG <- c(inf_anoNO, inf_anoNE, inf_anoCO, inf_anoSE, inf_anoSU)
+#ordem_infanoREG <- sort(infano_REG, decreasing = TRUE)
+#max_infanoREG <- ordem_infanoREG[1]
+#seg_infanoREG <- ordem_infanoREG[2]
+#ter_infanoREG <- ordem_infanoREG[3]
+#qua_infanoREG <- ordem_infanoREG[4]
+#qui_infanoREG <- ordem_infanoREG[5]
+
+
+# Raça e gênero
+
+informal_HB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Branco" & agreInformal.RG$Data == "2024 Q2"]
+informal_HN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Homem Negro" & agreInformal.RG$Data == "2024 Q2"]
+informal_MB <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Branca" & agreInformal.RG$Data == "2024 Q2"]
+informal_MN <- agreInformal.RG$Informal[agreInformal.RG$Categoria == "Mulher Negra" & agreInformal.RG$Data == "2024 Q2"]
+
+
+##Tri anterior
+#informal_tri_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2024 Q1"]
+#informal_tri_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2024 Q1"]
+
+#diftri_informalidadeHB <- informal_HB - informal_tri_anterior_HB
+#diftri_informalidadeHN <- informal_HN - informal_tri_anterior_HN
+#diftri_informalidadeMB <- informal_HB - informal_tri_anterior_MB
+#diftri_informalidadeMN <- informal_HN - informal_tri_anterior_MN
+
+
+## Ano anterior
+#informalidade_ano_anterior <- #informalidadeMedia.sh$Taxa_media_informalidade[informalidadeMedia.sh$Data == "2023 #Q1"]
+#difano_informalRG <- informalidade - informalidade_ano_anterior
+#
+#informal_ano_anterior_HB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Branco" & informal.RG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_HN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Homem Negro" & informal.RG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_MB <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Branca" & informal.RG.sh$Data == "2023 Q2"]
+#informal_ano_anterior_MN <- informal.RG.sh$Informal[informal.RG.sh$Categoria == #"Mulher Negra" & informal.RG.sh$Data == "2023 Q2"]
+#
+#dif_infanoHB <- informal_HB - informal_ano_anterior_HB
+#dif_infanoHN <- informal_HN - informal_ano_anterior_HN
+#dif_infanoMB <- informal_MB - informal_ano_anterior_MB
+#dif_infanoMN <- informal_MB - informal_ano_anterior_MN
+#
+
+### Mínimos e máximos
+
+# Máximo de 2024 Q2
+max_Inf_RG_2023_04 <- agreInformal.RG %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Informal == max(Informal)) %>% # e peço a linha correspondente ao valor máximo
+  select(Categoria) #peço a categoria associada
+
+# Mínimo de 2024 Q2      
+min_INF_RG_2023_04 <- agreInformal.RG %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(Informal == min(Informal)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Categoria) #peço a categoria associada
+
+
+
+# Ordem
+
+informalRG <- c(informal_HB, informal_HN, informal_MB, informal_MN)
+ordem_infRG <- sort(informalRG, decreasing = TRUE)
+max_infRG <- ordem_infRG[1]
+seg_infRG <- ordem_infRG[2]
+ter_infRG <- ordem_infRG[3]
+qua_infRG <- ordem_infRG[4]
+
+#diftri_informalidadeRG <- c(diftri_informalidadeHB, diftri_informalidadeHN, #diftri_informalidadeMB, diftri_informalidadeMN)
+#ordem_diftri <- sort(diftri_informalidadeRG, decreasing = TRUE)
+#max_inftriRG <- ordem_diftri[1]
+#seg_inftriRG <- ordem_diftri[2]
+#ter_inftriRG <- ordem_diftri[3]
+#qua_inftriRG <- ordem_diftri[4]
+
+#infano_RG <- c(dif_infanoHB, dif_infanoHN, dif_infanoMB, dif_infanoMN)
+#ordem_infanoRG <- sort(infano_RG, decreasing = TRUE)
+#max_infanoRG <- ordem_infanoRG[1]
+#seg_infanoRG <- ordem_infanoRG[2]
+#ter_infanoRG <- ordem_infanoRG[3]
+#qua_infanoRG <- ordem_infanoRG[4]
+
+
+```
+
+Neste relatório, reportamos estatísticas sobre a informalidade no mercado de trabalho brasileiro. Definimos como informais os trabalhadores sem carteira de trabalho^[Critério utilizado, por exemplo, por Barros, R.P. e Varandas, S. A carteira de trabalho e as condições de trabalho e remuneração dos chefes de família no Brasil. IPEA. 1987.]  e, dentre aqueles que se autodeclaram como autônomos, empregadores ou familiares auxiliares do lar, os trabalhadores que não contribuem para o sistema de previdência social (INSS)^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998]. No `r q`º trimestre de `r i`, a taxa de informalidade média calculada para o Brasil foi de `r informalidadeMedia$Taxa_media_informalidade *100` %. Do ponto de vista regional, a região com maior taxa de informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores informais (`r qui_infREG*100`%). No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%.
+
+
+## Emprego por Setor
+
+```{r include=FALSE}
+
+# Formatando datas
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Renomeando colunas
+#colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Homem Branco"] = "Homem_Branco"
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Administração Pública"] = "Adm_pública"
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Outros serviços"] = "Outros_serviços"
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Serviços domésticos"] = "Ser_domesticos"
+colnames(trabalhosetor.RG.sh)[colnames(trabalhosetor.RG.sh) == "Mal definido"] = "mal_definido"
+
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(trabalhosetor.RG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+trabalhosetor.RG.sh <- trabalhosetor.RG.sh %>% 
+  select(Categoria, Agropecuária, Indústria, Construção, Comércio, Transporte, Alimentação, Informação, Adm_pública, Educação, Outros_serviços, Ser_domesticos, mal_definido)
+trabalhosetor.RG.sh <- cbind(trabalhosetor.RG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+trabalhosetor.RG.sh$Dia <- 01  
+
+trabalhosetor.RG.sh$Mes <- ifelse(trabalhosetor.RG.sh$Trimestre=="Q1",1,
+                     ifelse(trabalhosetor.RG.sh$Trimestre=="Q2",4,
+                     ifelse(trabalhosetor.RG.sh$Trimestre=="Q3",7,10))) 
+
+
+trabalhosetor.RG.sh$Ano <- as.numeric(trabalhosetor.RG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+trabalhosetor.RG.sh$Data <-as.yearqtr(with(trabalhosetor.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+trabalhosetor.RG.sh<- trabalhosetor.RG.sh %>%
+   select(Categoria, Agropecuária, Indústria, Construção, Comércio, Transporte, Alimentação, Informação, Adm_pública, Educação, Outros_serviços, Ser_domesticos, mal_definido, Data)
+
+#Checando formato
+class(trabalhosetor.RG.sh$Data)
+
+#Homem Branco
+HB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Branco" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+
+setores_HB <- c(HB_agro, HB_ind, HB_const, HB_comercio, HB_tran, HB_alimen, HB_info, HB_publico, HB_educa, HB_oserv, HB_domes)
+ordem_HB <- sort(setores_HB, decreasing = TRUE)
+max_HB <- ordem_HB[1]
+seg_HB <- ordem_HB[2]
+ter_HB <- ordem_HB[3]
+qua_HB <- ordem_HB[4]
+qui_HB <- ordem_HB[5]
+
+
+#Homem negro
+HN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+HN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Homem Negro" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+
+setores_HN <- c(HN_agro, HN_ind, HN_const, HN_comercio, HN_tran, HN_alimen, HN_info, HN_publico, HN_educa, HN_oserv, HN_domes)
+ordem_HN <- sort(setores_HN, decreasing = TRUE)
+
+max_HN <- ordem_HN[1]
+seg_HN <- ordem_HN[2]
+ter_HN <- ordem_HN[3]
+qua_HN <- ordem_HN[4]
+qui_HN <- ordem_HN[5]
+
+#Mulher Branca
+MB_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MB_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Branca" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+
+
+setores_MB <- c(MB_agro, MB_ind, MB_const, MB_comercio, MB_tran, MB_alimen, MB_info, MB_publico, MB_educa, MB_oserv, MB_domes)
+ordem_MB <- sort(setores_MB, decreasing = TRUE)
+max_MB <- ordem_MB[1]
+seg_MB <- ordem_MB[2]
+ter_MB <- ordem_MB[3]
+qua_MB <- ordem_MB[4]
+qui_MB <- ordem_MB[5]
+
+
+#Mulher Negra
+MN_agro <- trabalhosetor.RG.sh$Agropecuária[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_const <- trabalhosetor.RG.sh$Construção[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_comercio <- trabalhosetor.RG.sh$Comércio[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_tran <- trabalhosetor.RG.sh$Transporte[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_alimen <- trabalhosetor.RG.sh$Alimentação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_info <- trabalhosetor.RG.sh$Informação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_publico <- trabalhosetor.RG.sh$Adm_pública[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_educa <- trabalhosetor.RG.sh$Educação[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_oserv <- trabalhosetor.RG.sh$Outros_serviços[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_domes <- trabalhosetor.RG.sh$Ser_domesticos[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+MN_ind <- trabalhosetor.RG.sh$Indústria[trabalhosetor.RG.sh$Categoria == "Mulher Negra" & trabalhosetor.RG.sh$Data == "2024 Q2"]
+
+
+setores_MN <- c(MN_agro, MN_ind, MN_const, MN_comercio, MN_tran, MN_alimen, MN_info, MN_publico, MN_educa, MN_oserv, MN_domes)
+ordem_MN <- sort(setores_MN, decreasing = TRUE)
+max_MN <- ordem_MN[1]
+seg_MN <- ordem_MN[2]
+ter_MN <- ordem_MN[3]
+qua_MN <- ordem_MN[4]
+qui_MN <- ordem_MN[5]
+
+```
+
+A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido de indústria (`r seg_HN*100`%), de construção (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de informação (`r seg_HB*100`%), de indústria (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
+
+Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Das mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
+
+Nota-se que os serviços de informação, educação e serviços domésticos são majoritariamente exercidos por mulheres. 
+
+
+# Rendimento habitual
+
+
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(RendaHabit.RG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+RendaHabit.RG.sh <- RendaHabit.RG.sh %>% 
+  select(Categoria, Renda_Habitual_RG)
+RendaHabit.RG.sh <- cbind(RendaHabit.RG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+RendaHabit.RG.sh$Dia <- 01  
+
+RendaHabit.RG.sh$Mes <- ifelse(RendaHabit.RG.sh$Trimestre=="Q1",1,
+                     ifelse(RendaHabit.RG.sh$Trimestre=="Q2",4,
+                     ifelse(RendaHabit.RG.sh$Trimestre=="Q3",7,10))) 
+
+
+RendaHabit.RG.sh$Ano <- as.numeric(RendaHabit.RG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+RendaHabit.RG.sh$Data <-as.yearqtr(with(RendaHabit.RG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+RendaHabit.RG.sh<- RendaHabit.RG.sh %>%
+   select(Categoria, Renda_Habitual_RG, Data)
+
+#Checando formato
+class(RendaHabit.RG.sh$Data)
+```
+
+```{r echo=FALSE}
+
+ggplot(RendaHabit.RG.sh, aes(x=Data, y=Renda_Habitual_RG, color=Categoria)) + 
+  geom_line(size=2) + # definindo grossura da linha
+  ggtitle("Figura 6: Rendimento Habitual por Raça e Gênero (Reais de 2024)") + #titulo do grafico
+  scale_colour_manual(values=c("#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) +
+  theme_bw() + # colocando fundo Branco
+  labs(color = "Categoria", x = "Trimestre", y = "Renda Habitual") + # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+
+```{r include=FALSE}
+#Renda média
+
+renda_med <- RendaHabitMedia.sh$RendaHabitMedia[RendaHabitMedia.sh$Trimestre == "2024 Q2"]
+
+# Raça e gênero
+rendahabitHB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2024 Q2"]
+rendahabitHN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2024 Q2"]
+rendahabitMB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2024 Q2"]
+rendahabitMN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2024 Q2"]
+
+##Ano anterior
+rendahabitano_HB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Branco" & RendaHabit.RG.sh$Data == "2023 Q2"]
+rendahabitano_HN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Homem Negro" & RendaHabit.RG.sh$Data == "2023 Q2"]
+rendahabitano_MB <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Branca" & RendaHabit.RG.sh$Data == "2023 Q2"]
+rendahabitano_MN <- RendaHabit.RG.sh$Renda_Habitual_RG[RendaHabit.RG.sh$Categoria == "Mulher Negra" & RendaHabit.RG.sh$Data == "2023 Q2"]
+
+rendahabitanoHB <- (rendahabitHB - rendahabitano_HB)
+rendahabitanoHN <- (rendahabitHN - rendahabitano_HN)
+rendahabitanoMB <- (rendahabitMB - rendahabitano_MB)
+rendahabitanoMN <- (rendahabitMN - rendahabitano_MN)
+
+
+rendahabitRG <- c(rendahabitHB, rendahabitHN, rendahabitMB, rendahabitMN)
+ordemrendahabitRG <- sort(rendahabitRG, decreasing = TRUE)
+max_renhab <- ordemrendahabitRG[1]
+seg_renhab <- ordemrendahabitRG[2]
+ter_renhab <- ordemrendahabitRG[3]
+qua_renhab <- ordemrendahabitRG[4]
+
+#ano
+
+rendahabitanoRG <- c(rendahabitanoHB, rendahabitanoHN, rendahabitanoMB, rendahabitanoMN)
+ordem_renhabRG <- sort(rendahabitanoRG, decreasing = TRUE)
+max_renhab_ano <- ordem_renhabRG[1]
+seg_renhab_ano <- ordem_renhabRG[2]
+ter_renhab_ano <- ordem_renhabRG[3]
+qua_renhab_ano <- ordem_renhabRG[4]
+
+```
+
+O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
+
+O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). 
+
+As séries estão plotadas na figura 6.
+
+# Distribuição: Índice de Gini
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(giniRG.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+giniRG.sh <- giniRG.sh %>% 
+  select(Categoria, gini)
+giniRG.sh <- cbind(giniRG.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+giniRG.sh$Dia <- 01  
+
+giniRG.sh$Mes <- ifelse(giniRG.sh$Trimestre=="Q1",1,
+                     ifelse(giniRG.sh$Trimestre=="Q2",4,
+                     ifelse(giniRG.sh$Trimestre=="Q3",7,10))) 
+
+
+giniRG.sh$Ano <- as.numeric(giniRG.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+giniRG.sh$Data <-as.yearqtr(with(giniRG.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+giniRG.sh<- giniRG.sh %>%
+   select(Categoria, gini, Data)
+
+#Checando formato
+class(giniRG.sh$Data)
+```
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(giniBR.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+giniBR.sh <- giniBR.sh %>% 
+  select(gini)
+giniBR.sh <- cbind(giniBR.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+giniBR.sh$Dia <- 01  
+
+giniBR.sh$Mes <- ifelse(giniBR.sh$Trimestre=="Q1",1,
+                     ifelse(giniBR.sh$Trimestre=="Q2",4,
+                     ifelse(giniBR.sh$Trimestre=="Q3",7,10))) 
+
+
+giniBR.sh$Ano <- as.numeric(giniBR.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+giniBR.sh$Data <-as.yearqtr(with(giniBR.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+giniBR.sh<- giniBR.sh %>%
+   select(gini, Data)
+
+#Checando formato
+class(giniBR.sh$Data)
+```
+
+```{r echo=FALSE}
+
+ggplot(giniRG.sh, aes(x=Data, y=gini, color=Categoria)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil (média)"), linetype = "dashed") + # adding average Gini line
+  ggtitle("Figura 7: Índice de Gini por Raça e Gênero") + # plot title
+  scale_colour_manual(name = "Categoria", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Categoria", x = "Trimestre", y = "Índice de Gini")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r include=FALSE}
+
+#Realizando a alteração da coluna "Trimestre" do formato character para o formato date;
+
+# Dividimos a coluna de data em uma de ano, e uma de trimestre:
+date <- do.call(rbind, strsplit(giniUF.sh$Trimestre, " ")) 
+colnames(date)[colnames(date) <- c("Ano", "Trimestre")] 
+
+# Retornamos a data atualizada para o dataframe anterior
+giniUF.sh <- giniUF.sh %>% 
+  select(Regiao, gini)
+giniUF.sh <- cbind(giniUF.sh,date) 
+
+# Tendo as colunas de Ano e Trimestre, agora temos que criar as variaveis de dia e mes
+# Definimos padrão para a criação dos trimestres, a partir do mês
+
+giniUF.sh$Dia <- 01  
+
+giniUF.sh$Mes <- ifelse(giniUF.sh$Trimestre=="Q1",1,
+                     ifelse(giniUF.sh$Trimestre=="Q2",4,
+                     ifelse(giniUF.sh$Trimestre=="Q3",7,10))) 
+
+
+giniUF.sh$Ano <- as.numeric(giniUF.sh$Ano)
+
+# Agora dizer pro R que temos datas trimestrais, que serao identificadas pelo ano, mes e dia:
+giniUF.sh$Data <-as.yearqtr(with(giniUF.sh,paste(Ano,Mes,Dia,sep="-")),"%Y-%m-%d")
+
+# Voltamos para colunas originais
+giniUF.sh<- giniUF.sh %>%
+   select(Regiao, gini, Data)
+
+#Checando formato
+class(giniUF.sh$Data)
+```
+```{r echo=FALSE}
+
+ggplot(giniUF.sh, aes(x=Data, y=gini, color=Regiao)) + 
+  geom_line(size=2) + # defining line thickness
+  geom_line(data = giniBR.sh, aes(x = Data, y = gini, color = "Brasil (média)"), linetype = "dashed") + # adding average Gini line
+  ggtitle("Figura 7: Índice de Gini por Região") + # plot title
+  scale_colour_manual(name = "Região", values=c("#FF7276", "#45ff66","#eb52ff", "#3366ff","#feff41", "#8968D3")) + # specifying legend and colors
+  theme_bw() + # setting white background
+  labs(color = "Regiao", x = "Trimestre", y = "Índice de Gini")+ # setting legend title
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r include=FALSE}
+
+giniBR <- giniBR.sh$gini[giniBR.sh$Data == "2024 Q2"]
+giniBR_ano_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2023 Q2"]
+giniBR_tri_anterior <- giniBR.sh$gini[giniBR.sh$Data == "2024 Q1"]
+
+### Mínimos e máximos (Regiao)
+
+# Máximo de 2024 Q2
+max_GINI_REG_2023_04 <- giniUF.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(gini == max(gini)) %>% # e peço a linha correspondente ao valor máximo
+  select(Regiao) #peço a categoria associada
+
+# Mínimo de 2024 Q2      
+min_GINI_REG_2023_04 <- giniUF.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(gini == min(gini)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Regiao) #peço a categoria associada
+
+
+### Mínimos e máximos (Raça e gênero)
+
+# Máximo de 2024 Q2
+max_GINI_RG_2023_04 <- giniRG.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(gini == max(gini)) %>% # e peço a linha correspondente ao valor máximo
+  select(Categoria) #peço a categoria associada
+
+# Mínimo de 2024 Q2      
+min_GINI_RG_2023_04 <- giniRG.sh %>%
+  filter(Data == "2024 Q2") %>% #filtro pelo trimestre que quero 
+  filter(gini == min(gini)) %>%  # e peço a linha correspondente ao valor mínimo
+  select(Categoria) #peço a categoria associada
+
+
+```
+
+O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor do índice, maior a desigualdade^[Para o cálculo do índice de Gini, consideramos a renda que os trabalhadores efetivamente receberam, isto é, seu rendimento efetivo em todos os trabalhos].
+
+O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`.
+
+Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao`, acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, o índice de Gini é maior para a categoria "`r max_GINI_RG_2023_04$Categoria`" e menor na categoria "`r min_GINI_RG_2023_04$Categoria`".
+
+
+# Percentis de renda
+
+```{r echo=FALSE}
+colnames(quantis_de_renda23_04)[colnames(quantis_de_renda23_04) == "Percentual da Renda Apropriada"] = "apropriado"
+
+quantis_de_renda23_04 <- quantis_de_renda23_04 %>% mutate("Percentis" = row.names(quantis_de_renda23_04))
+
+#percentis$percentis <- c(paste(seq(0, 0.9, 0.1)), "0.99")
+#colnames(percentis)[colnames(percentis) == "% da renda apropriado"] ="apropriado"
+
+
+ggplot(quantis_de_renda23_04, aes(x=Percentis, y=apropriado))+ 
+  geom_bar(stat = "identity", fill="#45ff66") + # definindo grossura da linha
+  labs(title = "Figura 8: Apropriação da Renda por Percentis",
+       x = "Percentil",
+       y = "Percentual Apropriado") +
+  theme_bw() # colocando fundo Branco
+```
+
+Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
+
+Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11.77% da renda nacional, no `r q`º trimestre de `r i`. 
+
+# Tabelas completas
+
+Clique abaixo para dados completos:
+
+[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
+
+[Tabela 2: Dados por Região](https://drive.google.com/file/d/1bCn8967ccAvB3idm5PiwU31HIFqY680K/view?usp=sharing)
+
+[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/10pwdVV6pGg4FgjZuXLQR6h7l1Zkplgmq/view?usp=sharing)
+
+[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
+
+[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/1HNiCJ2wPMjPWRs8-5EQQT5IMxP5qPdrG/view?usp=drive_link)
+
+
+# Dados e códigos
+
+Os arquivos de código e dados extraídos da PNADc (IBGE, 2024) utilizados para gerar esta publicação trimestral estão disponíveis [neste repositório no GitHub](https://made-usp.github.io/PNADc-Report/). 
