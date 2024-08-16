@@ -1,7 +1,7 @@
 ---
 title: "Relatório Trimestral da PNAD^[Este relatório foi elaborado pelas pesquisadoras do Made Eslen Brito e Clara Brenck e os pesquisadores José Bergamin e Hiaman Santos.]" 
 author: "Made USP"
-date: "15/08/2024"
+date: "16/08/2024"
 lang: pt-br
 output:
   pdf_document: default
@@ -51,8 +51,8 @@ library(xts)
 #load(file_path)
 
 #Clara
-load("C:/Users/lauro/Desktop/PNADc/v3/PNAD_dados_relatorio_01_2024.RData")
-load("C:/Users/lauro/Desktop/PNADc/v3/dados_serie_historica_012024.RData")
+load("C:/Users/lauro/Desktop/PNADc/Q2 2024/PNAD_dados_relatorio_02_2024.RData")
+load("C:/Users/lauro/Desktop/PNADc/Q2 2024/dados_serie_historica_022024.RData")
 
 #Hiaman
 #load("C:/Users/lauro/Desktop/conferirpnad/PNAD_dados_relatorio_01_2024.RData")
@@ -410,75 +410,83 @@ qui_desemREG <- ordem_desemREG[5]
 ```
 
 
-Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` pontos percentuais em relação ao `r q+3`º trimestre de `r i-1`. Assim, a taxa nacional de desemprego encerrou o `r q`º trimestre de `r i` em `r desemprego*100`%. A região `r min_REG_2023_04$Regiao` registrou maior desemprego no trimestre de referência (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor desemprego no mesmo período (`r qui_desemREG*100`%). Nas categorias de raça e gênero, "`r min_RG_2023_04$Categoria`" foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desocupação foi registrada na categoria "`r max_RG_2023_04$Categoria`", de `r qua_desemRG*100`%. 
+Inicialmente, destacamos a variação da taxa de desemprego geral de `r dif_desem_tri*100` ponto percentual em relação ao `r q-1`º trimestre de `r i`. Assim, a taxa nacional de desemprego encerrou o `r q`º trimestre de `r i` em `r desemprego*100`%. 
+
+A região `r min_REG_2023_04$Regiao` registrou o maior desemprego no trimestre de referência (`r max_desemREG*100`%), enquanto a região `r max_REG_2023_04$Regiao` teve o menor desemprego no mesmo período (`r qui_desemREG*100`%). 
+
+Nas categorias de raça e gênero, "`r min_RG_2023_04$Categoria`" foi a categoria com maior população desempregada, cerca de `r max_desemRG*100`%. A menor taxa de desemprego foi registrada na categoria "`r max_RG_2023_04$Categoria`", de `r qua_desemRG*100`%. 
 
 Veja o comportamento das séries referentes a ocupação nas figuras 1 e 2.
 
+```{r include=FALSE}
+#colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
+#
+##ESCOLARIDADE
+#colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] #="ensino_fundamental"
+#colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] #="ensino_medio"
+#colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] #="ensino_superior"
+#
+#
+#  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = #row.names(ESCOLARIDADE.RG))
+#  ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = #row.names(ESCOLARIDADE.REG))
+#  
+#escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria #=="Homem Branco"]
+#escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == #"Homem Negro"]
+#escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == #"Mulher Branca"]
+#escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == #"Mulher Negra"]
+#
+#escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem #Branco"]
+#escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem #Negro"]
+#escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == #"Mulher Branca"]
+#escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == #"Mulher Negra"]
+#
+#escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem #Branco"]
+#escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == #"Homem Negro"]
+#escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == #"Mulher Branca"]
+#escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == #"Mulher Negra"]
+#
+##Região
+#max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
+#max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
+
+# Texto escolaridade:
 
 ### Escolaridade
-```{r include=FALSE}
-colnames(EMPREGO.RG.sh)[colnames(EMPREGO.RG.sh) == "Data"] = "Trimestre"
 
-#ESCOLARIDADE
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino fundamental"] ="ensino_fundamental"
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino médio"] ="ensino_medio"
-colnames(ESCOLARIDADE.RG)[colnames(ESCOLARIDADE.RG) == "Ensino superior"] ="ensino_superior"
-
-
-  ESCOLARIDADE.RG <- ESCOLARIDADE.RG %>% mutate("Categoria" = row.names(ESCOLARIDADE.RG))
-  ESCOLARIDADE.REG <- ESCOLARIDADE.REG %>% mutate("Categoria" = row.names(ESCOLARIDADE.REG))
-  
-escol_fund_hb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_fund_hn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_fund_mb <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_fund_mn <- ESCOLARIDADE.RG$ensino_fundamental[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-escol_medio_hb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_medio_hn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_medio_mb <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_medio_mn <- ESCOLARIDADE.RG$ensino_medio[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-escol_sup_hb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria =="Homem Branco"]
-escol_sup_hn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Homem Negro"]
-escol_sup_mb <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Branca"]
-escol_sup_mn <- ESCOLARIDADE.RG$ensino_superior[ESCOLARIDADE.RG$Categoria == "Mulher Negra"]
-
-#Região
-max_escol_sup <- max(ESCOLARIDADE.REG$ensino_superior)
-max_escol_fund <- max(ESCOLARIDADE.REG$ensino_fundamental)
+#No relatório da PNAD elaborado pelo Made mostramos, em todo primeiro trimestre do #ano, dados sobre o nível educacional da força de trabalho. Dados de escolaridade #representam o percentual de obtenção de um grau educacional dentro de um designado #grupo da população economicamente ativa. Dentre as mulheres negras, `r #(escol_sup_mn*100)`% possuíam ensino superior; `r (escol_medio_mn*100)`%, ensino #médio; e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres #brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo; `r #(escol_medio_mb*100)`%, ensino médio; e `r (escol_fund_mb*100)`%, ensino #fundamental.
+#
+#
+#Dentre os homens negros, `r (escol_sup_hn*100)`% possuíam ensino superior; `r #(escol_medio_hn*100)`%, ensino médio; e `r (escol_fund_hn*100)`%, ensino #fundamental. Dentre os homens brancos, `r (escol_sup_hb*100)`% tinham ensino #superior; `r (escol_medio_hb*100)`%, ensino médio; e `r (escol_fund_hb*100)`%, #apenas ensino fundamental.
 
 ```
 
-No relatório da PNAD elaborado pelo Made mostramos, em todo primeiro trimestre do ano, dados sobre o nível educacional da força de trabalho. Dados de escolaridade representam o percentual de obtenção de um grau educacional dentro de um designado grupo da população economicamente ativa. Dentre as mulheres negras, `r (escol_sup_mn*100)`% possuíam ensino superior; `r (escol_medio_mn*100)`%, ensino médio; e, `r (escol_fund_mn*100)`%, apenas ensino fundamental. Para as mulheres brancas, `r (escol_sup_mb*100)`% tinham ensino superior completo; `r (escol_medio_mb*100)`%, ensino médio; e `r (escol_fund_mb*100)`%, ensino fundamental.
 
-
-Dentre os homens negros, `r (escol_sup_hn*100)`% possuíam ensino superior; `r (escol_medio_hn*100)`%, ensino médio; e `r (escol_fund_hn*100)`%, ensino fundamental. Dentre os homens brancos, `r (escol_sup_hb*100)`% tinham ensino superior; `r (escol_medio_hb*100)`%, ensino médio; e `r (escol_fund_hb*100)`%, apenas ensino fundamental.
 
 ```{r echo=FALSE}
 
-ESCOLARIDADE_reshape <- reshape(ESCOLARIDADE.RG, idvar = "Categoria", direction = "long", varying = list(c("Pré-fundamental", "ensino_fundamental","ensino_medio","ensino_superior","Especializacao/pós-graduação","Mestrado/doutorado")))
-
-
-colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "Pré-fundamental"] = "Composição"
-colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "time"] = "Escolaridade"
-
-ESCOLARIDADE_reshape$Nivel <- ifelse(ESCOLARIDADE_reshape$Escolaridade ==1, "Pré-fundamental", 
-                                            ifelse(ESCOLARIDADE_reshape$Escolaridade==2, "Ensino Fundamental",
-                                                   ifelse(ESCOLARIDADE_reshape$Escolaridade==3, "Ensino Médio", 
-                                                          ifelse(ESCOLARIDADE_reshape$Escolaridade==4, "Ensino Superior", 
-                                                                 ifelse(
-                                                                   ESCOLARIDADE_reshape$Escolaridade ==5, "Especialização/pós-graduação", "Mestrado/Doutorado"
-                                                                 )
-                                                          ))))
-
-ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, fill=reorder(Nivel,-Escolaridade)))+
-  geom_bar(stat="identity") +
-  scale_fill_manual(values=c("#FFAB4D","#eb52ff","#45ff66", "#3366ff","#feff41","#FF7276")) + #cores Made
-  theme_bw() + # colocando fundo Branco 
-  labs(title = "Figura 3: Nível de Escolaridade Máxima Atingida",
-       x = "Categoria",
-       y = "Percentual",
-       fill = "Nível de Escolaridade") 
+#ESCOLARIDADE_reshape <- reshape(ESCOLARIDADE.RG, idvar = "Categoria", direction = #"long", varying = list(c("Pré-fundamental", #"ensino_fundamental","ensino_medio","ensino_superior","Especializacao/pós-graduaçã#o","Mestrado/doutorado")))
+#
+#
+#colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == #"Pré-fundamental"] = "Composição"
+#colnames(ESCOLARIDADE_reshape)[colnames(ESCOLARIDADE_reshape) == "time"] = #"Escolaridade"
+#
+#ESCOLARIDADE_reshape$Nivel <- ifelse(ESCOLARIDADE_reshape$Escolaridade ==1, #"Pré-fundamental", 
+#                                            #ifelse(ESCOLARIDADE_reshape$Escolaridade==2, "Ensino Fundamental",
+#                                                   #ifelse(ESCOLARIDADE_reshape$Escolaridade==3, "Ensino Médio", 
+#                                                          #ifelse(ESCOLARIDADE_reshape$Escolaridade==4, "Ensino Superior", 
+#                                                                 ifelse(
+#                                                                   #ESCOLARIDADE_reshape$Escolaridade ==5, "Especialização/pós-graduação", #"Mestrado/Doutorado"
+#                                                                 )
+#                                                          ))))
+#
+#ggplot(data=ESCOLARIDADE_reshape, aes(x=Categoria, y=Composição, #fill=reorder(Nivel,-Escolaridade)))+
+#  geom_bar(stat="identity") +
+#  scale_fill_manual(values=c("#FFAB4D","#eb52ff","#45ff66", #"#3366ff","#feff41","#FF7276")) + #cores Made
+#  theme_bw() + # colocando fundo Branco 
+#  labs(title = "Figura 3: Nível de Escolaridade Máxima Atingida",
+#       x = "Categoria",
+#       y = "Percentual",
+#       fill = "Nível de Escolaridade") 
 ```
 
 
@@ -819,7 +827,13 @@ qua_infRG <- ordem_infRG[4]
 
 ```
 
-Neste relatório, reportamos estatísticas sobre a informalidade no mercado de trabalho brasileiro. Definimos como informais os trabalhadores sem carteira de trabalho^[Critério utilizado, por exemplo, por Barros, R.P. e Varandas, S. A carteira de trabalho e as condições de trabalho e remuneração dos chefes de família no Brasil. IPEA. 1987.]  e, dentre aqueles que se autodeclaram como autônomos, empregadores ou familiares auxiliares do lar, os trabalhadores que não contribuem para o sistema de previdência social (INSS)^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998]. No `r q`º trimestre de `r i`, a taxa de informalidade média calculada para o Brasil foi de `r informalidadeMedia$Taxa_media_informalidade *100` %. Do ponto de vista regional, a região com maior taxa de informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores informais (`r qui_infREG*100`%). No recorte de raça e gênero, o grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%.
+Neste relatório, reportamos estatísticas sobre a informalidade no mercado de trabalho brasileiro. Definimos como informais os trabalhadores sem carteira de trabalho^[Critério utilizado, por exemplo, por Barros, R.P. e Varandas, S. A carteira de trabalho e as condições de trabalho e remuneração dos chefes de família no Brasil. IPEA. 1987.]  e, dentre aqueles que se autodeclaram como autônomos, empregadores ou familiares auxiliares do lar, os trabalhadores que não contribuem para o sistema de previdência social (INSS)^[Ver Kassouf, A. L. Wage gender discrimination and segmentation in the Brazilian labor market. Economia Aplicada, v. 2, n. 2, p. 243-269, 1998]. 
+
+No `r q`º trimestre de `r i`, a taxa de informalidade média calculada para o Brasil foi de `r informalidadeMedia$Taxa_media_informalidade *100` %. 
+
+Do ponto de vista regional, a região com maior taxa de informalidade foi a região `r max_Inf_REG_2023_04$Regiao` (`r max_infREG*100`%), seguida do Nordeste (`r seg_infREG*100`%). A região `r min_INF_REG_2023_04$Regiao` registrou a menor taxa de trabalhadores informais (`r qui_infREG*100`%). 
+
+No recorte de raça e gênero, observa-se maior informalidade na população negra. O grupo com maior proporção de trabalhadores informais foi a categoria "`r max_Inf_RG_2023_04$Categoria`", com `r max_infRG*100`%, seguido da categoria "Mulher Negra" (`r informal_MN*100`%). As taxas de informalidade calculadas para as categorias "Homem Branco" e "Mulher Branca" foram de `r informal_HB*100`% e `r informal_MB*100`%, respectivamente.
 
 
 ## Emprego por Setor
@@ -960,15 +974,14 @@ qui_MN <- ordem_MN[5]
 
 ```
 
-A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido de indústria (`r seg_HN*100`%), de construção (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de informação (`r seg_HB*100`%), de indústria (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
+A ocupação por setores varia consideravelmente de acordo com recortes de raça e gênero. No `r q`º trimestre de `r i`, a maioria dos homens negros (`r max_HN*100`%) estavam alocados no setor de comércio, seguido da construção (`r seg_HN*100`%), da indústria (`r ter_HN*100`%), de agropecuária (`r qua_HN*100`%) e de informação (`r qui_HN*100`%). Para homens brancos, o setor que mais empregou foi comércio com `r max_HB*100`%, além de informação (`r seg_HB*100`%), de indústria (`r ter_HB*100`%), de agropecuária (`r qua_HB*100`%) e de construção (`r qui_HB*100`%). 
 
-Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Das mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
+Para as mulheres brancas empregadas, `r max_MB*100`% estavam no setor de educação, `r seg_MB*100`% em comércio, `r ter_MB*100`% em informação, `r qua_MB*100`% em indústria e `r qui_MB*100`% em serviços domésticos. Dentre as mulheres negras, a maioria (`r max_MN*100`%) ocupava o setor de educação, seguido de comércio (`r seg_MN*100`%), de serviços domésticos (`r ter_MN*100`%), de informação (`r qua_MN*100`%) e de indústria (`r qui_MN*100`%).
 
 Nota-se que os serviços de informação, educação e serviços domésticos são majoritariamente exercidos por mulheres. 
 
 
 # Rendimento habitual
-
 
 
 ```{r include=FALSE}
@@ -1064,7 +1077,7 @@ qua_renhab_ano <- ordem_renhabRG[4]
 
 O rendimento habitual mensal do trabalho principal é a remuneração recebida pelo trabalhador sem considerar acréscimos e descontos esporádicos. Já o rendimento efetivo mensal do trabalho principal inclui os pagamentos e descontos que não possuem caráter contínuo. Neste relatório, optamos por reportar apenas o rendimento habitual mensal.
 
-O rendimento habitual médio do trabalhador brasileiro foi de `r renda_med` reais por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de mulheres brancas, com `r max_renhab_ano` reais, enquanto homens negros tiveram o menor aumento (`r qua_renhab_ano` reais). 
+O rendimento habitual médio do trabalhador brasileiro foi de R\$ `r renda_med` por mês no `r q`º trimestre de `r i`. O grupo populacional com maior aumento da renda média na comparação anual foi o de homens brancos, com R\$ `r max_renhab_ano` reais, enquanto mulheres negras tiveram o menor aumento (R\$ `r qua_renhab_ano`). 
 
 As séries estão plotadas na figura 6.
 
@@ -1244,7 +1257,7 @@ O índice de Gini varia de 0 (zero) a 1 (um). Quanto mais próximo de 1 o valor 
 
 O índice de Gini dos rendimentos efetivos a nível nacional para o `r q`º trimestre de `r i` foi de `r giniBR`.
 
-Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao`, acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, o índice de Gini é maior para a categoria "`r max_GINI_RG_2023_04$Categoria`" e menor na categoria "`r min_GINI_RG_2023_04$Categoria`".
+Observamos que a maior desigualdade foi registrada na região `r max_GINI_REG_2023_04$Regiao` (0.52), acima da média reportada para o Brasil no trimestre analisado. O menor Gini foi registrado na região `r min_GINI_REG_2023_04$Regiao`. Por fim, no recorte de raça e gênero, o índice de Gini é maior para a categoria "`r max_GINI_RG_2023_04$Categoria`" (0.53) e menor para a categoria "`r min_GINI_RG_2023_04$Categoria`" (0.45).
 
 
 # Percentis de renda
@@ -1266,23 +1279,23 @@ ggplot(quantis_de_renda23_04, aes(x=Percentis, y=apropriado))+
   theme_bw() # colocando fundo Branco
 ```
 
-Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do Índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
+Outra forma de estudarmos a desigualdade de rendimentos, além do cálculo do índice de Gini, é analisando os percentis de renda. Os percentis, decis e quantis são calculados ordenando a população de forma crescente a partir do nível de renda. Se uma economia possui 100 pessoas, por exemplo, ordenam-se essas pessoas por ordem de renda e  divide-se a população em grupos com o mesmo número de pessoas. Assim, se existem 10 subsegmentos, temos os decis – cada grupo contendo 10% da população. Por fim, os dados ainda podem ser subdivididos em percentis, neste caso a população é dividida em centésimas partes, cada parte teria 1% dos dados.
 
-Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11.77% da renda nacional, no `r q`º trimestre de `r i`. 
+Para calcular uma medida de distribuição de renda, obtemos a renda apropriada por cada um dos decis da distribuição de renda, juntamente com o último percentil, que é o valor equivalente ao 1% mais rico da população. Assim, encontramos o percentual da renda total do país que está nas mãos das pessoas em cada grupo de renda específico. Reportamos a participação de cada um dos quantis de renda na renda total do país. Por exemplo, o último percentil (ou o 1% mais rico) apropriou-se de 11.93% da renda nacional, no `r q`º trimestre de `r i`. 
 
 # Tabelas completas
 
 Clique abaixo para dados completos:
 
-[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/1MszWt8l3aHwKP5v78_gP-sGT0e-wqccx/view?usp=sharing)
+[Tabela 1: Dados por Raça e Gênero](https://drive.google.com/file/d/153Ed_kcnTrq2mNos2OcizBBoXfkNmZpp/view?usp=sharing)
 
-[Tabela 2: Dados por Região](https://drive.google.com/file/d/1bCn8967ccAvB3idm5PiwU31HIFqY680K/view?usp=sharing)
+[Tabela 2: Dados por Região](https://drive.google.com/file/d/1O4RvsnCIQwzGxsyhbc05FJpVXxhnliM-/view?usp=drive_link)
 
-[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/10pwdVV6pGg4FgjZuXLQR6h7l1Zkplgmq/view?usp=sharing)
+[Tabela 3: Dados por Raça, Gênero e Região](https://drive.google.com/file/d/1t1QbdGAVv7GKxXMgeSKe3-LLFQvxKk7l/view?usp=drive_link)
 
-[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1qThm-hEmr9hotuPpOQu8jvqbbGNkMHBs/view?usp=sharing)
+[Tabela 4: Dados para a média do Brasil](https://drive.google.com/file/d/1xN5wQ7iItwOsL_OC0LAPlakxOJObV89N/view?usp=drive_link)
 
-[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/1HNiCJ2wPMjPWRs8-5EQQT5IMxP5qPdrG/view?usp=drive_link)
+[Tabela 5: Dados dos percentis de renda por decil e 1% mais rico](https://drive.google.com/file/d/160dd1TdEP4oKdQihbpcNq0PRS0thXXs0/view?usp=drive_link)
 
 
 # Dados e códigos
